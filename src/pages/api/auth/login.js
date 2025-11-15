@@ -1,12 +1,14 @@
 import ownerModel from "@/models/owner";
 import connectToDb from "../../../../utils/db";
 import managerModel from "@/models/manager";
+import teacherModel from "@/models/teacher";
 import { verifyPassword } from "../../../../utils/passwordConf";
 import { serialize } from "cookie";
 import {
   generateRefreshToken,
   generateToken,
 } from "../../../../utils/tokenConf";
+import cookieOptions from "../../../../utils/cookieOptions";
 
 export default async function Login(req, res) {
   try {
@@ -23,7 +25,6 @@ export default async function Login(req, res) {
         .status(422)
         .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
     }
-
     const owner = await ownerModel.findOne({ userName });
     const manager = await managerModel.findOne({ userName });
     const teacher = await teacherModel.findOne({ userName });
@@ -55,19 +56,17 @@ export default async function Login(req, res) {
 
     return res
       .setHeader("Set-Cookie", [
-        serialize("token", token, {
-          path: "/",
-          httpOnly: true,
-          maxAge: 60 * 60 * 24,
-        }),
-        serialize("refreshToken", refreshToken, {
-          path: "/",
-          httpOnly: true,
-          maxAge: 60 * 60 * 24 * 7,
-        }),
+        serialize("token", token, cookieOptions("token", "/", true)),
+        serialize(
+          "refreshToken",
+          refreshToken,
+          cookieOptions("refreshToken", "/", true)
+        ),
       ])
       .json({ message: "با موفقیت وارد شدید", success: true });
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false });
   }
 }

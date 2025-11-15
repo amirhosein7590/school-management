@@ -44,6 +44,8 @@ const teacherSchema = new mongoose.Schema({
   },
 });
 
+teacherSchema.index({ phone: 1 });
+
 teacherSchema.pre("save", async function (next) {
   if (this.isNew) {
     this.userName = this.nationalCode;

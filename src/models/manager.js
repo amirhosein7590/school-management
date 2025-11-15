@@ -42,6 +42,8 @@ const managerSchema = new mongoose.Schema({
   },
 });
 
+managerSchema.index({ phone: 1 });
+
 managerSchema.pre("save", async function (next) {
   if (this.isNew) {
     this.userName = this.nationalCode;

@@ -4,6 +4,7 @@ import {
   generateToken,
   generateRefreshToken,
 } from "./utils/tokenConf";
+import cookieOptions from "./utils/cookieOptions";
 
 export async function middleware(req) {
   const token = req.cookies.get("token")?.value;
@@ -44,17 +45,13 @@ export async function middleware(req) {
 
     const res = NextResponse.next();
 
-    res.cookies.set("token", newToken, {
-      maxAge: 60 * 60 * 24,
-      path: "/",
-      httpOnly: true,
-    });
+    res.cookies.set("token", newToken, cookieOptions("token", "/", true));
 
-    res.cookies.set("token", newRefreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-      httpOnly: true,
-    });
+    res.cookies.set(
+      "token",
+      newRefreshToken,
+      cookieOptions("refreshToken", "/", true)
+    );
 
     return res;
   }
