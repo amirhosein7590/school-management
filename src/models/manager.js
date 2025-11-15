@@ -1,0 +1,62 @@
+import { hashPassword } from "../../utils/passwordConf";
+
+const mongoose = require("mongoose");
+
+const managerSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  userName: { type: String, unique: true }, // its not required just for default value
+  password: { type: String }, // its not required just for default value
+  nationalCode: { type: String, required: true },
+  personnelCode: { type: String, required: true },
+  phone: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["manager"],
+    default: "manager",
+    immutable: true,
+  },
+  school: { type: mongoose.Types.ObjectId, ref: "School" },
+  isBanned: { type: Boolean, required: true, default: false },
+  expTime: { type: Number, required: true, default: 1 }, // for future if anyone buy plan
+  plan: { type: String, required: false }, // for fouture if anyone buy plan
+  messages: [
+    // for messages and notifications that owner will send !!
+    {
+      title: { type: String },
+      body: { type: String },
+      fromRole: { type: String },
+    },
+  ],
+  actionsPermissions: {
+    createStudent: { type: Boolean, default: true },
+    editStudent: { type: Boolean, default: true },
+    deleteStudent: { type: Boolean, default: true },
+    createTeacher: { type: Boolean, default: true },
+    editTeacher: { type: Boolean, default: true },
+    deleteTeacher: { type: Boolean, default: true },
+    createClass: { type: Boolean, default: true },
+    editClass: { type: Boolean, default: true },
+    deleteClass: { type: Boolean, default: true },
+    overrideSchoolSettings: { type: Boolean, default: false },
+  },
+});
+
+managerSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    this.userName = this.nationalCode;
+    this.password = await hashPassword(this.personnelCode);
+  }
+  next();
+}); // set personnel code for password and national code for username in first time
+
+managerSchema.virtual("teachers", {
+  ref: "Teacher",
+  localField: "_id",
+  foreignField: "manager",
+});
+
+const managerModel =
+  mongoose.models.Manager || mongoose.model("Manager", managerSchema);
+
+export default managerModel;
