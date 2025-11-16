@@ -6,12 +6,13 @@ const cookieOptions = (
   httpOnly = true,
   logout = false
 ) => {
+  const tokens = {
+    token: 60 * 60 * 24,
+    refreshToken: 60 * 60 * 24 * 7,
+    resetToken: 60 * 10, // a reset token for access user to reset password
+  };
   return {
-    maxAge: !logout
-      ? tokenType == "token"
-        ? 60 * 60 * 24
-        : 60 * 60 * 24 * 7
-      : 0,
+    maxAge: !logout ? tokens[tokenType] : 0,
     path,
     httpOnly,
     secure: !isProd,

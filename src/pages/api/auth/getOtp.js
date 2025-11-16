@@ -31,17 +31,16 @@ export default async function GetOtp(req, res) {
         .json({ error: "این شماره در سایت ثبت نشده است", success: false });
     }
 
-    const date = new Date();
     const sendedCode = await otpModel.findOne({ phone });
     if (sendedCode) {
-      if (sendedCode.expTime > date.getTime()) {
+      if (sendedCode.expTime > Date.now()) {
         return res
           .status(409)
           .json({ error: "کد قبلی هنوز منقضی نشده است", success: false });
       } else {
         await otpModel.findOneAndDelete({ phone: sendedCode.phone });
         const code = Math.floor(10000 + Math.random() * 9999);
-        const expTime = date.getTime() + Number(process.env.expOtpTime);
+        const expTime = Date.now() + Number(process.env.expOtpTime);
         const { success } = await sendSms({
           patternKey: process.env.otpPattern,
           phoneNumber: phone,
@@ -59,7 +58,7 @@ export default async function GetOtp(req, res) {
     }
 
     const code = Math.floor(10000 + Math.random() * 9999);
-    const expTime = date.getTime() + Number(process.env.expOtpTime);
+    const expTime = Date.now() + Number(process.env.expOtpTime);
     const { success } = await sendSms({
       patternKey: process.env.otpPattern,
       phoneNumber: phone,
