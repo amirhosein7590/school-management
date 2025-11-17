@@ -16,7 +16,7 @@ export default async function Login(req, res) {
       .status(400)
       .json({ error: "این درخواست مجاز نیست", success: false });
   }
-  
+
   const { userName, password } = req.body;
   if (!userName.trim() || !password.trim()) {
     return res
@@ -36,6 +36,18 @@ export default async function Login(req, res) {
       return res
         .status(401)
         .json({ error: "شما در سایت ثبت نام نیستید", success: false });
+    }
+
+    if (user.role != "owner" && user.isBanned) {
+      if (user.expTime < Date.now()) {
+        return res
+          .status(403)
+          .json({ error: "اشتراک شما به پایان رسیده است", success: false });
+      }
+
+      return res
+        .status(403)
+        .json({ error: "حساب کاربری شما بن شده است", success: false });
     }
 
     const isPasswordValid = await verifyPassword(password, user.password);

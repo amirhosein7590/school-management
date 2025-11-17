@@ -20,7 +20,7 @@ const managerSchema = new mongoose.Schema({
   isBanned: { type: Boolean, required: true, default: false },
   expTime: { type: Number, required: true, default: 1 }, // for future if anyone buy plan
   plan: { type: String, required: false }, // for fouture if anyone buy plan
-  messages: [
+  notifications: [
     // for messages and notifications that owner will send !!
     {
       title: { type: String },
@@ -43,6 +43,7 @@ const managerSchema = new mongoose.Schema({
 });
 
 managerSchema.index({ phone: 1 });
+managerSchema.index({ userName: 1 });
 
 managerSchema.pre("save", async function (next) {
   if (this.isNew) {

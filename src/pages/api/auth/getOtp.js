@@ -4,6 +4,7 @@ import sendSms from "../../../../utils/sendSms";
 import ownerModel from "@/models/owner";
 import managerModel from "@/models/manager";
 import teacherModel from "@/models/teacher";
+import findUserByPhone from "../../../../utils/findUserByPhone";
 
 export default async function GetOtp(req, res) {
   if (req.method != "POST") {
@@ -19,16 +20,25 @@ export default async function GetOtp(req, res) {
   }
   try {
     await connectToDb();
-    const owner = await ownerModel.findOne({ phone });
-    const manager = await managerModel.findOne({ phone });
-    const teacher = await teacherModel.findOne({ phone });
 
-    const isUserRegistered = owner || manager || teacher;
+    const user = await findUserByPhone(phone);
 
-    if (!isUserRegistered) {
+    if (!user) {
       return res
         .status(401)
         .json({ error: "این شماره در سایت ثبت نشده است", success: false });
+    }
+
+    if (user.role != "owner" && user.isBanned) {
+      if (user.expTime < Date.now()) {
+        return res
+          .status(403)
+          .json({ error: "اشتراک شما به پایان رسیده است", success: false });
+      }
+
+      return res
+        .status(403)
+        .json({ error: "حساب کاربری شما بن شده است", success: false });
     }
 
     const sendedCode = await otpModel.findOne({ phone });

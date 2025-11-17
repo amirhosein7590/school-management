@@ -22,7 +22,7 @@ const teacherSchema = new mongoose.Schema({
     default: "teacher",
     immutable: true,
   },
-  messages: [
+  notifications: [
     // for messages and notifications that manager will send !!
     {
       title: { type: String },
@@ -45,6 +45,7 @@ const teacherSchema = new mongoose.Schema({
 });
 
 teacherSchema.index({ phone: 1 });
+teacherSchema.index({userName : 1})
 
 teacherSchema.pre("save", async function (next) {
   if (this.isNew) {

@@ -1,7 +1,6 @@
 import otpModel from "@/models/otp";
 import connectToDb from "../../../../utils/db";
-import { serialize } from "cookie";
-import cookieOptions from "../../../../utils/cookieOptions";
+import { hashPassword } from "../../../../utils/passwordConf";
 
 export default async function CheckOtp(req, res) {
   if (req.method != "POST") {
@@ -20,10 +19,10 @@ export default async function CheckOtp(req, res) {
     if (!otp) {
       return res.status(422).json({ error: "کد نادرست است", success: false });
     }
-    if (otp.resetTokenExp > Date.now()) {
+    if (otp?.resetTokenExp > Date.now()) {
       return res
         .status(400)
-        .json({ error: "کد قبلا تایید شده", success: false });
+        .json({ error: "کد قبلا استفاده شده", success: false });
     }
 
     if (otp.expTime < Date.now()) {
@@ -34,19 +33,12 @@ export default async function CheckOtp(req, res) {
 
     const resetToken = crypto.randomUUID();
     const resetTokenExp = Date.now() + Number(process.env.expReset);
-    otp.resetToken = resetToken;
+    otp.resetToken = resetToken + process.env.salt;
     otp.resetTokenExp = resetTokenExp;
     await otp.save();
     return res
-      .setHeader(
-        "Set-Cookie",
-        serialize(
-          "resetToken",
-          resetToken,
-          cookieOptions("resetToken", "/", true)
-        )
-      )
-      .json({ success: true, message: "کد تایید شد" });
+      .status(200)
+      .json({ message: "کد تایید شد", resetToken, success: true });
   } catch (error) {
     return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }

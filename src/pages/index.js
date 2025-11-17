@@ -7,7 +7,10 @@ function Index() {
     password: "",
     phone: "",
     otp: "",
+    newPassword: "",
+    repeatPassword: "",
   });
+  const [resetToken, setResetToken] = useState("");
   const { mutate } = useCustomeMutation(
     "login",
     null,
@@ -28,6 +31,14 @@ function Index() {
     "sendOtp",
     null,
     "/auth/checkOtp",
+    null,
+    "post"
+  );
+
+  const { mutate: resetPasswordMutate } = useCustomeMutation(
+    "resetPassword",
+    null,
+    "/auth/resetPassword",
     null,
     "post"
   );
@@ -67,10 +78,27 @@ function Index() {
       { code: otp },
       {
         onSuccess: (response) => {
+          setResetToken(response.resetToken);
           console.log(response);
         },
         onError: (err) => {
           const errorMessage = err.response.data;
+          console.log(errorMessage);
+        },
+      }
+    );
+  };
+
+  const resetPassword = (event, newPassword, repeatPassword) => {
+    event.preventDefault();
+    resetPasswordMutate(
+      { newPassword, repeatPassword, resetToken },
+      {
+        onSuccess: (response) => {
+          console.log(response);
+        },
+        onError: (err) => {
+          const errorMessage = err.response.data.error;
           console.log(errorMessage);
         },
       }
@@ -111,7 +139,7 @@ function Index() {
 
       <hr />
 
-      <div className="resetPassword">
+      <div className="check & get Otp">
         <h3>Reset Password</h3>
         <div className="getOtp">
           <input
@@ -139,6 +167,34 @@ function Index() {
             Send Code
           </button>
         </div>
+      </div>
+
+      <div className="resetPassword">
+        <input
+          type="text"
+          placeholder="new password"
+          value={inputs.newPassword}
+          onChange={(event) =>
+            setInputs((prev) => ({ ...prev, newPassword: event.target.value }))
+          }
+        />
+        <input
+          type="text"
+          value={inputs.repeatPassword}
+          onChange={(event) =>
+            setInputs((prev) => ({
+              ...prev,
+              repeatPassword: event.target.value,
+            }))
+          }
+        />
+        <button
+          onClick={(event) =>
+            resetPassword(event, inputs.newPassword, inputs.repeatPassword)
+          }
+        >
+          Reset Password
+        </button>
       </div>
     </>
   );
