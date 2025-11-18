@@ -1,6 +1,5 @@
 import otpModel from "@/models/otp";
 import connectToDb from "../../../../utils/db";
-import { hashPassword } from "../../../../utils/passwordConf";
 
 export default async function CheckOtp(req, res) {
   if (req.method != "POST") {

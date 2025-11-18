@@ -5,13 +5,14 @@ const ownerSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   userName: { type: String, unique: true }, // its not required just for default value
   password: { type: String }, // its not required just for default value
+  nationalCode: { type: String, required: true, unique: true },
   role: {
     type: String,
     enum: ["owner"],
     default: "owner",
     immutable: true,
   },
-  phone: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
 });
 
 const ownerModel =

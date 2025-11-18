@@ -1,10 +1,7 @@
 import connectToDb from "../../../../utils/db";
 import otpModel from "@/models/otp";
 import sendSms from "../../../../utils/sendSms";
-import ownerModel from "@/models/owner";
-import managerModel from "@/models/manager";
-import teacherModel from "@/models/teacher";
-import findUserByPhone from "../../../../utils/findUserByPhone";
+import findUserByProp from "../../../../utils/findUserByProp";
 
 export default async function GetOtp(req, res) {
   if (req.method != "POST") {
@@ -13,15 +10,22 @@ export default async function GetOtp(req, res) {
       .json({ error: "این درخواست مجاز نیست", success: false });
   }
   const { phone } = req.body;
-  if (!phone.trim()) {
+  const isBodyPropsValid = req.body?.phone && req.body.phone.trim();
+  if (!isBodyPropsValid) {
     return res
       .status(422)
       .json({ error: "شماره تلفن مشخص نیست", success: false });
   }
+
+  if (Object.keys(req.body).length != 1) {
+    return res
+      .status(422)
+      .json({ error: "فیلد های ارسال شده نا معتبر است", success: false });
+  }
   try {
     await connectToDb();
 
-    const user = await findUserByPhone(phone);
+    const user = await findUserByProp("phone", phone);
 
     if (!user) {
       return res

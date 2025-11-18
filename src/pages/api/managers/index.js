@@ -2,6 +2,7 @@ import ownerModel from "@/models/owner";
 import connectToDb from "../../../../utils/db";
 import { verifyToken } from "../../../../utils/tokenConf";
 import managerModel from "@/models/manager";
+import findUserByProps from "../../../../utils/findUserByProps";
 
 async function Manager(req, res) {
   try {
@@ -45,7 +46,6 @@ async function Manager(req, res) {
           "nationalCode",
           "personnelCode",
           "phone",
-          "expTime",
         ];
 
         const isBodyPropsValid = exceptedProps.every(
@@ -58,15 +58,16 @@ async function Manager(req, res) {
             .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
 
-        const manager = await managerModel.findOne({
+        const user = await findUserByProps({
           nationalCode: req.body?.nationalCode,
-          role: "manager",
+          phone: req.body?.phone,
+          personnelCode: req.body?.personnelCode,
         });
 
-        if (manager) {
+        if (user) {
           return res
             .status(409)
-            .json({ error: "مدیری با این مشخصات وجود دارد", success: false });
+            .json({ error: "شخصی با این مشخصات وجود دارد", success: false });
         }
 
         await managerModel.create({

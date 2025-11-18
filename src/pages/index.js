@@ -1,16 +1,16 @@
 import useCustomeMutation from "@/hooks/useCustomeMutation";
+import useCustomeQuery from "@/hooks/useCustomeQuery";
 import { useState } from "react";
 
 function Index() {
   const [inputs, setInputs] = useState({
-    userName: "",
-    password: "",
+    firstName: "",
+    lastName: "",
+    nationalCode: "",
+    personnelCode: "",
     phone: "",
-    otp: "",
-    newPassword: "",
-    repeatPassword: "",
+    plan: "",
   });
-  const [resetToken, setResetToken] = useState("");
   const { mutate } = useCustomeMutation(
     "login",
     null,
@@ -19,26 +19,10 @@ function Index() {
     "post"
   );
 
-  const { mutate: getOtpMutate } = useCustomeMutation(
-    "getOtp",
+  const { mutate: createManagerMutate } = useCustomeMutation(
+    "managers",
     null,
-    "/auth/getOtp",
-    null,
-    "post"
-  );
-
-  const { mutate: sendOtpMutate } = useCustomeMutation(
-    "sendOtp",
-    null,
-    "/auth/checkOtp",
-    null,
-    "post"
-  );
-
-  const { mutate: resetPasswordMutate } = useCustomeMutation(
-    "resetPassword",
-    null,
-    "/auth/resetPassword",
+    "/managers",
     null,
     "post"
   );
@@ -56,54 +40,21 @@ function Index() {
     });
   };
 
-  const getOtpHandler = (event, phoneNumber) => {
+  const createManagerHandler = (event, data) => {
     event.preventDefault();
-    getOtpMutate(
-      { phone: phoneNumber },
-      {
-        onSuccess: (response) => {
-          console.log(response.message);
-        },
-        onError: (err) => {
-          const errorMessage = err.response.data;
-          console.log(errorMessage);
-        },
-      }
-    );
+    createManagerMutate(data, {
+      onSuccess: (response) => {
+        console.log(response.message);
+      },
+      onError: (err) => {
+        const errorMessage = err.response.data;
+        console.log(errorMessage);
+      },
+    });
   };
 
-  const sendOtpHandler = (event, otp) => {
-    event.preventDefault();
-    sendOtpMutate(
-      { code: otp },
-      {
-        onSuccess: (response) => {
-          setResetToken(response.resetToken);
-          console.log(response);
-        },
-        onError: (err) => {
-          const errorMessage = err.response.data;
-          console.log(errorMessage);
-        },
-      }
-    );
-  };
-
-  const resetPassword = (event, newPassword, repeatPassword) => {
-    event.preventDefault();
-    resetPasswordMutate(
-      { newPassword, repeatPassword, resetToken },
-      {
-        onSuccess: (response) => {
-          console.log(response);
-        },
-        onError: (err) => {
-          const errorMessage = err.response.data.error;
-          console.log(errorMessage);
-        },
-      }
-    );
-  };
+  // const { data } = useCustomeQuery("me", null, "/auth/me", null);
+  // console.log(data);
   return (
     <>
       <div className="login-logut">
@@ -136,64 +87,61 @@ function Index() {
           Logout
         </button>
       </div>
-
       <hr />
-
-      <div className="check & get Otp">
-        <h3>Reset Password</h3>
-        <div className="getOtp">
-          <input
-            type="number"
-            value={inputs.phone}
-            onChange={(event) =>
-              setInputs((prev) => ({ ...prev, phone: event.target.value }))
-            }
-          />
-
-          <button onClick={(event) => getOtpHandler(event, inputs.phone)}>
-            Send Sms
-          </button>
-        </div>
-        <div className="checkOtp">
-          <input
-            type="number"
-            value={inputs.otp}
-            onChange={(event) =>
-              setInputs((prev) => ({ ...prev, otp: event.target.value }))
-            }
-          />
-
-          <button onClick={(event) => sendOtpHandler(event, inputs.otp)}>
-            Send Code
-          </button>
-        </div>
-      </div>
-
-      <div className="resetPassword">
+      <div className="create-manager">
         <input
           type="text"
-          placeholder="new password"
-          value={inputs.newPassword}
+          placeholder="firstName ..."
+          value={inputs.firstName}
           onChange={(event) =>
-            setInputs((prev) => ({ ...prev, newPassword: event.target.value }))
+            setInputs((prev) => ({ ...prev, firstName: event.target.value }))
           }
         />
         <input
           type="text"
-          value={inputs.repeatPassword}
+          placeholder="lastName ..."
+          value={inputs.lastName}
+          onChange={(event) =>
+            setInputs((prev) => ({ ...prev, lastName: event.target.value }))
+          }
+        />
+        <input
+          type="text"
+          placeholder="nationalCode ..."
+          value={inputs.nationalCode}
+          onChange={(event) =>
+            setInputs((prev) => ({ ...prev, nationalCode: event.target.value }))
+          }
+        />
+        <input
+          type="text"
+          placeholder="personnelCode ..."
+          value={inputs.personnelCode}
           onChange={(event) =>
             setInputs((prev) => ({
               ...prev,
-              repeatPassword: event.target.value,
+              personnelCode: event.target.value,
             }))
           }
         />
-        <button
-          onClick={(event) =>
-            resetPassword(event, inputs.newPassword, inputs.repeatPassword)
+        <input
+          type="text"
+          placeholder="phone ..."
+          value={inputs.phone}
+          onChange={(event) =>
+            setInputs((prev) => ({ ...prev, phone: event.target.value }))
           }
-        >
-          Reset Password
+        />
+        <input
+          type="text" 
+          placeholder="plan ..."
+          value={inputs.plan}
+          onChange={(event) =>
+            setInputs((prev) => ({ ...prev, plan: event.target.value }))
+          }
+        />
+        <button onClick={(event) => createManagerHandler(event, { ...inputs })}>
+          create
         </button>
       </div>
     </>

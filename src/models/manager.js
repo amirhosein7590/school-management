@@ -7,19 +7,23 @@ const managerSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   userName: { type: String, unique: true }, // its not required just for default value
   password: { type: String }, // its not required just for default value
-  nationalCode: { type: String, required: true },
-  personnelCode: { type: String, required: true },
-  phone: { type: String, required: true },
+  nationalCode: { type: String, required: true, unique: true },
+  personnelCode: { type: String, required: true, unique: true },
+  phone: { type: String, required: true, unique: true },
   role: {
     type: String,
     enum: ["manager"],
     default: "manager",
     immutable: true,
   },
-  school: { type: mongoose.Types.ObjectId, ref: "School" },
+  school: { type: mongoose.Types.ObjectId, ref: "School", required: false },
   isBanned: { type: Boolean, required: true, default: false },
-  expTime: { type: Number, required: true, default: 1 }, // for future if anyone buy plan
-  plan: { type: String, required: false }, // for fouture if anyone buy plan
+  expTime: {
+    type: Number,
+    required: true,
+    default: Date.now() + Number(process.env.freePlanTime),
+  }, // for future if anyone buy plan
+  plan: { type: String, enum: ["free", "subscription"] }, // for fouture if anyone buy plan
   notifications: [
     // for messages and notifications that owner will send !!
     {
@@ -42,9 +46,6 @@ const managerSchema = new mongoose.Schema({
   },
 });
 
-managerSchema.index({ phone: 1 });
-managerSchema.index({ userName: 1 });
-
 managerSchema.pre("save", async function (next) {
   if (this.isNew) {
     this.userName = this.nationalCode;
@@ -52,6 +53,14 @@ managerSchema.pre("save", async function (next) {
   }
   next();
 }); // set personnel code for password and national code for username in first time
+
+managerSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    this.plan = "free";
+    this.expTime = Date.now() + Number(process.env.freePlanTime);
+  }
+  next();
+});
 
 managerSchema.virtual("teachers", {
   ref: "Teacher",

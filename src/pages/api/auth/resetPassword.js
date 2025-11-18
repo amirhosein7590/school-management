@@ -1,7 +1,7 @@
 import otpModel from "@/models/otp";
 import connectToDb from "../../../../utils/db";
 import { hashPassword } from "../../../../utils/passwordConf";
-import findUserByPhone from "../../../../utils/findUserByPhone";
+import findUserByProp from "../../../../utils/findUserByProp";
 
 export default async function ResetPassword(req, res) {
   if (req.method != "POST") {
@@ -26,13 +26,6 @@ export default async function ResetPassword(req, res) {
       .json({ error: "تکرار رمز عبور نادرست است", success: false });
   }
 
-  if (!resetToken) {
-    return res.status(422).json({
-      error: "برای بازیابی رمز عبور باید کد تایید بگیرید",
-      success: false,
-    });
-  }
-
   try {
     await connectToDb();
     const hashedResetToken = resetToken + process.env.salt;
@@ -48,7 +41,7 @@ export default async function ResetPassword(req, res) {
         .status(410)
         .json({ error: "کد منقضی شده است", success: false });
     }
-    const user = await findUserByPhone(otp.phone);
+    const user = await findUserByProp("phone", otp.phone);
     if (!user) {
       return res
         .status(404)

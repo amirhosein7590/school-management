@@ -1,7 +1,4 @@
-import ownerModel from "@/models/owner";
 import connectToDb from "../../../../utils/db";
-import managerModel from "@/models/manager";
-import teacherModel from "@/models/teacher";
 import { verifyPassword } from "../../../../utils/passwordConf";
 import { serialize } from "cookie";
 import {
@@ -9,6 +6,7 @@ import {
   generateToken,
 } from "../../../../utils/tokenConf";
 import cookieOptions from "../../../../utils/cookieOptions";
+import findUserByProp from "../../../../utils/findUserByProp";
 
 export default async function Login(req, res) {
   if (req.method != "POST") {
@@ -17,20 +15,23 @@ export default async function Login(req, res) {
       .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
-  const { userName, password } = req.body;
-  if (!userName.trim() || !password.trim()) {
+  const exceptedProps = ["userName", "password"];
+  const isBodyPropValid = exceptedProps.every(
+    (prop) => req.body[prop] && req.body[prop].trim()
+  );
+
+  if (!isBodyPropValid) {
     return res
       .status(422)
       .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
   }
+
   try {
     await connectToDb();
 
-    const owner = await ownerModel.findOne({ userName });
-    const manager = await managerModel.findOne({ userName });
-    const teacher = await teacherModel.findOne({ userName });
+    const { userName, password } = req.body;
 
-    const user = owner || teacher || manager;
+    const user = await findUserByProp("userName", userName);
 
     if (!user) {
       return res
@@ -38,7 +39,7 @@ export default async function Login(req, res) {
         .json({ error: "شما در سایت ثبت نام نیستید", success: false });
     }
 
-    if (user.role != "owner" && user.isBanned) {
+    if (user.isBanned) {
       if (user.expTime < Date.now()) {
         return res
           .status(403)

@@ -10,7 +10,7 @@ const studentSchema = new mongoose.Schema({
   teacher: { type: mongoose.Types.ObjectId, required: false, ref: "Teacher" },
   birthDay: { type: Date, required: true },
   grade: { type: Number, required: true }, // عددی که نشان دهنده کلاس 1 تا 12 است
-}); 
+});
 
 const studentModel =
   mongoose.models.Student || mongoose.model("Student", studentSchema);

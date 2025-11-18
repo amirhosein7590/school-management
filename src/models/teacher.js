@@ -7,9 +7,9 @@ const teacherSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   userName: { type: String, unique: true }, // its not required just for default value
   password: { type: String }, // its not required just for default value
-  phone: { type: String, required: true },
-  nationalCode: { type: String, required: true },
-  personnelCode: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
+  nationalCode: { type: String, required: true, unique: true },
+  personnelCode: { type: String, required: true, unique: true },
   isBanned: { type: Boolean, required: true },
   school: { type: mongoose.Types.ObjectId, required: false, ref: "School" },
   class: { type: mongoose.Types.ObjectId, required: false, ref: "Class" },
@@ -43,9 +43,6 @@ const teacherSchema = new mongoose.Schema({
     deleteStudent: { type: Boolean, default: true },
   },
 });
-
-teacherSchema.index({ phone: 1 });
-teacherSchema.index({userName : 1})
 
 teacherSchema.pre("save", async function (next) {
   if (this.isNew) {
