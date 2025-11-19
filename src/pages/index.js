@@ -9,7 +9,6 @@ function Index() {
     nationalCode: "",
     personnelCode: "",
     phone: "",
-    plan: "",
   });
   const { mutate } = useCustomeMutation(
     "login",
@@ -24,7 +23,8 @@ function Index() {
     null,
     "/managers",
     null,
-    "post"
+    "post",
+    true
   );
 
   const loginHandler = (event, data) => {
@@ -130,14 +130,6 @@ function Index() {
           value={inputs.phone}
           onChange={(event) =>
             setInputs((prev) => ({ ...prev, phone: event.target.value }))
-          }
-        />
-        <input
-          type="text" 
-          placeholder="plan ..."
-          value={inputs.plan}
-          onChange={(event) =>
-            setInputs((prev) => ({ ...prev, plan: event.target.value }))
           }
         />
         <button onClick={(event) => createManagerHandler(event, { ...inputs })}>

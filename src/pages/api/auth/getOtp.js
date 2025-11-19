@@ -1,7 +1,7 @@
-import connectToDb from "../../../../utils/db";
+import connectToDb from "@/utils/db";
 import otpModel from "@/models/otp";
-import sendSms from "../../../../utils/sendSms";
-import findUserByProp from "../../../../utils/findUserByProp";
+import sendSms from "@/utils/sendSms";
+import findUserByProp from "@/utils/findUserByProp";
 
 export default async function GetOtp(req, res) {
   if (req.method != "POST") {

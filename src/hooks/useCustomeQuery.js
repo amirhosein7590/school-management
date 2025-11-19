@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axiosPublic from "../../utils/axiosPublic";
+import axiosPublic from "../utils/axiosPublic";
 
 function useCustomeQuery(key, deps, url, headers) {
   const finalHeaders = headers ? { headers } : null;

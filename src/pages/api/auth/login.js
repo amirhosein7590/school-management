@@ -1,13 +1,9 @@
-import connectToDb from "../../../../utils/db";
-import { verifyPassword } from "../../../../utils/passwordConf";
+import connectToDb from "@/utils/db";
+import { verifyPassword } from "@/utils/passwordConf";
 import { serialize } from "cookie";
-import {
-  generateRefreshToken,
-  generateToken,
-} from "../../../../utils/tokenConf";
-import cookieOptions from "../../../../utils/cookieOptions";
-import findUserByProp from "../../../../utils/findUserByProp";
-
+import { generateRefreshToken, generateToken } from "@/utils/tokenConf";
+import cookieOptions from "@/utils/cookieOptions";
+import findUserByProp from "@/utils/findUserByProp";
 export default async function Login(req, res) {
   if (req.method != "POST") {
     return res

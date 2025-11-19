@@ -1,4 +1,4 @@
-import { hashPassword } from "../../utils/passwordConf";
+import { hashPassword } from "../utils/passwordConf";
 
 const mongoose = require("mongoose");
 
@@ -42,7 +42,15 @@ const managerSchema = new mongoose.Schema({
     createClass: { type: Boolean, default: true },
     editClass: { type: Boolean, default: true },
     deleteClass: { type: Boolean, default: true },
-    overrideSchoolSettings: { type: Boolean, default: false },
+    overrideSchoolSettings: { type: Boolean, default: true },
+    teacherExcused: { type: Boolean, default: true },
+    teacherUnexcused: { type: Boolean, default: true },
+    teacherLate: { type: Boolean, default: true },
+    teacherOther: { type: Boolean, default: true },
+    studentExcused: { type: Boolean, default: true },
+    studentUnexcused: { type: Boolean, default: true },
+    studentLate: { type: Boolean, default: true },
+    studentOther: { type: Boolean, default: true },
   },
 });
 

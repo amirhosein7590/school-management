@@ -1,5 +1,5 @@
 import { serialize } from "cookie";
-import cookieOptions from "../../../../utils/cookieOptions";
+import cookieOptions from "@/utils/cookieOptions";
 
 export default async function Logout(req, res) {
   if (req.method != "GET") {

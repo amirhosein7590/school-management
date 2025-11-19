@@ -1,6 +1,6 @@
-import connectToDb from "../../../../utils/db";
-import findUserByProp from "../../../../utils/findUserByProp";
-import { verifyToken } from "../../../../utils/tokenConf";
+import connectToDb from "@/utils/db";
+import findUserByProp from "@/utils/findUserByProp";
+import { verifyToken } from "@/utils/tokenConf";
 
 export default async function GetMe(req, res) {
   try {

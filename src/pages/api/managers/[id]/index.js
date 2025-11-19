@@ -1,9 +1,9 @@
 import ownerModel from "@/models/owner";
-import connectToDb from "../../../../../utils/db";
-import { verifyToken } from "../../../../../utils/tokenConf";
+import connectToDb from "@/utils/db";
+import { verifyToken } from "@/utils/tokenConf";
 import { isValidObjectId } from "mongoose";
 import managerModel from "@/models/manager";
-import findUserByProps from "../../../../../utils/findUserByProps";
+import findUserByProps from "@/utils/findUserByProps";
 
 export default async function SingleManager(req, res) {
   const { token } = req.cookies;
@@ -12,12 +12,21 @@ export default async function SingleManager(req, res) {
   }
 
   if (!req.query?.id || !isValidObjectId(req.query?.id)) {
-    return res.status(422).json({ error: "کاربر یافت نشد", success: false });
+    return res.status(422).json({ error: "مدیر یافت نشد", success: false });
   }
 
   try {
     await connectToDb();
-    const { nationalCode } = verifyToken(token);
+    const { nationalCode, role } = verifyToken(token);
+    if (!nationalCode || !role) {
+      return res.status(422).json({ error: "دسترسی غیر مجاز", success: false });
+    }
+    if (role != "owner") {
+      return res.status(403).json({
+        error: "شما مجاز به انجام این عملیات نیستید",
+        success: false,
+      });
+    }
     if (!nationalCode) {
       return res
         .status(403)

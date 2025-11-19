@@ -14,8 +14,8 @@ const cookieOptions = (
     maxAge: !logout ? tokens[tokenType] : 0,
     path,
     httpOnly,
-    secure: !isProd,
-    sameSite: isProd ? "lax" : "strict",
+    secure: isProd,
+    sameSite: "lax",
   };
 };
 

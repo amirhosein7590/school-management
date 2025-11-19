@@ -1,7 +1,7 @@
 import otpModel from "@/models/otp";
-import connectToDb from "../../../../utils/db";
-import { hashPassword } from "../../../../utils/passwordConf";
-import findUserByProp from "../../../../utils/findUserByProp";
+import connectToDb from "@/utils/db";
+import { hashPassword } from "@/utils/passwordConf";
+import findUserByProp from "@/utils/findUserByProp";
 
 export default async function ResetPassword(req, res) {
   if (req.method != "POST") {

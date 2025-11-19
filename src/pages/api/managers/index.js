@@ -1,13 +1,18 @@
 import ownerModel from "@/models/owner";
-import connectToDb from "../../../../utils/db";
-import { verifyToken } from "../../../../utils/tokenConf";
+import connectToDb from "@/utils/db";
+import { verifyToken } from "@/utils/tokenConf";
 import managerModel from "@/models/manager";
-import findUserByProps from "../../../../utils/findUserByProps";
+import findUserByProps from "@/utils/findUserByProps";
 
-async function Manager(req, res) {
+async function Managers(req, res) {
   try {
     await connectToDb();
-    const { nationalCode, role } = verifyToken(req.cookies?.token);
+    const { token } = req.cookies;
+    if (!token) {
+      return res.status(401).json({ error: "لطفا وارد حساب کاربری خود شوید" });
+    }
+
+    const { nationalCode, role } = verifyToken(token);
     const owner = await ownerModel.findOne({ nationalCode });
 
     if (!nationalCode || !role) {
@@ -91,4 +96,4 @@ async function Manager(req, res) {
   }
 }
 
-export default Manager;
+export default Managers;

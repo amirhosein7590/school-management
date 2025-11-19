@@ -1,4 +1,4 @@
-import { hashPassword } from "../../utils/passwordConf";
+import { hashPassword } from "../utils/passwordConf";
 
 const mongoose = require("mongoose");
 
@@ -30,14 +30,12 @@ const teacherSchema = new mongoose.Schema({
       fromRole: { type: String },
     },
   ],
-  absencePermissions: {
+
+  actionsPermissions: {
     excused: { type: Boolean, default: true },
     unexcused: { type: Boolean, default: true },
     late: { type: Boolean, default: true },
     other: { type: Boolean, default: true },
-  },
-
-  actionsPermissions: {
     createStudent: { type: Boolean, default: true },
     editStudent: { type: Boolean, default: true },
     deleteStudent: { type: Boolean, default: true },
