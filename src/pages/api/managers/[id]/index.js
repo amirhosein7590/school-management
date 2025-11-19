@@ -3,6 +3,7 @@ import connectToDb from "../../../../../utils/db";
 import { verifyToken } from "../../../../../utils/tokenConf";
 import { isValidObjectId } from "mongoose";
 import managerModel from "@/models/manager";
+import findUserByProps from "../../../../../utils/findUserByProps";
 
 export default async function SingleManager(req, res) {
   const { token } = req.cookies;
@@ -72,6 +73,17 @@ export default async function SingleManager(req, res) {
               .status(422)
               .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
           }
+        }
+        const { nationalCode, phone, personnelCode } = req.body;
+        const user = await findUserByProps({
+          nationalCode,
+          phone,
+          personnelCode,
+        });
+        if (user) {
+          return res
+            .status(409)
+            .json({ error: "شخصی با این مشخصات وجود دارد", success: false });
         }
         const manager = await managerModel.findOneAndUpdate(
           { _id: req.query?.id },
