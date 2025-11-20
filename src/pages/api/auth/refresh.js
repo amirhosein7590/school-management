@@ -1,4 +1,5 @@
 import cookieOptions from "@/utils/cookieOptions";
+import findUserByProp from "@/utils/findUserByProp";
 import {
   generateRefreshToken,
   generateToken,
@@ -7,6 +8,11 @@ import {
 import { serialize } from "cookie";
 
 export default async function RefreshToken(req, res) {
+  if (req.method != "GET") {
+    return res
+      .status(400)
+      .json({ error: "این درخواست مجاز نیست", success: false });
+  }
   const { refreshToken } = req.cookies;
   if (!refreshToken) {
     return res.status(401).json({

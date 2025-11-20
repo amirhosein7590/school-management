@@ -1,14 +1,15 @@
 import { isValidObjectId } from "mongoose";
 import connectToDb from "@/utils/db";
-import { verifyToken } from "@/utils/tokenConf";
 import ownerModel from "@/models/owner";
 import managerModel from "@/models/manager";
+import schoolModel from "@/models/school";
 import RBAC from "@/utils/RBAC";
 
-export default async function ManagerPermissons(req, res) {
+export default async function SetSchool(req, res) {
   if (req.method != "POST") {
     return res.status(400).json({ error: "خطای ناشناخته", success: false });
   }
+
   const auth = RBAC(req, res, ["owner"], {
     status: true,
     errorMessage: "مدیر یافت نشد",
@@ -16,6 +17,12 @@ export default async function ManagerPermissons(req, res) {
 
   if (!auth) return;
   const { nationalCode } = auth;
+
+  const { schoolId } = req.body;
+
+  if (!schoolId || !isValidObjectId(schoolId)) {
+    return res.status(422).json({ error: "مدرسه یافت نشد", success: false });
+  }
 
   try {
     await connectToDb();
@@ -31,25 +38,29 @@ export default async function ManagerPermissons(req, res) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
 
-    const validKeys = Object.keys(manager.actionsPermissions);
-    const bodyKeys = Object.keys(req.body);
-
-    for (const key of bodyKeys) {
-      if (!validKeys.includes(key)) {
-        return res
-          .status(422)
-          .json({ error: "فیلد نامعتبر است", success: false });
-      }
+    const school = await schoolModel.findOne({ _id: schoolId });
+    if (!school) {
+      return res.status(404).json({ error: "مدرسه یافت نشد", success: false });
+    }
+    if (manager.school) {
+      return res.status(409).json({
+        error: "برای این مدیر قبلا مدرسه ای تعریف شده است",
+        success: false,
+      });
     }
 
-    manager.actionsPermissions = {
-      ...manager.actionsPermissions,
-      ...req.body,
-    };
+    if (school.manager) {
+      return res.status(409).json({
+        error: " برای این مدرسه قبلا مدیری تعریف شده است",
+        success: false,
+      });
+    }
+    manager.school = schoolId;
+    school.manager = manager._id;
+    await manager.save();
+    await school.save();
 
-    manager.save();
-
-    return res.json({ message: "محدودیت با موفقیت اعمال شد", success: true });
+    return res.json({ message: "عملیات موفقیت آمیز بود", success: true });
   } catch (error) {
     return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }

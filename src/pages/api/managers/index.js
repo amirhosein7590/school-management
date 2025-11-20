@@ -1,25 +1,19 @@
 import ownerModel from "@/models/owner";
 import connectToDb from "@/utils/db";
-import { verifyToken } from "@/utils/tokenConf";
 import managerModel from "@/models/manager";
 import findUserByProps from "@/utils/findUserByProps";
+import RBAC from "@/utils/RBAC";
 
 async function Managers(req, res) {
+  const auth = RBAC(req, res, ["owner"]);
+
+  if (!auth) return;
+  const { nationalCode } = auth;
+
   try {
     await connectToDb();
-    const { token } = req.cookies;
-    if (!token) {
-      return res.status(401).json({ error: "لطفا وارد حساب کاربری خود شوید" });
-    }
-
-    const { nationalCode, role } = verifyToken(token);
     const owner = await ownerModel.findOne({ nationalCode });
-
-    if (!nationalCode || !role) {
-      return res.status(422).json({ error: "دسترسی غیر مجاز", success: false });
-    }
-
-    if (role != "owner" || !owner) {
+    if (!owner) {
       return res.status(422).json({ error: "دسترسی غیر مجاز", success: false });
     }
 
@@ -30,7 +24,7 @@ async function Managers(req, res) {
         const skip = (page - 1) * limit;
         if (page) {
           const [managers, total] = await Promise.all([
-            managerModel.find().skip(skip).limit(limit),
+            managerModel.find().skip(skip).limit(limit).populate("school"),
             managerModel.countDocuments(),
           ]);
           return res.json({
@@ -40,7 +34,7 @@ async function Managers(req, res) {
             success: true,
           });
         } else {
-          const managers = await managerModel.find();
+          const managers = await managerModel.find().populate("school");
           return res.json({ managers, success: true });
         }
       }

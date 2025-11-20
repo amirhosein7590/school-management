@@ -1,37 +1,19 @@
 import ownerModel from "@/models/owner";
 import connectToDb from "@/utils/db";
-import { verifyToken } from "@/utils/tokenConf";
-import { isValidObjectId } from "mongoose";
 import managerModel from "@/models/manager";
 import findUserByProps from "@/utils/findUserByProps";
+import RBAC from "@/utils/RBAC";
 
 export default async function SingleManager(req, res) {
-  const { token } = req.cookies;
-  if (!token) {
-    return res.status(401).json({ error: "لطفا وارد حساب کاربری خود شوید" });
-  }
+  const auth = RBAC(req, res, ["owner"], {
+    status: true,
+    errorMessage: "مدیر یافت نشد",
+  });
 
-  if (!req.query?.id || !isValidObjectId(req.query?.id)) {
-    return res.status(422).json({ error: "مدیر یافت نشد", success: false });
-  }
-
+  if (!auth) return;
+  const { nationalCode } = auth;
   try {
     await connectToDb();
-    const { nationalCode, role } = verifyToken(token);
-    if (!nationalCode || !role) {
-      return res.status(422).json({ error: "دسترسی غیر مجاز", success: false });
-    }
-    if (role != "owner") {
-      return res.status(403).json({
-        error: "شما مجاز به انجام این عملیات نیستید",
-        success: false,
-      });
-    }
-    if (!nationalCode) {
-      return res
-        .status(403)
-        .json({ error: "دسترسی شما معتبر نیست", success: false });
-    }
     const owner = await ownerModel.findOne({ nationalCode });
     if (!owner) {
       return res.status(403).json({
@@ -104,7 +86,7 @@ export default async function SingleManager(req, res) {
             .json({ error: "مدیر یافت نشد", success: false });
         }
         return res.json({
-          message: "مدیر با موفقیت ویرایش شد",
+          message: "اطلاعات مدیر با موفقیت تغییر یافت",
           success: false,
         });
 
