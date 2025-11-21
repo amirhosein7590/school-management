@@ -12,6 +12,8 @@ const classSchema = new mongoose.Schema({
   capacity: { type: Number, required: true }, //منظور ظرفیت هر کلاس هستش
 });
 
+classSchema.index({ name: 1 });
+
 classSchema.virtual("students", {
   ref: "Student",
   localField: "_id",

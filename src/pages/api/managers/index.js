@@ -24,7 +24,11 @@ async function Managers(req, res) {
         const skip = (page - 1) * limit;
         if (page) {
           const [managers, total] = await Promise.all([
-            managerModel.find().skip(skip).limit(limit).populate("school"),
+            managerModel
+              .find()
+              .skip(skip)
+              .limit(limit)
+              .populate("school", "name _id"),
             managerModel.countDocuments(),
           ]);
           return res.json({
@@ -34,7 +38,9 @@ async function Managers(req, res) {
             success: true,
           });
         } else {
-          const managers = await managerModel.find().populate("school");
+          const managers = await managerModel
+            .find()
+            .populate("school", "name _id");
           return res.json({ managers, success: true });
         }
       }
@@ -57,10 +63,12 @@ async function Managers(req, res) {
             .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
 
-        const user = await findUserByProps({
-          nationalCode: req.body?.nationalCode,
-          phone: req.body?.phone,
-          personnelCode: req.body?.personnelCode,
+        const user = await managerModel({
+          $or: [
+            { nationalCode: req.body?.nationalCode },
+            { personnelCode: req.body?.personnelCode },
+            { phone: req.body?.phone },
+          ],
         });
 
         if (user) {

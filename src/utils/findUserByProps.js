@@ -11,14 +11,16 @@ export default async function findUserByProps(fields = {}) {
   if (owner) return owner;
 
   const teacher = await teacherModel
-    .findOne(query)
-    .populate("school")
-    .populate("class")
-    .populate("manager");
+    .findOne(query, "-actionsPermissions")
+    .populate("school", "name _id")
+    .populate("manager", "firstName lastName _id ")
+    .populate("class", "name _id");
 
   if (teacher) return teacher.toObject();
 
-  const manager = await managerModel.findOne(query).populate("school");
+  const manager = await managerModel
+    .findOne(query, "-actionsPermissions")
+    .populate("school", "name _id");
 
   if (manager) return manager.toObject();
 

@@ -20,7 +20,11 @@ export default async function Schools(req, res) {
         const skip = (page - 1) * limit;
         if (page) {
           const [schools, total] = await Promise.all([
-            schoolModel.find().skip(skip).limit(limit).populate("manager"),
+            schoolModel
+              .find()
+              .skip(skip)
+              .limit(limit)
+              .populate("manager", "firstName lastName _id"),
             schoolModel.countDocuments(),
           ]);
           return res.json({
@@ -30,7 +34,9 @@ export default async function Schools(req, res) {
             success: true,
           });
         } else {
-          const schools = await schoolModel.find().populate("manager");
+          const schools = await schoolModel
+            .find()
+            .populate("manager", "firstName lastName _id");
           return res.json({ schools, success: true });
         }
       }
