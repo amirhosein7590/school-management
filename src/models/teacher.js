@@ -15,7 +15,7 @@ const teacherSchema = new mongoose.Schema({
   class: { type: mongoose.Types.ObjectId, required: false, ref: "Class" },
   manager: { type: mongoose.Types.ObjectId, required: false, ref: "Manager" },
   birthDay: { type: Date, required: true },
-  gender: { type: String, required: true },
+  gender: { type: String, required: true, enum: ["boyish", "girlish"] },
   role: {
     type: String,
     enum: ["teacher"],

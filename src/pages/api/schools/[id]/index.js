@@ -18,6 +18,12 @@ export default async function SingleSchool(req, res) {
 
     switch (req.method) {
       case "GET": {
+        if (role != "owner") {
+          return res.status(403).json({
+            error: "شما مجاز به انجام این عملیات نیستید",
+            success: false,
+          });
+        }
         const owner = await ownerModel.findOne({ nationalCode });
         if (!owner) {
           return res.status(403).json({
