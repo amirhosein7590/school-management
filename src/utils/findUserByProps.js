@@ -1,12 +1,13 @@
 import managerModel from "@/models/manager";
 import teacherModel from "@/models/teacher";
 import ownerModel from "@/models/owner";
+import connectToDb from "./db";
 
 export default async function findUserByProps(fields = {}) {
   const query = {
     $or: Object.entries(fields).map(([key, value]) => ({ [key]: value })),
   };
-
+  await connectToDb();
   const owner = await ownerModel.findOne(query);
   if (owner) return owner;
 

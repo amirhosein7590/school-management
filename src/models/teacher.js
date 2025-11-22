@@ -11,9 +11,24 @@ const teacherSchema = new mongoose.Schema({
   nationalCode: { type: String, required: true, unique: true },
   personnelCode: { type: String, required: true, unique: true },
   isBanned: { type: Boolean, required: true, default: false },
-  school: { type: mongoose.Types.ObjectId, required: true, ref: "School" },
-  class: { type: mongoose.Types.ObjectId, required: false, ref: "Class" },
-  manager: { type: mongoose.Types.ObjectId, required: true, ref: "Manager" },
+  school: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "School",
+    unique: true,
+  },
+  class: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "Class",
+    unique: true,
+  },
+  manager: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "Manager",
+    unique: true,
+  },
   birthDay: { type: Date, required: true },
   gender: { type: String, required: true, enum: ["male", "female"] },
   role: {

@@ -99,7 +99,7 @@ export default async function SingleSchool(req, res) {
               .json({ error: "مدرسه یافت نشد", success: false });
           }
 
-          return res.json({ message: "اطلاعات مدرسه با موفقیت تغییر یافت" });
+          return res.json({ message: "اطلاعات مدرسه با موفقیت تغییر یافت" , success : true });
         } else if (role == "manager") {
           const manager = await managerModel.findOne({ nationalCode });
           if (!manager) {

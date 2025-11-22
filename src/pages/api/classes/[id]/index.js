@@ -101,7 +101,7 @@ export default async function SingleClass(req, res) {
               .status(404)
               .json({ error: "کلاس یافت نشد", success: false });
           }
-          return res.json({ message: "کلاس با موفقیت حذف شد", success: false });
+          return res.json({ message: "کلاس با موفقیت حذف شد", success: true });
         }
         // owner role is not doing anything in this api (POST Request) but may be later must to add it
       }

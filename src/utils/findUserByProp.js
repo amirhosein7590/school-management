@@ -1,7 +1,9 @@
 import ownerModel from "@/models/owner";
 import teacherModel from "@/models/teacher";
 import managerModel from "@/models/manager";
+import connectToDb from "./db";
 export default async function findUserByProp(propertyName, value) {
+  await connectToDb();
   const owner = await ownerModel.findOne({ [propertyName]: value });
   if (owner) return owner;
 

@@ -16,7 +16,12 @@ const managerSchema = new mongoose.Schema({
     default: "manager",
     immutable: true,
   },
-  school: { type: mongoose.Types.ObjectId, ref: "School", required: false },
+  school: {
+    type: mongoose.Types.ObjectId,
+    ref: "School",
+    required: false,
+    unique: true,
+  },
   isBanned: { type: Boolean, required: true, default: false },
   expTime: {
     type: Number,

@@ -3,11 +3,32 @@ const mongoose = require("mongoose");
 const studentSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  nationalCode: { type: String, required: true },
-  parentPhone: { type: String, required: true },
-  school: { type: mongoose.Types.ObjectId, required: false, ref: "School" },
-  class: { type: mongoose.Types.ObjectId, required: false, ref: "Class" },
-  teacher: { type: mongoose.Types.ObjectId, required: false, ref: "Teacher" },
+  nationalCode: { type: String, required: true, unique: true },
+  parentPhone: { type: String, required: true, unique: true },
+  school: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "School",
+    unique: true,
+  },
+  class: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "Class",
+    unique: true,
+  },
+  teacher: {
+    type: mongoose.Types.ObjectId,
+    required: false,
+    ref: "Teacher",
+    unique: true,
+  },
+  manager: {
+    type: mongoose.Types.ObjectId,
+    ref: "Manager",
+    required: true,
+    unique: true,
+  },
   birthDay: { type: Date, required: true },
   grade: {
     type: Number,
