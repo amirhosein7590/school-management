@@ -89,6 +89,6 @@ export default async function GetOtp(req, res) {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "خطای ناشناخته", dbError: error, success: false });
+      .json({ error: "خطای ناشناخته", success: false });
   }
 }

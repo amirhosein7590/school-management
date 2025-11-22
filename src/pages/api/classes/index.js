@@ -104,7 +104,7 @@ export default async function Classes(req, res) {
           name: req.body?.name,
           school: manager.school,
         });
-        if (!cls) {
+        if (cls) {
           return res
             .status(409)
             .json({ error: "کلاسی با این مشخصات وجود دارد", success: false });
