@@ -1,9 +1,8 @@
 import classModel from "@/models/class";
 import teacherModel from "@/models/teacher";
-import managerModel from "@/models/manager";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
-import mongoose from "mongoose";
+import managerModel from "@/models/manager";
 
 export default async function TeachersClassification(req, res) {
   if (req.method !== "POST") {
@@ -22,65 +21,42 @@ export default async function TeachersClassification(req, res) {
 
   try {
     await connectToDb();
-
-    const manager = await managerModel.findOne(
-      { nationalCode },
-      { _id: 1, school: 1 }
-    );
-    if (!manager)
+    const manager = await managerModel.findOne({ nationalCode });
+    if (!manager) {
       return res.status(403).json({
         error: "شما مجاز به انجام این عملیات نیستید",
         success: false,
       });
-
+    }
     const { classId } = req.body;
-    if (!classId?.trim()) {
+    if (!classId || !classId.trim()) {
       return res
         .status(422)
         .json({ error: "کلاس مشخص نشده است", success: false });
     }
-
-    const teacher = await teacherModel.findOne(
-      {
-        _id: req.query.id,
-        school: manager.school,
-        manager: manager._id,
-      },
-      { _id: 1 }
-    );
-    if (!teacher)
+    const teacher = await teacherModel.findOne({
+      _id: req.query?.id,
+      school: manager.school,
+      manager: manager._id,
+    });
+    if (!teacher) {
       return res.status(404).json({ error: "معلم یافت نشد", success: false });
-
-    const cls = await classModel.findOne(
-      {
-        _id: classId,
-        school: manager.school,
-        manager: manager._id,
-      },
-      { _id: 1 }
-    );
-    if (!cls)
+    }
+    const Class = await classModel.findOne({
+      _id: classId,
+      school: manager.school,
+    });
+    if (!Class) {
       return res.status(404).json({ error: "کلاس یافت نشد", success: false });
-
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
-    await classModel.updateOne(
-      { _id: classId },
-      { teacher: teacher._id },
-      { session }
-    );
-
-    await teacherModel.updateOne(
-      { _id: teacher._id },
-      { class: classId },
-      { session }
-    );
-
-    await session.commitTransaction();
-    session.endSession();
-
-    return res.json({ message: "عملیات موفقیت آمیز بود", success: true });
+    }
+    Class.teacher = teacher._id;
+    teacher.class = Class._id;
+    await Class.save();
+    await teacher.save();
+    return res.json({
+      message: "معلم با موفقیت به کلاس منتقل شد",
+      success: true,
+    });
   } catch (error) {
     return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }

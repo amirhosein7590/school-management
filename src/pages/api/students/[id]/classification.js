@@ -67,7 +67,6 @@ export default async function StudentClassification(req, res) {
     const cls = await classModel.findOne(
       {
         _id: classId,
-        manager: manager._id,
         school: manager.school,
       },
       { capacity: 1, teacher: 1 }
@@ -110,6 +109,7 @@ export default async function StudentClassification(req, res) {
     return res.status(500).json({
       error: "خطای ناشناخته",
       success: false,
+      dbError: error,
     });
   }
 }
