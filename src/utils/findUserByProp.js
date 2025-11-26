@@ -8,7 +8,7 @@ export default async function findUserByProp(propertyName, value) {
   if (owner) return owner;
 
   const teacher = await teacherModel
-    .findOne({ [propertyName]: value })
+    .findOne({ [propertyName]: value } , '-actionsPermissions')
     .populate("school", "name _id")
     .populate("manager", "firstName lastName _id ")
     .populate("class", "name _id");
@@ -16,7 +16,7 @@ export default async function findUserByProp(propertyName, value) {
   if (teacher) return teacher.toObject();
 
   const manager = await managerModel
-    .findOne({ [propertyName]: value })
+    .findOne({ [propertyName]: value } , '-actionsPermissions')
     .populate("school", "name _id");
 
   if (manager) return manager.toObject();

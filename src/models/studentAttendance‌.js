@@ -13,6 +13,7 @@ const studentAttendanceSchema = new mongoose.Schema({
     required: true,
   },
   description: { type: String, required: false },
+  time: { type: String, required: false }, // when status is late
 
   createdAt: { type: Date, default: Date.now },
 });

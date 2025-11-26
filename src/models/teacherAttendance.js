@@ -6,10 +6,11 @@ const teacherAttendanceSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   status: {
     type: String,
-    enum: ["present", "absent", "excused", "late" , "other" , "leave"],
+    enum: ["present", "absent", "excused", "late", "other", "leave"],
     required: true,
   },
   description: { type: String, required: false },
+  time: { type: String, required: false }, // when status is late
 
   createdAt: { type: Date, default: Date.now },
 });
