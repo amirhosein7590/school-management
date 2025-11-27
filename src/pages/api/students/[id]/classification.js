@@ -105,7 +105,6 @@ export default async function StudentClassification(req, res) {
       success: true,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       error: "خطای ناشناخته",
       success: false,

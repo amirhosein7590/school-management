@@ -16,7 +16,6 @@ export default async function MostAbsentTeacher(req, res) {
   try {
     await connectToDb();
 
-    // بررسی مدیر
     const manager = await managerModel.findOne({ nationalCode }).lean();
     if (!manager) {
       return res.status(403).json({
@@ -25,7 +24,6 @@ export default async function MostAbsentTeacher(req, res) {
       });
     }
 
-    // محاسبه محدوده ماه جاری
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(
@@ -37,11 +35,6 @@ export default async function MostAbsentTeacher(req, res) {
       59
     );
 
-    // لاگ برای دیباگ
-    console.log("Manager:", manager._id);
-    console.log("Date range:", monthStart, "to", monthEnd);
-
-    // aggregation بهبود یافته
     const result = await teacherAttendanceModel.aggregate([
       {
         $match: {
@@ -50,7 +43,7 @@ export default async function MostAbsentTeacher(req, res) {
             $gte: monthStart,
             $lte: monthEnd,
           },
-          status: { $in: ["absent", "excused"] }, // مقادیر رو چک کنید
+          status: { $in: ["absent", "excused"] },
         },
       },
       {
@@ -82,7 +75,8 @@ export default async function MostAbsentTeacher(req, res) {
           _id: 0,
           teacher: {
             _id: "$teacher._id",
-            fullName: "$teacher.fullName",
+            firstName: "$teacher.firstName",
+            lastName: "$teacher.lastName",
             userName: "$teacher.userName",
             nationalCode: "$teacher.nationalCode",
           },
@@ -91,8 +85,6 @@ export default async function MostAbsentTeacher(req, res) {
         },
       },
     ]);
-
-    console.log("Aggregation result:", result);
 
     if (!result.length) {
       return res.json({
@@ -107,7 +99,6 @@ export default async function MostAbsentTeacher(req, res) {
       teacher: result[0],
     });
   } catch (error) {
-    console.error("Error:", error);
     return res.status(500).json({
       error: "خطای ناشناخته",
       success: false,
