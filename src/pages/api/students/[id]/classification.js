@@ -91,6 +91,13 @@ export default async function StudentClassification(req, res) {
       });
     }
 
+    if (!cls.teacher) {
+      return res.status(409).json({
+        error: "نخست باید کلاس بندی معلم انجام شود",
+        success: false,
+      });
+    }
+
     // ---- Update Student ----
     await studentModel.updateOne(
       { _id: student._id },
