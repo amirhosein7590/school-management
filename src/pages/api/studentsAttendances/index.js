@@ -20,7 +20,7 @@ export default async function StudentsAttendances(req, res) {
   try {
     await connectToDb();
     // ------------------ Body validation ------------------
-    const { attendances } = req.body; // date , teacher , status
+    const { attendances } = req.body; // date , class , status
 
     if (!Array.isArray(attendances) || attendances.length === 0) {
       return res
