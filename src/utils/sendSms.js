@@ -6,6 +6,7 @@ export default async function sendSms({
   param1 = "",
   param2 = "",
   param3 = "",
+  text = "",
 }) {
   if (patternKey) {
     try {
@@ -22,6 +23,32 @@ export default async function sendSms({
       return { ...error, success: false };
     }
   } else {
-    // for messages that have not any specific pattern
+    try {
+      const url = "http://api.sms-webservice.com/api/V3/SendBulk";
+      const bodyReq = {
+        ApiKey: process.env.smsApiKey,
+        Text: text,
+        Sender: process.env.sender,
+        Recipients: [
+          {
+            Destination: phoneNumber,
+            UserTraceId: 0,
+          },
+        ],
+      };
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      console.log(bodyReq);
+
+      const res = await axios.post(url, bodyReq, { headers });
+      const data = await res.data;
+      console.log(data);
+      return { ...data, success: true };
+    } catch (error) {
+      console.log(error);
+      return { ...error, success: false };
+    }
   }
 }
