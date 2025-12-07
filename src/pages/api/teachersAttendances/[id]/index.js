@@ -1,5 +1,4 @@
 import managerModel from "@/models/manager";
-import teacherModel from "@/models/teacher";
 import teacherAttendanceModel from "@/models/teacherAttendance";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
