@@ -5,6 +5,7 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import React from "react";
+import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -13,6 +14,10 @@ export default function App({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <Component {...pageProps} />
+        <Toaster
+          richColors
+          position="top-center"
+        />
       </HydrationBoundary>
     </QueryClientProvider>
   );
