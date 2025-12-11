@@ -39,43 +39,45 @@ const buttonVariants = cva(
   }
 );
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  isActiveAware = false,
-  ...props
-}) {
-  const Comp = asChild ? Slot : "button";
-  const pathName = usePathname();
-  const isActive = pathName == props.href;
+const Button = React.memo(
+  ({
+    className,
+    variant,
+    size,
+    asChild = false,
+    isActiveAware = false,
+    ...props
+  }) => {
+    const Comp = asChild ? Slot : "button";
+    const pathName = usePathname();
+    const isActive = pathName == props.href;
 
-  if (isActiveAware) {
-    const activeClass = isActive && "!text-red-600";
+    if (isActiveAware) {
+      const activeClass = isActive && "!text-red-600";
+      return (
+        <Link
+          className={cn(
+            buttonVariants({ variant, size }),
+            activeClass,
+            className
+          )}
+          {...props}
+        />
+      );
+    }
+
     return (
-      <Link
+      <Comp
+        data-slot="button"
         className={cn(
           buttonVariants({ variant, size }),
-          activeClass,
+          isActiveAware && isActive && "!text-red-600",
           className
         )}
         {...props}
       />
     );
   }
-
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size }),
-        isActiveAware && isActive && "!text-red-600",
-        className
-      )}
-      {...props}
-    />
-  );
-}
+);
 
 export { Button, buttonVariants };

@@ -1,30 +1,63 @@
+import { useModal } from "@/contexts/ModalContext";
 import { Button } from "@/components/modules/button";
-import { toast } from "sonner";
-import { XCircleIcon } from "lucide-react";
 
 function Index() {
+  const { showModal } = useModal();
+
+
   return (
-    <>
-      <Button
-        onClick={() => {
-          toast.success("این یک پیغام نمایشی است", {
-            icon: null,
-            duration: 5000,
-            closeButton : true,
-            style: {
-              textAlign: "center",
-              direction: "rtl",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            },
-          });
-        }}
-      >
-        Show Toast
-      </Button>
-      <div>سلام به همگی</div>
-    </>
+    <Button
+      onClick={() => {
+        showModal({
+          title: "بردیا فتاحی",
+          data: {name : "amirhosein"},
+          size: "xl",
+
+          content: ({ id, data, close, update, openNested }) => (
+            <form
+              className="flex items-center flex-wrap"
+            >
+              
+              <p>{data.name}</p>
+              <Button type="submit">Submit</Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openNested({
+                    title: "مودال شماره ۲",
+                    data: { name: "امیرحسین" },
+                    content: ({ data, close, update, parentId }) => (
+                      <div>
+                        <p>سلام {data.name}</p>
+                        <Button
+                          onClick={() => {
+                            update(parentId, {name : "امیرحسین غلامی"});
+                            close({name : "امیرحسین غلامی"})
+                          }}
+                        >
+                          آپدیت مودال اول
+                        </Button>
+                      </div>
+                    ),
+                    onClose: (res) => {
+                      console.log("نتیجه مودال دوم:", res);
+                    },
+                  });
+                }}
+              >
+                باز کردن مودال دوم
+              </Button>
+            </form>
+          ),
+
+          onClose: (result) => {
+            console.log(result);
+          },
+        });
+      }}
+    >
+      Open Modal
+    </Button>
   );
 }
 

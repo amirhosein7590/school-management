@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 import { Toaster } from "sonner";
+import { ModalProvider } from "@/contexts/ModalContext";
 
 export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -13,11 +14,10 @@ export default function App({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
-        <Component {...pageProps} />
-        <Toaster
-          richColors
-          position="top-center"
-        />
+        <ModalProvider>
+          <Component {...pageProps} />
+        </ModalProvider>
+        <Toaster richColors position="top-center" />
       </HydrationBoundary>
     </QueryClientProvider>
   );
