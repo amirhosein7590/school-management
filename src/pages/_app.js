@@ -7,6 +7,8 @@ import {
 import React from "react";
 import { Toaster } from "sonner";
 import { ModalProvider } from "@/contexts/ModalContext";
+import "react-multi-date-picker/styles/layouts/mobile.css";
+
 
 export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient());

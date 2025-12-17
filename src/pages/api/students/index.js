@@ -48,8 +48,8 @@ export default async function Students(req, res) {
           }
           const students = await studentModel
             .find({}, "-actionsPermissions -userName -password")
-            .populate("school", "name _id")
             .populate("teacher", "firstName lastName _id")
+            .populate("school", "name _id")
             .populate("manager", "firstName lastName _id ")
             .populate("class", "name _id");
           return res.json({ students, success: true });
@@ -93,6 +93,7 @@ export default async function Students(req, res) {
               "-manager -school"
             )
             .populate("school", "name _id")
+            .populate("teacher", "firstName lastName _id")
             .populate("class", "name _id");
 
           return res.json({ students, success: true });

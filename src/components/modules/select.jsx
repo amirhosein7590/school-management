@@ -3,7 +3,7 @@
 import { memo, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/utils/shadcn-utils";
-import { Button } from "@/components/modules/button";
+import { Button } from "@/components/modules/Button/button";
 import {
   Command,
   CommandGroup,

@@ -27,7 +27,7 @@ const TableHeader = React.memo(({ className, ...props }) => {
   );
 });
 
-const TableBody = memo(({ className, ...props }) => {
+const TableBody = React.memo(({ className, ...props }) => {
   return (
     <tbody
       data-slot="table-body"
@@ -37,7 +37,7 @@ const TableBody = memo(({ className, ...props }) => {
   );
 });
 
-const TableFooter = memo(({ className, ...props }) => {
+const TableFooter = React.memo(({ className, ...props }) => {
   return (
     <tfoot
       data-slot="table-footer"
@@ -50,7 +50,7 @@ const TableFooter = memo(({ className, ...props }) => {
   );
 });
 
-const TableRow = memo(({ className, ...props }) => {
+const TableRow = React.memo(({ className, ...props }) => {
   return (
     <tr
       data-slot="table-row"
@@ -63,7 +63,7 @@ const TableRow = memo(({ className, ...props }) => {
   );
 });
 
-const TableHead = memo(({ className, ...props }) => {
+const TableHead = React.memo(({ className, ...props }) => {
   return (
     <th
       data-slot="table-head"
@@ -76,7 +76,7 @@ const TableHead = memo(({ className, ...props }) => {
   );
 });
 
-const TableCell = memo(({ className, ...props }) => {
+const TableCell = React.memo(({ className, ...props }) => {
   return (
     <td
       data-slot="table-cell"
@@ -89,7 +89,7 @@ const TableCell = memo(({ className, ...props }) => {
   );
 });
 
-const TableCaption = memo(({ className, ...props }) => {
+const TableCaption = React.memo(({ className, ...props }) => {
   return (
     <caption
       data-slot="table-caption"

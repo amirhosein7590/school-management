@@ -3,6 +3,8 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import { cn } from "@/utils/shadcn-utils";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -19,16 +21,12 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        present: "!border !border-[#0000001f] !bg-[#f5f5f5] !text-[#27ae61]",
-        absent: "!border border-[#0000001f] !text-[#ff3d00] !bg-[#ff3d00]",
-        late: "!border b!order-[#0000001f] !text-[#ff9800] !bg-[#f57c00]",
-        excused: "!border border-[#0000001f] !bg-green-300 !text-green-500",
-        other: "!border border-[#0000001f] !bg-blue-300 !text-blue-500",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        xl: "h-15 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
@@ -41,24 +39,45 @@ const buttonVariants = cva(
   }
 );
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  asChild = false,
-  ...props
-}) {
-  const Comp = asChild ? Slot : "button";
+const Button = React.memo(
+  ({
+    className,
+    variant,
+    size,
+    asChild = false,
+    isActiveAware = false,
+    ...props
+  }) => {
+    const Comp = asChild ? Slot : "button";
+    const pathName = usePathname();
+    const isActive = pathName == props.href;
 
-  return (
-    <Comp
-      data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
-}
+    if (isActiveAware) {
+      const activeClass = isActive && "!text-red-600";
+      return (
+        <Link
+          className={cn(
+            buttonVariants({ variant, size }),
+            activeClass,
+            className
+          )}
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <Comp
+        data-slot="button"
+        className={cn(
+          buttonVariants({ variant, size }),
+          isActiveAware && isActive && "!text-red-600",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
 
 export { Button, buttonVariants };
