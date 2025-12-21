@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/modules/popover";
-import { Button } from "@/components/modules/button";
+import { Button } from "@/components/modules/Button/button";
 import { TimerIcon } from "lucide-react";
 
 /**

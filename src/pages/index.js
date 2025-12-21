@@ -1,11 +1,36 @@
-import DataTable from "@/components/modules/dataTable";
+import ROLE_REDIRECT_MAP from "@/constants/auth/roleRedirect";
 
 function Index() {
-  return (
-    <div className="w-full md:w-10/12 md:mx-auto">
-      <DataTable />
-    </div>
-  );
+  return <></>;
 }
 
 export default Index;
+
+export async function getServerSideProps(context) {
+  const { token } = context.req.cookies;
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+      },
+    };
+  }
+  const { role } = verifyToken(token);
+  if (!role.trim()) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+      },
+    };
+  }
+  if (role.trim()) {
+    return {
+      redirect: {
+        destination: ROLE_REDIRECT_MAP[role],
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

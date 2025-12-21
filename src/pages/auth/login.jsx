@@ -1,0 +1,43 @@
+import { Button } from "@/components/modules/Button/button";
+import Form from "@/components/modules/Form";
+import React from "react";
+
+function Login() {
+  return (
+    <div className="wrapper bg-white flex w-full md:max-w-10/12 mx-auto shadow-sm mt-5 py-2 px-4 justify-between">
+      <div className="form flex flex-col w-full md:w-1/2">
+        <div className="medad-info bg-white flex items-center pb-2 border-b border-b-[rgba(0_0_0_0.87)] card-shadow">
+          <div className="w-20 h-20 bg-[url('/images/logo.png')] bg-cover bg-center bg-no-repeat"></div>
+
+          <div className="description flex flex-col -mr-2">
+            <span className="sans-bold mb-1 text-sm md:text-[16px]">
+              سامانه مداد
+            </span>
+            <span className="text-xs md:text-sm text-[rgba(0_0_0_.87)]">
+              پیوند مدرسه با اولیا و دانش آموزان
+            </span>
+          </div>
+        </div>
+        <div className="title mb-6 md:mb-10 mr-6 sans-medium text-lg md:text-xl mt-3 md:mt-5">
+          ورود به حساب کاربری
+        </div>
+        <Form
+          submitButtonClassName="w-full md:text-[16px] rounded-full py-3 pb-4 md:py-4 md:pb-5 items-center justify-center"
+          submitButtonText="ورود"
+          mode="login"
+          entityName="login"
+        />
+        <Button
+          variant="link"
+          href="/auth/forgotPassword"
+          className="mt-3 text-right cursor-pointer"
+        >
+          رمز عبور خود را فراموش کرده اید ؟
+        </Button>
+      </div>
+      <div className="image hidden h-110 w-1/2 bg-no-repeat md:block bg-[url(/images/loginImage.png)]"></div>
+    </div>
+  );
+}
+
+export default Login;

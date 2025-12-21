@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosPublic from "../utils/axiosPublic";
 import axiosPrivate from "@/utils/axiosPrivate";
+import { toast } from "sonner";
 
 function injectIdToUrl(url, paramId) {
   let finalUrl = url;
@@ -28,12 +29,13 @@ function useCustomeMutation(
       client[reqType](finalUrl, data, headers && { headers }).then(
         (res) => res.data
       ),
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries(finalKey);
+      toast.success(response?.message);
     },
     onError: (err) => {
       const errorMessage = err.response.data.error;
-      console.log(errorMessage);
+      toast.error(errorMessage);
     },
   });
 
