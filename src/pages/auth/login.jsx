@@ -35,9 +35,9 @@ function Login() {
         >
           رمز عبور خود را فراموش کرده اید ؟
         </Button>
-        <p className="text-rose-600 flex items-center gap-x-2">
+        <p className="text-rose-600 text-sm md:text-[16px] flex md:items-center gap-x-2">
         <Info size='20' />
-          به صورت پیش فرض نام کاربری ، کدملی و رمز عبور کد پرسنلی می باشد
+          به صورت پیش فرض نام کاربری  کدملی و رمز عبور کد پرسنلی می باشد
         </p>
       </div>
       <div className="image hidden h-110 w-1/2 bg-no-repeat md:block bg-[url(/images/loginImage.png)]"></div>
