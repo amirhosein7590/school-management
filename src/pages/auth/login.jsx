@@ -1,5 +1,6 @@
 import { Button } from "@/components/modules/Button/button";
 import Form from "@/components/modules/Form";
+import { Info } from "lucide-react";
 import React from "react";
 
 function Login() {
@@ -34,6 +35,10 @@ function Login() {
         >
           رمز عبور خود را فراموش کرده اید ؟
         </Button>
+        <p className="text-rose-600 flex items-center gap-x-2">
+        <Info size='20' />
+          به صورت پیش فرض نام کاربری ، کدملی و رمز عبور کد پرسنلی می باشد
+        </p>
       </div>
       <div className="image hidden h-110 w-1/2 bg-no-repeat md:block bg-[url(/images/loginImage.png)]"></div>
     </div>

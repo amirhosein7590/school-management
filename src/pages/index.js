@@ -1,4 +1,5 @@
 import ROLE_REDIRECT_MAP from "@/constants/auth/roleRedirect";
+import { verifyToken } from "@/utils/tokenConf";
 
 function Index() {
   return <></>;
@@ -16,7 +17,7 @@ export async function getServerSideProps(context) {
     };
   }
   const { role } = verifyToken(token);
-  if (!role.trim()) {
+  if (!role?.trim()) {
     return {
       redirect: {
         destination: "/auth/login",
@@ -24,6 +25,7 @@ export async function getServerSideProps(context) {
     };
   }
   if (role.trim()) {
+    console.log(role);
     return {
       redirect: {
         destination: ROLE_REDIRECT_MAP[role],

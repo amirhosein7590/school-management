@@ -9,7 +9,7 @@ export function middleware(request) {
   }
 
   const { role } = verifyToken(token);
-  if (!role.trim()) {
+  if (!role) {
     url.pathname = "/auth/login";
   }
 
