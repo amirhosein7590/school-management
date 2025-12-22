@@ -13,6 +13,8 @@ function Form({
   className,
   submitButtonText,
   submitButtonClassName,
+  afterSubmitFn,
+  bodyReq,
 }) {
   const {
     control,
@@ -32,11 +34,12 @@ function Form({
 
   const submit = useCallback(
     async (data) => {
+      const finalData = bodyReq ? { ...data, ...bodyReq } : data;
       try {
-        const result = await mutate(data, {});
+        const result = await mutate(finalData, {});
+        afterSubmitFn && afterSubmitFn({ ...result, ...finalData });
         return result;
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     [mutate]
   );

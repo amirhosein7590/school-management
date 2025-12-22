@@ -13,7 +13,7 @@ export default async function ResetPassword(req, res) {
   const { newPassword, repeatPassword, resetToken } = req.body;
   const excepteBodyProps = ["newPassword", "repeatPassword", "resetToken"];
   const isBodyPropsValid = excepteBodyProps.every(
-    (prop) => req.body[prop] && req.body[prop.trim()]
+    (prop) => req.body[prop?.trim()]
   );
 
   if (!isBodyPropsValid) {
@@ -28,8 +28,10 @@ export default async function ResetPassword(req, res) {
 
   try {
     await connectToDb();
+
     const hashedResetToken = resetToken + process.env.salt;
     const otp = await otpModel.findOne({ resetToken: hashedResetToken });
+
     if (!otp) {
       return res.status(404).json({
         error: "اطلاعات شما نامعبتر است",
@@ -42,19 +44,25 @@ export default async function ResetPassword(req, res) {
         .json({ error: "کد منقضی شده است", success: false });
     }
     const user = await findUserByProp("phone", otp.phone);
+
     if (!user) {
       return res
         .status(404)
         .json({ error: "کاربری با این شماره تلفن یافت نشد", success: false });
     }
     const hashedPassword = await hashPassword(newPassword);
+
     user.password = hashedPassword;
     await user.save();
+
     await otpModel.deleteOne({ _id: otp._id });
+
     return res
       .status(201)
       .json({ message: "رمز عبور با موفقیت تغییر کرد", success: true });
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

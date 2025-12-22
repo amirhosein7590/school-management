@@ -37,28 +37,13 @@ export default async function SetSchool(req, res) {
     if (!manager) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
-
     const school = await schoolModel.findOne({ _id: schoolId });
     if (!school) {
       return res.status(404).json({ error: "مدرسه یافت نشد", success: false });
     }
-    if (manager.school) {
-      return res.status(409).json({
-        error: "برای این مدیر قبلا مدرسه ای تعریف شده است",
-        success: false,
-      });
-    }
 
-    if (school.manager) {
-      return res.status(409).json({
-        error: " برای این مدرسه قبلا مدیری تعریف شده است",
-        success: false,
-      });
-    }
     manager.school = schoolId;
-    school.manager = manager._id;
     await manager.save();
-    await school.save();
 
     return res.json({ message: "عملیات موفقیت آمیز بود", success: true });
   } catch (error) {

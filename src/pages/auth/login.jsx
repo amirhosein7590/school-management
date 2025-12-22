@@ -19,7 +19,7 @@ function Login() {
             </span>
           </div>
         </div>
-        <div className="title mb-6 md:mb-10 mr-6 sans-medium text-lg md:text-xl mt-3 md:mt-5">
+        <div className="title mb-6 md:mb-10 mr-6 sans-medium md:text-xl mt-3 md:mt-5">
           ورود به حساب کاربری
         </div>
         <Form
@@ -32,7 +32,7 @@ function Login() {
         <Button
           variant="link"
           href="/auth/forgotPassword"
-          className="mt-3 text-right cursor-pointer"
+          className="mt-3 text-right cursor-pointer text-xs md:text-sm"
         >
           رمز عبور خود را فراموش کرده اید ؟
         </Button>

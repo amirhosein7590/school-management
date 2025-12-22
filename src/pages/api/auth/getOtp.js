@@ -32,6 +32,8 @@ export default async function GetOtp(req, res) {
         .status(401)
         .json({ error: "نام کاربری یافت نشد", success: false });
     }
+    const formatedPhone =
+      user.phone.slice(-3) + "****" + user.phone.slice(0, 4);
 
     if (user.role != "owner" && user.isBanned) {
       if (user.expTime < Date.now()) {
@@ -67,7 +69,11 @@ export default async function GetOtp(req, res) {
             .json({ error: "خطا در ارسال پبامک", success: false });
         }
         await otpModel.create({ phone: user.phone, code, expTime });
-        return res.json({ message: "کد با موفقیت ارسال شد", success: true });
+        return res.json({
+          message: "کد با موفقیت ارسال شد",
+          success: true,
+          phone: formatedPhone,
+        });
       }
     }
 
@@ -85,7 +91,11 @@ export default async function GetOtp(req, res) {
         .json({ error: "خطا در ارسال پبامک", success: false });
     }
     await otpModel.create({ phone: user.phone, code, expTime });
-    return res.json({ message: "کد با موفقیت ارسال شد", success: true });
+    return res.json({
+      message: "کد با موفقیت ارسال شد",
+      success: true,
+      phone: formatedPhone,
+    });
   } catch (error) {
     return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }

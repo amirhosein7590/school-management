@@ -63,7 +63,7 @@ async function Managers(req, res) {
             .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
 
-        const user = await managerModel({
+        const user = await managerModel.findOne({
           $or: [
             { nationalCode: req.body?.nationalCode },
             { personnelCode: req.body?.personnelCode },
