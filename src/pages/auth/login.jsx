@@ -27,6 +27,7 @@ function Login() {
           submitButtonText="ورود"
           mode="login"
           entityName="login"
+          className="mr-6"
         />
         <Button
           variant="link"
@@ -35,7 +36,7 @@ function Login() {
         >
           رمز عبور خود را فراموش کرده اید ؟
         </Button>
-        <p className="text-rose-600 text-sm md:text-[16px] flex md:items-center gap-x-2">
+        <p className="text-rose-600 text-xs md:text-[16px] flex md:items-center gap-x-2">
         <Info size='20' />
           به صورت پیش فرض نام کاربری  کدملی و رمز عبور کد پرسنلی می باشد
         </p>

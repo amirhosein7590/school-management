@@ -9,12 +9,12 @@ export default async function GetOtp(req, res) {
       .status(400)
       .json({ error: "این درخواست مجاز نیست", success: false });
   }
-  const { phone } = req.body;
-  const isBodyPropsValid = req.body?.phone && req.body.phone.trim();
+  const { userName } = req.body;
+  const isBodyPropsValid = req.body?.userName && req.body.userName.trim();
   if (!isBodyPropsValid) {
     return res
       .status(422)
-      .json({ error: "شماره تلفن مشخص نیست", success: false });
+      .json({ error: "نام کاربری الزامی است", success: false });
   }
 
   if (Object.keys(req.body).length != 1) {
@@ -25,12 +25,12 @@ export default async function GetOtp(req, res) {
   try {
     await connectToDb();
 
-    const user = await findUserByProp("phone", phone);
+    const user = await findUserByProp("userName", userName);
 
     if (!user) {
       return res
         .status(401)
-        .json({ error: "این شماره در سایت ثبت نشده است", success: false });
+        .json({ error: "نام کاربری یافت نشد", success: false });
     }
 
     if (user.role != "owner" && user.isBanned) {
@@ -45,7 +45,7 @@ export default async function GetOtp(req, res) {
         .json({ error: "حساب کاربری شما بن شده است", success: false });
     }
 
-    const sendedCode = await otpModel.findOne({ phone });
+    const sendedCode = await otpModel.findOne({ phone: user.phone });
     if (sendedCode) {
       if (sendedCode.expTime > Date.now()) {
         return res
@@ -57,7 +57,7 @@ export default async function GetOtp(req, res) {
         const expTime = Date.now() + Number(process.env.expOtpTime);
         const { success } = await sendSms({
           patternKey: process.env.otpPattern,
-          phoneNumber: phone,
+          phoneNumber: user.phone,
           param1: code,
         });
 
@@ -66,7 +66,7 @@ export default async function GetOtp(req, res) {
             .status(500)
             .json({ error: "خطا در ارسال پبامک", success: false });
         }
-        await otpModel.create({ phone, code, expTime });
+        await otpModel.create({ phone: user.phone, code, expTime });
         return res.json({ message: "کد با موفقیت ارسال شد", success: true });
       }
     }
@@ -75,7 +75,7 @@ export default async function GetOtp(req, res) {
     const expTime = Date.now() + Number(process.env.expOtpTime);
     const { success } = await sendSms({
       patternKey: process.env.otpPattern,
-      phoneNumber: phone,
+      phoneNumber: user.phone,
       param1: code,
     });
 
@@ -84,11 +84,9 @@ export default async function GetOtp(req, res) {
         .status(500)
         .json({ error: "خطا در ارسال پبامک", success: false });
     }
-    await otpModel.create({ phone, code, expTime });
+    await otpModel.create({ phone: user.phone, code, expTime });
     return res.json({ message: "کد با موفقیت ارسال شد", success: true });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: "خطای ناشناخته", success: false });
+    return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }
 }
