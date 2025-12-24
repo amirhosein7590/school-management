@@ -1,4 +1,4 @@
-function DashboardLayout({ children }) {
+function DashboardLayout({ children, user }) {
   return (
     <div className="flex flex-col">
       <p>سلام عزیزم</p>
