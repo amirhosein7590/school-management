@@ -19,7 +19,7 @@ function Login() {
             </span>
           </div>
         </div>
-        <div className="title mb-6 md:mb-10 mr-6 sans-medium md:text-xl mt-3 md:mt-5">
+        <div className="title mb-6 md:mb-10 md:mr-6 sans-medium md:text-xl mt-3 md:mt-5">
           ورود به حساب کاربری
         </div>
         <Form
@@ -27,7 +27,7 @@ function Login() {
           submitButtonText="ورود"
           mode="login"
           entityName="login"
-          className="mr-6"
+          className="md:mr-6"
         />
         <Button
           variant="link"
@@ -37,7 +37,7 @@ function Login() {
           رمز عبور خود را فراموش کرده اید ؟
         </Button>
         <p className="text-rose-600 text-xs md:text-[16px] flex md:items-center gap-x-2">
-        <Info size='20' />
+        <Info size={20} />
           به صورت پیش فرض نام کاربری  کدملی و رمز عبور کد پرسنلی می باشد
         </p>
       </div>

@@ -13,7 +13,7 @@ const resetPasswordConfig = {
       type: "password",
       name: "repeatPassword",
       placeholder: "تکرار رمز عبور",
-      className: "mb-5 rounded-sm !text-md py-3 md:py-5",
+      className: "mb-5 rounded-sm text-center !text-md py-3 md:py-5",
       rules: {
         required: "لطفا تکرار رمز عبور را وارد نمایید",
       },
