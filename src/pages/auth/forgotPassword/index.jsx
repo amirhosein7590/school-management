@@ -43,3 +43,5 @@ function ForgotPassword() {
 }
 
 export default memo(ForgotPassword);
+
+ForgotPassword.getLayout = (page) => <>{page}</>; // blank layout

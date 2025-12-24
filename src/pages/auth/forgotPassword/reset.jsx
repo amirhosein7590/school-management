@@ -107,7 +107,7 @@ function Reset() {
         )}
         <Button
           variant="ghost"
-          onClick={()=> router.push('/auth/login')}
+          onClick={() => router.push("/auth/login")}
           className="flex justify-center mt-5 items-center text-xs md:text-sm text-[#3598db]"
         >
           بازگشت به صفحه ورود
@@ -118,3 +118,5 @@ function Reset() {
 }
 
 export default memo(Reset);
+
+Reset.getLayout = (page) => <>{page}</>; // blank layout

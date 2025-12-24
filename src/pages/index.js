@@ -25,7 +25,6 @@ export async function getServerSideProps(context) {
     };
   }
   if (role.trim()) {
-    console.log(role);
     return {
       redirect: {
         destination: ROLE_REDIRECT_MAP[role],
