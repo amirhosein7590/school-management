@@ -12,16 +12,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#3598db] border border-[#3598db] text-white hover:bg-[#2b7bb0]",
+          "bg-[var(--light-blue)] border border-[var(--light-blue)] text-white hover:bg-[var(--dark-blue)]",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost:
-        "",
-          // "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        ghost: "",
+        // "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -41,6 +40,31 @@ const buttonVariants = cva(
   }
 );
 
+const WithTooltip = React.memo(({ tooltip, children }) => {
+  if (!tooltip) return children;
+
+  return (
+    <div className="relative inline-flex group">
+      {children}
+
+      <span
+        className="
+          pointer-events-none
+          absolute top-full left-1/2 z-50
+          mt-1 -translate-x-1/2
+          hidden group-hover:block
+          rounded-sm bg-gray-500 px-3 py-2
+          text-sm text-white text-center
+          max-w-xs break-words text-nowrap
+          animate-in fade-in-0 zoom-in-95
+        "
+      >
+        {tooltip}
+      </span>
+    </div>
+  );
+});
+
 const Button = React.memo(
   ({
     className,
@@ -49,46 +73,55 @@ const Button = React.memo(
     asChild = false,
     href = null,
     isActiveAware = false,
+    tooltip = null,
+    activeClass,
     ...props
   }) => {
     const Comp = asChild ? Slot : "button";
     const pathName = usePathname();
-    const isActive = pathName == props.href;
+    const isActive = href ? pathName?.startsWith(href) : false;
 
     if (isActiveAware) {
-      const activeClass = isActive && "!text-red-600";
+      const activeCls = isActive && activeClass ? activeClass : "";
       return (
-        <Link
-          className={cn(
-            buttonVariants({ variant, size }),
-            activeClass,
-            className
-          )}
-          {...props}
-        />
+        <WithTooltip tooltip={tooltip}>
+          <Link
+            className={cn(
+              buttonVariants({ variant, size }),
+              isActive && activeClass,
+              className
+            )}
+            href={href}
+            {...props}
+          />
+        </WithTooltip>
       );
     }
 
     if (href) {
       return (
-        <Link
-          className={cn(buttonVariants({ variant, size }), className)}
-          href={href}
-          {...props}
-        />
+        <WithTooltip tooltip={tooltip}>
+          <Link
+            className={cn(buttonVariants({ variant, size }), className)}
+            href={href}
+            {...props}
+          />
+        </WithTooltip>
       );
     }
 
     return (
-      <Comp
-        data-slot="button"
-        className={cn(
-          buttonVariants({ variant, size }),
-          isActiveAware && isActive && "!text-red-600",
-          className
-        )}
-        {...props}
-      />
+      <WithTooltip tooltip={tooltip}>
+        <Comp
+          data-slot="button"
+          className={cn(
+            buttonVariants({ variant, size }),
+            isActiveAware && isActive && "!text-red-600",
+            className
+          )}
+          {...props}
+        />
+      </WithTooltip>
     );
   }
 );

@@ -13,6 +13,7 @@ const ownerSchema = new mongoose.Schema({
     immutable: true,
   },
   phone: { type: String, required: true, unique: true },
+  gender : {type : String , required : true , enum : ['male' , 'female']}
 });
 
 const ownerModel =

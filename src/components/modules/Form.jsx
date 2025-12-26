@@ -15,6 +15,7 @@ function Form({
   submitButtonClassName,
   afterSubmitFn,
   bodyReq,
+  user = null,
 }) {
   const {
     control,
@@ -44,9 +45,11 @@ function Form({
     [mutate]
   );
 
+  const inputs = config.inputs?.all || config.inputs[user];
+
   return (
     <form onSubmit={handleSubmit(submit)} className={className}>
-      {config.inputs.map((input) => (
+      {inputs.map((input) => (
         <Controller
           control={control}
           name={input.name}

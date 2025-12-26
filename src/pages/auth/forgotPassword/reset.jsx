@@ -60,7 +60,7 @@ function Reset() {
   };
 
   return (
-    <div className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full">
+    <div dir="rtl" className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full">
       <Steper currentStep={currentStep} className="mb-2" />
       <div className="form-wrapper bg-white shadow-sm flex flex-col py-2 px-4">
         {currentStep == 2 ? (
@@ -76,14 +76,14 @@ function Reset() {
               afterSubmitFn={checkOtpAfterSubmit}
             />
             {timer > 0 ? (
-              <p className="text-center text-[#3598db] text-xs md:text-sm ">
+              <p className="text-center text-[var(--light-blue)] text-xs md:text-sm ">
                 ارسال مجدد کد تا {timer} دیگر
               </p>
             ) : (
               <Button
                 variant="ghost"
                 onClick={sendOtp}
-                className="flex justify-center items-center text-xs md:text-sm text-[#3598db]"
+                className="flex justify-center items-center text-xs md:text-sm text-[var(--light-blue)]"
                 disabled={isPending}
               >
                 {isPending ? <Spinner size="sm" /> : "ارسال مجدد کد فعال سازی"}
@@ -108,7 +108,7 @@ function Reset() {
         <Button
           variant="ghost"
           onClick={() => router.push("/auth/login")}
-          className="flex justify-center mt-5 items-center text-xs md:text-sm text-[#3598db]"
+          className="flex justify-center mt-5 items-center text-xs md:text-sm text-[var(--light-blue)]"
         >
           بازگشت به صفحه ورود
         </Button>
@@ -117,6 +117,6 @@ function Reset() {
   );
 }
 
-export default memo(Reset);
+export default Reset;
 
 Reset.getLayout = (page) => <>{page}</>; // blank layout

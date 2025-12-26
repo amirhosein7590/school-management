@@ -1,4 +1,3 @@
-import ROLE_REDIRECT_MAP from "@/constants/auth/roleRedirect";
 import { verifyToken } from "@/utils/tokenConf";
 
 function Index() {
@@ -27,7 +26,7 @@ export async function getServerSideProps(context) {
   if (role.trim()) {
     return {
       redirect: {
-        destination: ROLE_REDIRECT_MAP[role],
+        destination: "/school/home",
       },
     };
   }

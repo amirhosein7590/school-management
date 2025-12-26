@@ -16,6 +16,7 @@ const managerSchema = new mongoose.Schema({
     default: "manager",
     immutable: true,
   },
+  gender: { type: String, required: true, enum: ["male", "female"] },
   school: {
     type: mongoose.Types.ObjectId,
     ref: "School",

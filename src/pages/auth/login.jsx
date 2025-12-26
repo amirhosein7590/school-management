@@ -1,11 +1,16 @@
 import { Button } from "@/components/modules/Button/button";
 import Form from "@/components/modules/Form";
 import { Info } from "lucide-react";
+import { useRouter } from "next/router";
 import React from "react";
 
 function Login() {
+  const router = useRouter();
+  const redirectToHome = () => {
+    router.push("/school/home");
+  };
   return (
-    <div className="wrapper bg-white flex w-full md:max-w-10/12 mx-auto shadow-sm mt-5 py-2 px-4 justify-between">
+    <div dir="rtl" className="wrapper bg-white flex w-full md:max-w-10/12 mx-auto shadow-sm mt-5 py-2 px-4 justify-between">
       <div className="form flex flex-col w-full md:w-1/2">
         <div className="medad-info bg-white flex items-center pb-2 border-b border-b-[rgba(0_0_0_0.87)] card-shadow">
           <div className="w-20 h-20 bg-[url('/images/logo.png')] bg-cover bg-center bg-no-repeat"></div>
@@ -28,6 +33,7 @@ function Login() {
           mode="login"
           entityName="login"
           className="md:mr-6"
+          afterSubmitFn={redirectToHome}
         />
         <Button
           variant="link"

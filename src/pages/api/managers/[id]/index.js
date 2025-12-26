@@ -53,6 +53,7 @@ export default async function SingleManager(req, res) {
             "nationalCode",
             "personnelCode",
             "phone",
+            "gender",
           ];
 
           const isBodyPropsValid = exceptedProps.every(

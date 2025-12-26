@@ -15,9 +15,7 @@ export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient());
   const getLayout =
     Component.getLayout ||
-    ((page) => (
-      <DashboardLayout user={page.props.user}>{page}</DashboardLayout>
-    ));
+    ((page) => <DashboardLayout user={pageProps.user}>{page}</DashboardLayout>);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -27,7 +25,7 @@ export default function App({ Component, pageProps }) {
             {getLayout(<Component {...pageProps} />)}
           </ModalProvider>
         </UserContext.Provider>{" "}
-        <Toaster richColors position="top-center" />
+        <Toaster dir="rtl" richColors position="top-center" />
       </HydrationBoundary>
     </QueryClientProvider>
   );

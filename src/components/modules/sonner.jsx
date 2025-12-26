@@ -15,7 +15,6 @@ const Toaster = memo(({ ...props }) => {
   return (
     <Sonner
       theme={theme}
-      className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,

@@ -16,7 +16,7 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full">
+    <div dir="rtl" className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full">
       <Steper currentStep={1} className="mb-2" />
       <div className="form-wrapper bg-white shadow-sm flex flex-col py-2 px-4">
         <p className="description mt-5 mb-15 text-sm md:text-[16px]">
@@ -33,7 +33,7 @@ function ForgotPassword() {
         <Button
           variant="ghost"
           href="/auth/login"
-          className="text-[#3598db] text-xs md:text-sm flex justify-center items-center"
+          className="text-[var(--light-blue)] text-xs md:text-sm flex justify-center items-center"
         >
           بازگشت به صفحه ورود
         </Button>
@@ -42,6 +42,8 @@ function ForgotPassword() {
   );
 }
 
-export default memo(ForgotPassword);
 
+export default ForgotPassword;
 ForgotPassword.getLayout = (page) => <>{page}</>; // blank layout
+
+

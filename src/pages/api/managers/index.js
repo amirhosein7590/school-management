@@ -51,6 +51,7 @@ async function Managers(req, res) {
           "nationalCode",
           "personnelCode",
           "phone",
+          "gender"
         ];
 
         const isBodyPropsValid = exceptedProps.every(
