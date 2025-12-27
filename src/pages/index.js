@@ -7,15 +7,15 @@ function Index() {
 export default Index;
 
 export async function getServerSideProps(context) {
-  const { token } = context.req.cookies;
-  if (!token) {
+  const { token, refreshToken } = context.req.cookies;
+  if (!token && !refreshToken) {
     return {
       redirect: {
         destination: "/auth/login",
       },
     };
   }
-  const { role } = verifyToken(token);
+  const { role } = verifyToken(token || refreshToken);
   if (!role?.trim()) {
     return {
       redirect: {

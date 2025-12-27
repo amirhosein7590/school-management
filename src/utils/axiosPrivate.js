@@ -13,7 +13,9 @@ axiosPrivate.interceptors.response.use(
       const { status } = error.response;
       if (status == 401 && !originalReq?._retry) {
         originalReq._retry = true;
-        await axios.post("http://localhost:3000/api/auth/refresh");
+        await axios.get("http://localhost:3000/api/auth/refresh", {
+          withCredentials: true,
+        });
         return axiosPrivate(originalReq);
       }
     } catch (refreshError) {

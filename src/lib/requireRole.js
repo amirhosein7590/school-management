@@ -5,12 +5,12 @@ export function requireRole(page) {
   return function (gssp) {
     return async function (context) {
       const { req } = context;
-      const { token } = req.cookies;
+      const { token, refreshToken } = req.cookies;
       const secret = new TextEncoder().encode(process.env.jwtSignature);
 
       let user;
       try {
-        const { payload } = await jwtVerify(token, secret);
+        const { payload } = await jwtVerify(token || refreshToken, secret);
         user = payload;
       } catch {
         return {
