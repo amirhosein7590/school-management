@@ -1,3 +1,7 @@
+import { Button } from "@/components/modules/Button/button";
+import { createColumnHelper } from "@tanstack/react-table";
+const columnHelper = createColumnHelper();
+
 const inSystemMessageConfig = {
   inputs: {
     teacher: [
@@ -13,7 +17,7 @@ const inSystemMessageConfig = {
       {
         type: "select",
         name: "receiver",
-        className : "w-full lg:w-auto",
+        className: "w-full lg:w-auto",
         rules: {
           required: "لطفا گیرنده را مشخص کنید",
         },
@@ -46,7 +50,7 @@ const inSystemMessageConfig = {
       {
         type: "select",
         name: "receiver",
-        className : "w-full lg:w-auto",
+        className: "w-full lg:w-auto",
         rules: {
           required: "لطفا گیرنده را مشخص کنید",
         },
@@ -83,7 +87,7 @@ const inSystemMessageConfig = {
       {
         type: "select",
         name: "receiver",
-        className : "w-full lg:w-auto",
+        className: "w-full lg:w-auto",
         rules: {
           required: "لطفا گیرنده را مشخص کنید",
         },
@@ -107,11 +111,69 @@ const inSystemMessageConfig = {
       },
     ],
   },
+  table: {
+    columns: (role) => [
+      columnHelper.display({
+        id: "text",
+        header: "پیام",
+        cell: ({ row }) => row.original.text,
+      }),
+      columnHelper.display({
+        id: "sender",
+        headers: "فرستنده",
+        cell: ({ row }) => row.original.sender.fullName,
+      }),
+      columnHelper.display({
+        id: "receiver",
+        header: "گیرنده",
+        cell: ({ row }) => row.original.receiver.fullName,
+      }),
+      columnHelper.accessor("replay", {
+        header: "پاسخ",
+        cell: ({ row }) => {
+          if (role == row.original.receiver.role) {
+            return (
+              <>
+                {row?.replay?.text ? (
+                  <Button size="sm" onClick={() => console.log("مودال باز شد")}>
+                    مشاهده پاسخ
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={() => console.log("مودال باز شد")}>
+                    ارسال پاسخ
+                  </Button>
+                )}
+              </>
+            );
+          } else {
+            return (
+              <>
+                {row?.replay?.text ? (
+                  <Button onClick={() => console.log("مودال باز شد")}>
+                    مشاهده پاسخ
+                  </Button>
+                ) : (
+                  <p>بررسی نشده است</p>
+                )}
+              </>
+            );
+          }
+        },
+      }),
+    ],
+    dataArrayName: "messages",
+    url: "/messages",
+    method: "get",
+    key: "messages",
+    deps: null,
+    isPrivate: true,
+    headers: null,
+  },
   url: "/messages",
   method: "post",
   key: "messages",
   deps: null,
-  isPrivate: false,
+  isPrivate: true,
   headers: { "content-type": "application/json" },
 };
 

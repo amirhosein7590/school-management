@@ -7,7 +7,7 @@ export default function SelectAction() {
   if (selectedRows.length < 2) return;
 
   return (
-    <Button onClick={() => console.log(selected)} variant="destructive">
+    <Button size="sm" className="rounded-sm" onClick={() => console.log(selected)} variant="destructive">
       حذف همه
     </Button>
   );

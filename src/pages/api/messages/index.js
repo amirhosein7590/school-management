@@ -5,6 +5,7 @@ import RBAC from "@/utils/RBAC";
 import teacherModel from "@/models/teacher";
 import { isValidObjectId } from "mongoose";
 import messageModel from "@/models/message";
+import findUserByProp from "@/utils/findUserByProp";
 
 const configs = {
   owner: {
@@ -36,9 +37,78 @@ export default async function Message(req, res) {
 
     switch (req.method) {
       case "GET": {
-        return res
-          .status(405)
-          .json({ error: "متد GET هنوز پیاده‌سازی نشده", success: false });
+        const user = await configs[role]?.model?.findOne({ nationalCode });
+        if (!user) {
+          return res
+            .status(403)
+            .json({ error: "دسترسی غیر مجاز", success: false });
+        }
+
+        const populateMessageUsers = async (message) => {
+          const senderInfo = await findUserByProp("_id", message.sender);
+          const receiverInfo = await findUserByProp("_id", message.receiver);
+
+          return {
+            _id: message._id,
+            text: message.text,
+            replay: message.replay,
+            createdAt: message.createdAt, // اگر فیلد createdAt داری اضافه کن
+            sender: {
+              _id: senderInfo?._id,
+              fullName: `${senderInfo?.firstName || ""} ${
+                senderInfo?.lastName || ""
+              }`.trim(),
+              role: senderInfo?.role,
+            },
+            receiver: {
+              _id: receiverInfo?._id,
+              fullName: `${receiverInfo?.firstName || ""} ${
+                receiverInfo?.lastName || ""
+              }`.trim(),
+              role: receiverInfo?.role,
+            },
+          };
+        };
+
+        const page = Number(req.query.page);
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        if (page) {
+          const [messages, total] = await Promise.all([
+            messageModel
+              .find({ $or: [{ sender: user._id }, { receiver: user._id }] })
+              .skip(skip)
+              .limit(limit),
+            messageModel.countDocuments({
+              $or: [{ sender: user._id }, { receiver: user._id }],
+            }),
+          ]);
+
+          const formatedMessages = await Promise.all(
+            messages.map(populateMessageUsers)
+          );
+          return res.json({
+            messages: formatedMessages,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            success: true,
+          });
+        } else {
+          const [messages, total] = await Promise.all([
+            messageModel
+              .find({ $or: [{ sender: user._id }, { receiver: user._id }] })
+              .skip(skip)
+              .limit(limit),
+            messageModel.countDocuments({
+              $or: [{ sender: user._id }, { receiver: user._id }],
+            }),
+          ]);
+
+          const formatedMessages = await Promise.all(
+            messages.map(populateMessageUsers)
+          );
+          return res.json({ messages: formatedMessages, success: true });
+        }
       }
 
       case "POST": {
