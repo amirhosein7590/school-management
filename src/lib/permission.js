@@ -1,12 +1,12 @@
 export const permission = {
   owner: {
-    pages: ["home"],
+    pages: ["home", "inSystemMessage"],
   },
   manager: {
-    pages: ["home"],
+    pages: ["home", "inSystemMessage"],
   },
   teacher: {
-    pages: ["home"],
+    pages: ["home", "inSystemMessage"],
   },
 };
 

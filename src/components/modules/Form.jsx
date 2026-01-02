@@ -17,6 +17,7 @@ function Form({
   afterSubmitFn,
   bodyReq,
   user = null,
+  inputsContainerClassName,
 }) {
   const {
     control,
@@ -46,50 +47,53 @@ function Form({
     [mutate]
   );
 
-  const inputs = config.inputs?.all || config.inputs[user];
+  const inputs = config.inputs?.all || config.inputs[user.role];
 
   return (
     <form dir="rtl" onSubmit={handleSubmit(submit)} className={className}>
-      {inputs.map((input) => (
-        <Controller
-          control={control}
-          name={input.name}
-          key={input.name}
-          rules={input.rules}
-          render={({ field }) => (
-            <>
-              {input.type == "select" ? (
-                <Select
-                  name={field.name}
-                  values={field.value || ""}
-                  onChange={field.onChange}
-                  {...input}
-                />
-              ) : input.type == "textarea" ? (
-                <Textarea
-                  type={input.type}
-                  name={field.name}
-                  value={field.value}
-                  onChange={field.onChange}
-                  className={input?.className}
-                  placeholder={input.placeholder}
-                  {...input}
-                />
-              ) : (
-                <Input
-                  type={input.type}
-                  name={field.name}
-                  value={field.value}
-                  onChange={field.onChange}
-                  className={input?.className}
-                  placeholder={input.placeholder}
-                  {...input}
-                />
+      <div className={`inputs-container ${inputsContainerClassName}`}>
+        {inputs &&
+          inputs.map((input) => (
+            <Controller
+              control={control}
+              name={input.name}
+              key={input.name}
+              rules={input.rules}
+              render={({ field }) => (
+                <>
+                  {input.type == "select" ? (
+                    <Select
+                      name={field.name}
+                      values={field.value || ""}
+                      onChange={field.onChange}
+                      {...input}
+                    />
+                  ) : input.type == "textarea" ? (
+                    <Textarea
+                      type={input.type}
+                      name={field.name}
+                      value={field.value}
+                      onChange={field.onChange}
+                      className={input?.className}
+                      placeholder={input.placeholder}
+                      {...input}
+                    />
+                  ) : (
+                    <Input
+                      type={input.type}
+                      name={field.name}
+                      value={field.value}
+                      onChange={field.onChange}
+                      className={input?.className}
+                      placeholder={input.placeholder}
+                      {...input}
+                    />
+                  )}
+                </>
               )}
-            </>
-          )}
-        />
-      ))}
+            />
+          ))}
+      </div>
       <Button
         disabled={isPending}
         className={submitButtonClassName}

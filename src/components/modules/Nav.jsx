@@ -173,6 +173,7 @@ function Nav({ user }) {
             className="inner-site-message !items-center cursor-pointer !p-0 lg:p-auto lg:!py-2 lg:!px-3"
             tooltip="ارسال پیام درون سامانه ای"
             variant="ghost"
+            href="/school/inSystemMessage"
           >
             <icons.MessageCircle
               color="white"
@@ -206,7 +207,7 @@ function Nav({ user }) {
       <nav
         className={`fixed ${
           isSideBarShow ? "right-0 z-10" : "-right-1000"
-        }  lg:right-0 flex flex-col lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
+        }  lg:right-0 flex flex-col w-8/12 lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
       >
         <div
           dir="rtl"
@@ -286,7 +287,7 @@ function Nav({ user }) {
               return (
                 <Button
                   key={button.id}
-                  className="flex items-center text-sm lg:text-[16px] !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
+                  className="flex items-center text-sm !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
                   variant="ghost"
                   href={button.href}
                   isActiveAware={true}

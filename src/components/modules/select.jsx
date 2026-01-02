@@ -18,6 +18,9 @@ import {
   PopoverTrigger,
 } from "@/components/modules/popover";
 import { Label } from "./label";
+import useCustomeMutation from "@/hooks/useCustomeMutation";
+import { Spinner } from "./spinner";
+import useCustomeQuery from "@/hooks/useCustomeQuery";
 
 const Select = memo(
   ({
@@ -45,6 +48,21 @@ const Select = memo(
       }
     };
 
+    const optionsData = !Array.isArray(options)
+      ? useCustomeQuery(
+          options.key,
+          options.deps,
+          options.url,
+          options.header,
+          options.method,
+          options.isPrivate
+        )
+      : undefined;
+
+    const formatedOptions = optionsData?.data
+      ? options.optionsGenerator(optionsData?.data)
+      : options;
+
     const getSelectedLabel = () => {
       if (multiple) {
         if (!options || values.length < 1)
@@ -53,10 +71,14 @@ const Select = memo(
       } else {
         if (!options || values.length < 1)
           return placeholder || "لطفا انتخاب کنید";
-        const label = options.find((o) => o.value == values[0]).label;
+        const label = formatedOptions.find((o) => o.value == values[0]).label;
         return label;
       }
     };
+
+    if (optionsData?.isPending) {
+      return <Spinner size="sm" />;
+    }
 
     return (
       <>
@@ -91,7 +113,7 @@ const Select = memo(
                   <CommandEmpty>یافت نشد</CommandEmpty>
 
                   <CommandGroup heading={title || ""}>
-                    {options.map((item) => (
+                    {formatedOptions.map((item) => (
                       <CommandItem
                         className="flex-row-reverse justify-between"
                         key={item.value}
