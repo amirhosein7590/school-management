@@ -1,7 +1,6 @@
 import ownerModel from "@/models/owner";
 import connectToDb from "@/utils/db";
 import managerModel from "@/models/manager";
-import findUserByProps from "@/utils/findUserByProps";
 import RBAC from "@/utils/RBAC";
 
 async function Managers(req, res) {
@@ -51,7 +50,7 @@ async function Managers(req, res) {
           "nationalCode",
           "personnelCode",
           "phone",
-          "gender"
+          "gender",
         ];
 
         const isBodyPropsValid = exceptedProps.every(
@@ -82,6 +81,12 @@ async function Managers(req, res) {
           ...req.body,
           isBanned: false,
           role: "manager",
+          notifications: [
+            {
+              text: "مدیر محترم ، ثبت نام شما در سامانه مداد با موفقیت انجام شد \n به جمع مدیران پیش رو و نوآور خوش آمدید \n در صورت نیاز به راهنمایی \n شماره تماس : 09375117590",
+              status : 'success'
+            },
+          ],
         });
 
         return res

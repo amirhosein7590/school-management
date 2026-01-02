@@ -9,7 +9,6 @@ import {
   useRef,
 } from "react";
 import { ModalContainer } from "@/components/modules/modal";
-import Portal from "@/components/modules/portal";
 const ModalContext = createContext(null);
 
 export const useModal = () => useContext(ModalContext);

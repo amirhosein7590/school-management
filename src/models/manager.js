@@ -31,11 +31,9 @@ const managerSchema = new mongoose.Schema({
   }, // for future if anyone buy plan
   plan: { type: String, enum: ["free", "subscription"] }, // for fouture if anyone buy plan
   notifications: [
-    // for messages and notifications that owner will send !!
     {
-      title: { type: String },
-      body: { type: String },
-      fromRole: { type: String },
+      text: { type: String },
+      status: { type: String, enum: ["info", "error", "success", "warning"] },
     },
   ],
   actionsPermissions: {
@@ -80,6 +78,12 @@ managerSchema.virtual("teachers", {
   ref: "Teacher",
   localField: "_id",
   foreignField: "manager",
+});
+
+managerSchema.virtual("suggests", {
+  localField: "_id",
+  ref: "Suggest",
+  foreignField: "sender",
 });
 
 const managerModel =

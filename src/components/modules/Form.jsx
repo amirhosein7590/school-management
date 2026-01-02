@@ -6,6 +6,7 @@ import { memo, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import useEntityMutation from "@/hooks/formMutations/useEntityMutation";
 import { Spinner } from "./spinner";
+import { Textarea } from "./textarea";
 
 function Form({
   mode,
@@ -48,7 +49,7 @@ function Form({
   const inputs = config.inputs?.all || config.inputs[user];
 
   return (
-    <form onSubmit={handleSubmit(submit)} className={className}>
+    <form dir="rtl" onSubmit={handleSubmit(submit)} className={className}>
       {inputs.map((input) => (
         <Controller
           control={control}
@@ -60,8 +61,19 @@ function Form({
               {input.type == "select" ? (
                 <Select
                   name={field.name}
+                  values={field.value || ""}
+                  onChange={field.onChange}
+                  {...input}
+                />
+              ) : input.type == "textarea" ? (
+                <Textarea
+                  type={input.type}
+                  name={field.name}
                   value={field.value}
                   onChange={field.onChange}
+                  className={input?.className}
+                  placeholder={input.placeholder}
+                  {...input}
                 />
               ) : (
                 <Input
@@ -71,6 +83,7 @@ function Form({
                   onChange={field.onChange}
                   className={input?.className}
                   placeholder={input.placeholder}
+                  {...input}
                 />
               )}
             </>

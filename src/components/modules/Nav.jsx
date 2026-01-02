@@ -22,12 +22,15 @@ import {
   House,
 } from "lucide-react";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Popover, PopoverTrigger } from "./popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useRouter } from "next/router";
 import homeConfig from "@/constants/home";
+import { useModal } from "@/contexts/ModalContext";
+import Notification from "./Notification";
+import Form from "./Form";
 
 const icons = {
   Menu,
@@ -60,6 +63,7 @@ function Nav({ user }) {
     { "content-type": "application/json" },
     true
   );
+  const { showModal } = useModal();
   const [isSideBarShow, setIsSideBarShow] = useState(false);
   const gender = data?.user?.gender == "male" ? "آقای" : "خانم";
   const fullName = `${data?.user?.firstName} ${data?.user?.lastName}`;
@@ -80,6 +84,57 @@ function Nav({ user }) {
   };
   const sideBarShowHandler = () => {
     setIsSideBarShow((prev) => !prev);
+  };
+
+  const showNotifications = () => {
+    showModal({
+      title: "اعلانات",
+      size: "lg",
+      content: ({ close }) => {
+        const {
+          data: { user },
+        } = useCustomeQuery(
+          "me",
+          null,
+          "/auth/me",
+          { "content-type": "application/json" },
+          true
+        );
+        return (
+          <div dir="rtl" className="notification-container flex flex-col">
+            {user.notifications.length > 0 ? (
+              user.notifications.map((notif) => (
+                <Notification key={notif._id} {...notif} />
+              ))
+            ) : (
+              <p className="text-center text-sm">
+                اعلانی برای نمایش وجود ندارد
+              </p>
+            )}
+          </div>
+        );
+      },
+    });
+  };
+
+  const suggestHandler = () => {
+    showModal({
+      title: "انتقادات / پیشنهادات",
+      content: ({ close }) => {
+        const senderModel =
+          user.role.slice(0, 1).toUpperCase() + user.role.slice(1);
+        return (
+          <Form
+            user={user}
+            bodyReq={{ sender: data?.user?._id, senderModel }}
+            afterSubmitFn={close}
+            entityName="suggest"
+            submitButtonText="ثبت"
+            submitButtonClassName="bg-green-500 cursor-pointer mt-4 px-4 rounded-sm"
+          />
+        );
+      },
+    });
   };
 
   return (
@@ -107,6 +162,7 @@ function Nav({ user }) {
             className="suggests cursor-pointer !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3"
             tooltip="ثبت پیشنهاد / انتقاد"
             variant="ghost"
+            onClick={suggestHandler}
           >
             <icons.MessageSquareWarning
               color="white"
@@ -127,6 +183,7 @@ function Nav({ user }) {
             className="notifications !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3 cursor-pointer relative"
             tooltip="اعلانات"
             variant="ghost"
+            onClick={showNotifications}
           >
             {data?.user?.notifications?.length > 0 && (
               <span className="bg-red-600 text-white w-5 h-5 rounded-full absolute top-0 right-1 flex justify-center items-center text-xs">
@@ -157,7 +214,7 @@ function Nav({ user }) {
         >
           <icons.CircleUserRound size={50} color="white" />
           <div className="profile-info flex items-center justify-between">
-            <span className="text-sm text-white">
+            <span className="text-xs lg:text-sm text-white">
               {data?.user && gender} {data?.user && fullName}
             </span>
             <Popover>
@@ -215,7 +272,7 @@ function Nav({ user }) {
         <div className="links bg-white h-full">
           <ul dir="rtl" className="flex flex-col gap-y-3">
             <Button
-              className="flex items-center !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer"
+              className="flex items-center text-sm !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer"
               variant="ghost"
               href="/school/home"
               isActiveAware={true}
@@ -229,7 +286,7 @@ function Nav({ user }) {
               return (
                 <Button
                   key={button.id}
-                  className="flex items-center !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
+                  className="flex items-center text-sm lg:text-[16px] !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
                   variant="ghost"
                   href={button.href}
                   isActiveAware={true}

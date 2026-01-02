@@ -38,11 +38,9 @@ const teacherSchema = new mongoose.Schema({
     immutable: true,
   },
   notifications: [
-    // for messages and notifications that manager will send !!
     {
-      title: { type: String },
-      body: { type: String },
-      fromRole: { type: String },
+      text: { type: String },
+      status: { type: String, enum: ["info", "error", "success", "warning"] },
     },
   ],
 
@@ -69,6 +67,12 @@ teacherSchema.virtual("students", {
   ref: "Student",
   localField: "_id",
   foreignField: "teacher",
+});
+
+teacherSchema.virtual("suggests", {
+  localField: "_id",
+  ref: "Suggest",
+  foreignField: "sender",
 });
 
 const teacherModel =

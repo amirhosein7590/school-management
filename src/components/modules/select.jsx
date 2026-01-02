@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/modules/popover";
+import { Label } from "./label";
 
 const Select = memo(
   ({
@@ -25,6 +26,9 @@ const Select = memo(
     multiple = false,
     title,
     onChange = () => {},
+    labels,
+    className,
+    placeholder,
   }) => {
     const [open, setOpen] = useState(false);
 
@@ -41,54 +45,87 @@ const Select = memo(
       }
     };
 
+    const getSelectedLabel = () => {
+      if (multiple) {
+        if (!options || values.length < 1)
+          return placeholder || "لطفا انتخاب کنید";
+        return `${values.length} مورد انتخاب شد`;
+      } else {
+        if (!options || values.length < 1)
+          return placeholder || "لطفا انتخاب کنید";
+        const label = options.find((o) => o.value == values[0]).label;
+        return label;
+      }
+    };
+
     return (
-      <div className="m-10 w-64">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              style={{ direction: "rtl" }}
-              className="w-full flex justify-between"
-            >
-              {values.length === 0
-                ? "لطفا انتخاب کنید"
-                : `${values.length} مورد انتخاب شد`}
-              <ChevronDown className="opacity-50 w-4 h-4" />
-            </Button>
-          </PopoverTrigger>
+      <>
+        {labels?.length > 0 &&
+          labels.map((label) => (
+            <>
+              {label.position == "before" && (
+                <Label key={label.id} {...label}>
+                  {label.text}
+                </Label>
+              )}
+            </>
+          ))}
+        <div className={`${className} w-64`}>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                style={{ direction: "rtl" }}
+                className="w-full flex justify-between"
+              >
+                {getSelectedLabel()}
+                <ChevronDown className="opacity-50 w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
 
-          <PopoverContent style={{ direction: "rtl" }} className="w-64 p-0">
-            <Command>
-              <CommandInput placeholder="جستجو..." />
+            <PopoverContent style={{ direction: "rtl" }} className="w-64 p-0">
+              <Command>
+                <CommandInput placeholder="جستجو..." />
 
-              <CommandList>
-                <CommandEmpty>یافت نشد</CommandEmpty>
+                <CommandList>
+                  <CommandEmpty>یافت نشد</CommandEmpty>
 
-                <CommandGroup heading={title || ""}>
-                  {options.map((item) => (
-                    <CommandItem
-                      className="flex-row-reverse justify-between"
-                      key={item.value}
-                      value={item.label} // for search use label of datas
-                      onSelect={() => toggleOption(item.value)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          values.includes(item.value)
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      {item.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
+                  <CommandGroup heading={title || ""}>
+                    {options.map((item) => (
+                      <CommandItem
+                        className="flex-row-reverse justify-between"
+                        key={item.value}
+                        value={item.label} // for search use label of datas
+                        onSelect={() => toggleOption(item.value)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            values.includes(item.value)
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                        {item.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+        {labels?.length > 0 &&
+          labels.map((label) => (
+            <>
+              {label.position == "after" && (
+                <Label key={label.id} {...label}>
+                  {label.text}
+                </Label>
+              )}
+            </>
+          ))}
+      </>
     );
   }
 );
