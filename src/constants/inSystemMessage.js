@@ -209,7 +209,7 @@ const inSystemMessageConfig = {
                         content: () => (
                           <p
                             dir="rtl"
-                            className="text-sm text-gay-600 leading-7"
+                            className="text-sm text-gray-600 leading-7"
                           >
                             {row.original.replay.text}
                           </p>

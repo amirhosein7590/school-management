@@ -102,7 +102,7 @@ function Nav({ user }) {
         );
         return (
           <div dir="rtl" className="notification-container flex flex-col">
-            {user.notifications.length > 0 ? (
+            {user?.notifications && user?.notifications?.length > 0 ? (
               user.notifications.map((notif) => (
                 <Notification key={notif._id} {...notif} />
               ))
