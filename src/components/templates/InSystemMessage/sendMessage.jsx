@@ -8,7 +8,7 @@ function SendMessage({ user }) {
       user={user}
       submitButtonText="ارسال"
       className="flex flex-col lg:block"
-      inputsContainerClassName="flex flex-col lg:flex-row gap-x-3 lg:items-center mb-3"
+      inputsContainerClassName="flex flex-col lg:flex-row gap-x-3 mb-3"
       submitButtonClassName="px-5 flex justify-center items-center !rounded-sm"
     />
   );

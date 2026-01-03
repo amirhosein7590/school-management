@@ -17,9 +17,9 @@ import {
 import SelectAction from "./Button/SelectAction";
 import registryEntity from "@/utils/registryEntity";
 import useCustomeQuery from "@/hooks/useCustomeQuery";
-import { Spinner } from "./spinner";
 import SelectAllCheckbox from "./Table/Cell/SelectAllCheckbox";
 import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
+import { useModal } from "@/contexts/ModalContext";
 
 function DataTable({ enableRowSelection = false, user, entityName }) {
   const registry = registryEntity[entityName]?.table;
@@ -37,8 +37,8 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
   );
 
   const columnHelper = useMemo(() => createColumnHelper(), []);
-
-  let columns = registry.columns(user.role);
+  const { showModal } = useModal();
+  let columns = registry.columns(user.role, showModal);
 
   if (enableRowSelection) {
     const selectColumn = columnHelper.display({

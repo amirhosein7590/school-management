@@ -18,6 +18,7 @@ function Form({
   bodyReq,
   user = null,
   inputsContainerClassName,
+  entityId,
 }) {
   const {
     control,
@@ -33,7 +34,7 @@ function Form({
     }
   }, [errors, submitCount]);
 
-  const { mutate, isPending, config } = useEntityMutation(entityName);
+  const { mutate, isPending, config } = useEntityMutation(entityName, entityId);
 
   const submit = useCallback(
     async (data) => {

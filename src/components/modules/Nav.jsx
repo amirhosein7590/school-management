@@ -224,7 +224,7 @@ function Nav({ user }) {
                   <icons.ChevronDown color="white" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-50 py-2 bg-white shadow-sm rounded-sm">
+              <PopoverContent className=" w-50 py-2 bg-white shadow-sm rounded-sm">
                 <ul className="flex flex-col !gap-y-3">
                   <li className="w-full flex items-center cursor-pointer transition duration-300 hover:bg-gray-50 px-4">
                     <icons.User color="#000000DE" size={20} />

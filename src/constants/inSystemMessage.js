@@ -1,4 +1,5 @@
 import { Button } from "@/components/modules/Button/button";
+import Form from "@/components/modules/Form";
 import { createColumnHelper } from "@tanstack/react-table";
 const columnHelper = createColumnHelper();
 
@@ -9,7 +10,7 @@ const inSystemMessageConfig = {
         type: "textarea",
         placeholder: "متن پیام را وارد کنید",
         name: "text",
-        className: "!text-sm bg-white order-1 mt-3",
+        className: "!text-sm bg-white order-1 mt-3 lg:mt-0",
         rules: {
           required: "لطفا متن پیام را وارد کنید",
         },
@@ -42,7 +43,7 @@ const inSystemMessageConfig = {
         type: "textarea",
         placeholder: "متن پیام را وارد کنید",
         name: "text",
-        className: "!text-sm bg-white order-1 mt-3",
+        className: "!text-sm bg-white order-1 mt-3 lg:mt-0",
         rules: {
           required: "لطفا متن پیام را وارد کنید",
         },
@@ -79,7 +80,7 @@ const inSystemMessageConfig = {
         type: "textarea",
         placeholder: "متن پیام را وارد کنید",
         name: "text",
-        className: " !text-sm bg-white order-1 mt-3",
+        className: " !text-sm bg-white order-1 mt-3 lg:mt-0",
         rules: {
           required: "لطفا متن پیام را وارد کنید",
         },
@@ -112,15 +113,32 @@ const inSystemMessageConfig = {
     ],
   },
   table: {
-    columns: (role) => [
-      columnHelper.display({
-        id: "text",
+    columns: (role, showModal) => [
+      columnHelper.accessor("text", {
         header: "پیام",
-        cell: ({ row }) => row.original.text,
+        cell: ({ row }) => (
+          <Button
+            size="sm"
+            className="cursor-pointer"
+            onClick={() =>
+              showModal({
+                title: "پیام",
+                size: "lg",
+                content: () => (
+                  <p dir="rtl" className="text-sm text-gray-600 leading-7">
+                    {row.original.text}
+                  </p>
+                ),
+              })
+            }
+          >
+            مشاهده پبام
+          </Button>
+        ),
       }),
       columnHelper.display({
         id: "sender",
-        headers: "فرستنده",
+        header: "فرستنده",
         cell: ({ row }) => row.original.sender.fullName,
       }),
       columnHelper.display({
@@ -134,12 +152,45 @@ const inSystemMessageConfig = {
           if (role == row.original.receiver.role) {
             return (
               <>
-                {row?.replay?.text ? (
-                  <Button size="sm" onClick={() => console.log("مودال باز شد")}>
+                {row.original?.replay?.text ? (
+                  <Button
+                    className="cursor-pointer"
+                    size="sm"
+                    onClick={() =>
+                      showModal({
+                        title: "پاسخ",
+                        content: () => (
+                          <p
+                            dir="rtl"
+                            className="text-sm text-gray-600 mt-4 leading-7"
+                          >
+                            {row.original.replay.text}
+                          </p>
+                        ),
+                      })
+                    }
+                  >
                     مشاهده پاسخ
                   </Button>
                 ) : (
-                  <Button size="sm" onClick={() => console.log("مودال باز شد")}>
+                  <Button
+                    className="cursor-pointer"
+                    size="sm"
+                    onClick={() => {
+                      showModal({
+                        title: "ارسال پاسخ",
+                        content: () => (
+                          <Form
+                            entityName="replayMessage"
+                            entityId={row.original._id}
+                            submitButtonClassName="!rounded-sm cursor-pointer"
+                            submitButtonText="ارسال پاسخ"
+                            inputsContainerClassName="mt-3 mb-5"
+                          />
+                        ),
+                      });
+                    }}
+                  >
                     ارسال پاسخ
                   </Button>
                 )}
@@ -148,8 +199,24 @@ const inSystemMessageConfig = {
           } else {
             return (
               <>
-                {row?.replay?.text ? (
-                  <Button onClick={() => console.log("مودال باز شد")}>
+                {row.original?.replay?.text ? (
+                  <Button
+                    className="cursor-pointer"
+                    size="sm"
+                    onClick={() =>
+                      showModal({
+                        title: "پاسخ",
+                        content: () => (
+                          <p
+                            dir="rtl"
+                            className="text-sm text-gay-600 leading-7"
+                          >
+                            {row.original.replay.text}
+                          </p>
+                        ),
+                      })
+                    }
+                  >
                     مشاهده پاسخ
                   </Button>
                 ) : (

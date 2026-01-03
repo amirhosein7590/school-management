@@ -99,7 +99,10 @@ export default async function SingleSchool(req, res) {
               .json({ error: "مدرسه یافت نشد", success: false });
           }
 
-          return res.json({ message: "اطلاعات مدرسه با موفقیت تغییر یافت" , success : true });
+          return res.json({
+            message: "اطلاعات مدرسه با موفقیت تغییر یافت",
+            success: true,
+          });
         } else if (role == "manager") {
           const manager = await managerModel.findOne({ nationalCode });
           if (!manager) {
@@ -137,6 +140,9 @@ export default async function SingleSchool(req, res) {
             success: true,
           });
         }
+      }
+      default: {
+        return res.status(405).json({ error: "متد مجاز نیست", success: false });
       }
     }
   } catch (error) {
