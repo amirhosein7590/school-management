@@ -1,6 +1,5 @@
 import connectToDb from "@/utils/db";
 import findUserByProps from "@/utils/findUserByProps";
-import { hashPassword, verifyPassword } from "@/utils/passwordConf";
 import RBAC from "@/utils/RBAC";
 import ownerModel from "@/models/owner";
 import teacherModel from "@/models/teacher";
@@ -40,6 +39,11 @@ export default async function Account(req, res) {
     ],
     owner: ["userName", "phone", "firstName", "lastName", "nationalCode"],
   };
+  const models = {
+    teacher: teacherModel,
+    manager: managerModel,
+    owner: ownerModel,
+  };
   const isBodyPropValid = roleExceptedProp[role].every(
     (prop) => req.body[prop] && req.body[prop].trim()
   );
@@ -52,19 +56,17 @@ export default async function Account(req, res) {
 
   try {
     await connectToDb();
-    const user = await findUserByProps({ nationalCode });
+    const user = await models[role].findOne({ nationalCode });
     if (!user || user.role != role) {
       return res
         .status(401)
         .json({ error: "لطفا وارد حساب کاربری خود شوید", success: false });
     }
 
-    let Model;
-    if (user.role === "owner") Model = ownerModel;
-    else if (user.role === "teacher") Model = teacherModel;
-    else if (user.role === "manager") Model = managerModel;
-
-    const update = await Model.findOneAndUpdate({ nationalCode }, req.body);
+    const update = await models[role].findOneAndUpdate(
+      { nationalCode },
+      req.body
+    );
 
     if (!update) {
       return res.status(404).json({ error: "کاربر یافت نشد", success: false });
