@@ -4,7 +4,16 @@ import { cn } from "@/utils/shadcn-utils";
 import { Label } from "./label";
 
 const Textarea = React.memo(
-  ({ className, value, onChange, name, placeholder, labels, ...props }) => {
+  ({
+    className,
+    value,
+    onChange,
+    name,
+    placeholder,
+    labels,
+    defaultValue,
+    ...props
+  }) => {
     return (
       <>
         {labels?.length > 0 &&

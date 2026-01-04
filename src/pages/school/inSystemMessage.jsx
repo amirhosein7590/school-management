@@ -7,7 +7,7 @@ import PageGuide from "@/components/modules/pageGuide";
 function InSystemMessage({ user }) {
   return (
     <div dir="rtl" className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col">
-      <PageGuide entityName="pageGuide" pageName="ارسال پیام درون سامانه ای" />
+      <PageGuide entityName="inSystemMessage" pageName="ارسال پیام درون سامانه ای" />
       <SendMessage user={user} />
       <ShowMessages user={user} />
     </div>

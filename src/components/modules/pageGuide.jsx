@@ -5,7 +5,7 @@ import { CircleQuestionMark } from "lucide-react";
 import { useModal } from "@/contexts/ModalContext";
 
 function PageGuide({ entityName, pageName }) {
-  const { texts } = registryEntity[entityName];
+  const { texts } = registryEntity.pageGuide[entityName];
   const { showModal } = useModal();
   return (
     <div className="flex items-center pb-5 border-b border-gray-300 mb-10">
@@ -14,14 +14,16 @@ function PageGuide({ entityName, pageName }) {
         onClick={() =>
           showModal({
             title: "بخش حضور و غیاب",
-            size : "lg",
+            size: "lg",
             content: () => (
               <ul
                 dir="rtl"
                 className="text-guide-container flex flex-col gap-y-2 list-disc"
               >
                 {texts.map((text) => (
-                  <li className="text-sm" key={text}>{text}</li>
+                  <li className="text-sm" key={text}>
+                    {text}
+                  </li>
                 ))}
               </ul>
             ),

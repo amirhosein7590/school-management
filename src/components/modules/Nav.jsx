@@ -231,6 +231,8 @@ function Nav({ user }) {
                     <Button
                       variant="ghost"
                       className="text-[#000000DE] !px-0 mr-2 cursor-pointer"
+                      isActiveAware={true}
+                      href="/school/profile"
                     >
                       پروفایل
                     </Button>

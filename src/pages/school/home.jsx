@@ -12,6 +12,7 @@ import {
   Backpack,
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
+import DatePicker from "react-multi-date-picker";
 
 
 const icons = {

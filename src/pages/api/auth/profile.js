@@ -13,8 +13,34 @@ export default async function Account(req, res) {
       .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
-  const exceptedProps = ["userName", "password", "oldPassword"];
-  const isBodyPropValid = exceptedProps.every(
+  const auth = RBAC(req, res, ["owner", "teacher", "manager"], {
+    status: false,
+  });
+
+  if (!auth) return;
+  const { nationalCode, role } = auth;
+
+  const roleExceptedProp = {
+    teacher: [
+      "userName",
+      "phone",
+      "firstName",
+      "lastName",
+      "nationalCode",
+      "personnelCode",
+      "birthDay",
+    ],
+    manager: [
+      "userName",
+      "phone",
+      "firstName",
+      "lastName",
+      "nationalCode",
+      "personnelCode",
+    ],
+    owner: ["userName", "phone", "firstName", "lastName", "nationalCode"],
+  };
+  const isBodyPropValid = roleExceptedProp[role].every(
     (prop) => req.body[prop] && req.body[prop].trim()
   );
 
@@ -23,15 +49,9 @@ export default async function Account(req, res) {
       .status(422)
       .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
   }
-  const auth = RBAC(req, res, ["owner", "teacher", "manager"], {
-    status: false,
-  });
-
-  if (!auth) return;
 
   try {
     await connectToDb();
-    const { nationalCode, role } = auth;
     const user = await findUserByProps({ nationalCode });
     if (!user || user.role != role) {
       return res
@@ -39,25 +59,12 @@ export default async function Account(req, res) {
         .json({ error: "لطفا وارد حساب کاربری خود شوید", success: false });
     }
 
-    const { userName, password, oldPassword } = req.body;
-    const isPasswordValid = await verifyPassword(oldPassword, user.password);
-
-    if (!isPasswordValid) {
-      return res
-        .status(422)
-        .json({ error: "رمز عبور قبلی نادرست است", success: false });
-    }
-
-    const hashedPassword = await hashPassword(password);
     let Model;
     if (user.role === "owner") Model = ownerModel;
     else if (user.role === "teacher") Model = teacherModel;
     else if (user.role === "manager") Model = managerModel;
 
-    const update = await Model.findOneAndUpdate(
-      { nationalCode },
-      { userName, password: hashedPassword }
-    );
+    const update = await Model.findOneAndUpdate({ nationalCode }, req.body);
 
     if (!update) {
       return res.status(404).json({ error: "کاربر یافت نشد", success: false });
