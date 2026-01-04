@@ -5,6 +5,7 @@ import resetPasswordConfig from "@/constants/auth/forgotPassword/resetPassword";
 import suggestConfig from "@/constants/suggests";
 import inSystemMessageConfig from "@/constants/inSystemMessage";
 import replayMessageConfig from "@/constants/replayMessage";
+import pageGuideConfig from "@/constants/pageGuide";
 
 export default {
   login: loginFormConfig,
@@ -14,4 +15,5 @@ export default {
   suggest: suggestConfig,
   inSystemMessage: inSystemMessageConfig,
   replayMessage: replayMessageConfig,
+  pageGuide: pageGuideConfig,
 };
