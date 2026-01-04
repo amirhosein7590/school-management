@@ -140,7 +140,7 @@ function Form({
       </div>
       <Button
         disabled={isPending}
-        className={submitButtonClassName}
+        className={`rounded-[3px] cursor-pointer ${submitButtonClassName}`}
         type="submit"
         size="sm"
       >

@@ -1,5 +1,4 @@
 import connectToDb from "@/utils/db";
-import findUserByProps from "@/utils/findUserByProps";
 import RBAC from "@/utils/RBAC";
 import ownerModel from "@/models/owner";
 import teacherModel from "@/models/teacher";

@@ -75,6 +75,7 @@ const Button = React.memo(
     isActiveAware = false,
     tooltip = null,
     activeClass,
+    disabled,
     ...props
   }) => {
     const Comp = asChild ? Slot : "button";
@@ -82,13 +83,16 @@ const Button = React.memo(
     const isActive = href ? pathName?.startsWith(href) : false;
 
     if (isActiveAware) {
-      const activeCls = isActive && activeClass ? activeClass : "";
+      const activeCls = isActive && "bg-gray-100";
       return (
         <WithTooltip tooltip={tooltip}>
           <Link
             className={cn(
               buttonVariants({ variant, size }),
-              isActive && activeClass,
+              isActive && activeCls,
+              disabled
+                ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
+                : "",
               className
             )}
             href={href}
@@ -102,7 +106,13 @@ const Button = React.memo(
       return (
         <WithTooltip tooltip={tooltip}>
           <Link
-            className={cn(buttonVariants({ variant, size }), className)}
+            className={cn(
+              buttonVariants({ variant, size }),
+              disabled
+                ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
+                : "",
+              className
+            )}
             href={href}
             {...props}
           />
@@ -117,6 +127,9 @@ const Button = React.memo(
           className={cn(
             buttonVariants({ variant, size }),
             isActiveAware && isActive && "!text-red-600",
+            disabled
+              ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
+              : "",
             className
           )}
           {...props}

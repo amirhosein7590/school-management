@@ -3,24 +3,23 @@ import PageGuide from "@/components/modules/pageGuide";
 import { requireRole } from "@/lib/requireRole";
 import React from "react";
 
-function Profile({ user }) {
+function ChangePassword({ user }) {
   return (
     <div
       dir="rtl"
       className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
     >
-      <PageGuide entityName="profile" pageName="پروفایل" />
+      <PageGuide entityName="changePassword" pageName="تغییر رمز عبور" />
       <Form
         user={user}
-        entityName="profile"
-        mode="edit"
-        inputsContainerClassName="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mb-5"
+        entityName="changePassword"
+        inputsContainerClassName="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-y-4 lg:gap-y-0 lg:gap-x-4 mb-5"
         submitButtonText="ذخیره تغییرات"
       />
     </div>
   );
 }
 
-export default Profile;
+export default ChangePassword;
 
-export const getServerSideProps = requireRole("profile")();
+export const getServerSideProps = requireRole("changePassword")();

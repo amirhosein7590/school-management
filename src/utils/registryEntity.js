@@ -7,6 +7,7 @@ import inSystemMessageConfig from "@/constants/inSystemMessage";
 import replayMessageConfig from "@/constants/replayMessage";
 import pageGuideConfig from "@/constants/pageGuide";
 import profileConfig from "@/constants/profile";
+import changePasswordConfig from "@/constants/changePassword";
 
 export default {
   login: loginFormConfig,
@@ -17,5 +18,6 @@ export default {
   inSystemMessage: inSystemMessageConfig,
   replayMessage: replayMessageConfig,
   pageGuide: pageGuideConfig,
-  profile : profileConfig
+  profile: profileConfig,
+  changePassword: changePasswordConfig,
 };
