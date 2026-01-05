@@ -14,24 +14,29 @@ export default async function SingleSchool(req, res) {
     if (!auth) return;
     const { nationalCode, role } = auth;
 
+    const models = {
+      owner: ownerModel,
+      manager: managerModel,
+    };
+
     await connectToDb();
 
     switch (req.method) {
       case "GET": {
-        if (role != "owner") {
-          return res.status(403).json({
+        const user = await models[role].findOne({ nationalCode });
+        if (!user) {
+          return res.status(422).json({
             error: "شما مجاز به انجام این عملیات نیستید",
             success: false,
           });
         }
-        const owner = await ownerModel.findOne({ nationalCode });
-        if (!owner) {
-          return res.status(403).json({
-            error: "شما مجاز به انجام این عملیات نیستید",
-            success: false,
-          });
+
+        const query = { _id: req.query?.id };
+        if (user.role == "manager") {
+          query.manager = String(user._id);
         }
-        const school = await schoolModel.findOne({ _id: req.query?.id });
+
+        const school = await schoolModel.findOne(query);
         if (!school) {
           return res
             .status(404)
@@ -80,6 +85,12 @@ export default async function SingleSchool(req, res) {
             .json({ error: "فرمت یا مقدار فیلد نادرست است", success: false });
         }
 
+        if (isNaN(Number(req.body.level))) {
+          return res
+            .status(22)
+            .json({ error: "دوره مدرسه نا معتبر است", success: false });
+        }
+
         if (role == "owner") {
           const owner = await ownerModel.findOne({ nationalCode });
           if (!owner) {
@@ -111,7 +122,7 @@ export default async function SingleSchool(req, res) {
               success: false,
             });
           }
-          if (!manager.overrideSchoolSettings) {
+          if (!manager.actionsPermissions.overrideSchoolSettings) {
             return res.status(403).json({
               error: "این عملیات از سوی مالک محدود شده است",
               success: false,
@@ -126,8 +137,14 @@ export default async function SingleSchool(req, res) {
           const school = await schoolModel.findOneAndUpdate(
             {
               _id: req.query.id,
+              manager: manager._id,
             },
-            { ...req.body }
+            {
+              ...req.body,
+              shift: req.body.shift[0],
+              level: Number(req.body.level[0]),
+              gender: req.body.gender[0],
+            }
           );
           if (!school) {
             return res

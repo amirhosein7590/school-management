@@ -3,7 +3,13 @@ export const permission = {
     pages: ["home", "inSystemMessage", "profile", "changePassword"],
   },
   manager: {
-    pages: ["home", "inSystemMessage", "profile", "changePassword"],
+    pages: [
+      "home",
+      "inSystemMessage",
+      "profile",
+      "changePassword",
+      "schoolSettings",
+    ],
   },
   teacher: {
     pages: ["home", "inSystemMessage", "profile", "changePassword"],

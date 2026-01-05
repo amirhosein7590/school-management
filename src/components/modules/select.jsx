@@ -71,7 +71,7 @@ const Select = memo(
       } else {
         if (!options || values.length < 1)
           return placeholder || "لطفا انتخاب کنید";
-        const label = formatedOptions.find((o) => o.value == values[0]).label;
+        const label = formatedOptions.find((o) => o.value == values?.[0])?.label;
         return label;
       }
     };
@@ -123,7 +123,7 @@ const Select = memo(
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            values.includes(item.value)
+                            values?.includes(item.value)
                               ? "opacity-100"
                               : "opacity-0"
                           )}

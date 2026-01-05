@@ -16,7 +16,7 @@ const homeConfig = {
       {
         id: "school-settings",
         text: "تنظیمات مدرسه",
-        href: "/school/settings",
+        href: "/school/schoolSettings",
         icon: "Settings",
       },
       {

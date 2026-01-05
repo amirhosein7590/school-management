@@ -8,6 +8,7 @@ import replayMessageConfig from "@/constants/replayMessage";
 import pageGuideConfig from "@/constants/pageGuide";
 import profileConfig from "@/constants/profile";
 import changePasswordConfig from "@/constants/changePassword";
+import editSchoolConfig from "@/constants/school/editSchool";
 
 export default {
   login: loginFormConfig,
@@ -20,4 +21,5 @@ export default {
   pageGuide: pageGuideConfig,
   profile: profileConfig,
   changePassword: changePasswordConfig,
+  editSchool: editSchoolConfig,
 };

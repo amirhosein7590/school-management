@@ -8,15 +8,27 @@ function useCustomeQuery(
   url,
   headers,
   isPrivate = false,
+  options = {},
   enabled = true
 ) {
   const finalHeaders = headers ? { headers } : null;
   const finalKey = deps ? [key, deps] : [key];
+  function finalUrl() {
+    const { paramId } = options;
+    if (!paramId) return url;
+
+    let finalUrl = url;
+    Object.entries(paramId).forEach(([key, value]) => {
+      finalUrl = finalUrl.replace(key, value);
+    });
+
+    return finalUrl;
+  }
   const client = isPrivate ? axiosPrivate : axiosPublic;
 
   return useQuery({
     queryKey: finalKey,
-    queryFn: () => client.get(url, finalHeaders).then((res) => res.data),
+    queryFn: () => client.get(finalUrl(), finalHeaders).then((res) => res.data),
     enabled,
   });
 }

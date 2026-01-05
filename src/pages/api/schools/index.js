@@ -58,6 +58,12 @@ export default async function Schools(req, res) {
             .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
 
+        if (isNaN(Number(req.body.level))) {
+          return res
+            .status(22)
+            .json({ error: "دوره مدرسه نا معتبر است", success: false });
+        }
+
         const school = await schoolModel.findOne({ phone: req.body.phone });
         if (school) {
           return res.status(409).json({
@@ -65,7 +71,12 @@ export default async function Schools(req, res) {
             success: false,
           });
         }
-        await schoolModel.create({ ...req.body });
+        await schoolModel.create({
+          ...req.body,
+          shift: req.body.shift[0],
+          level: Number(req.body.level[0]),
+          gender: req.body.gender[0],
+        });
         return res.json({ message: "مدرسه با موفقیت ایجاد شد", success: true });
       }
 

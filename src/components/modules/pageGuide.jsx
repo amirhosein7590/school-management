@@ -13,7 +13,7 @@ function PageGuide({ entityName, pageName }) {
       <Button
         onClick={() =>
           showModal({
-            title: "بخش حضور و غیاب",
+            title: pageName,
             size: "lg",
             content: () => (
               <ul

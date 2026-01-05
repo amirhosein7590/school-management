@@ -22,6 +22,7 @@ function Form({
   user = null,
   inputsContainerClassName,
   entityId,
+  queryOptions = {},
 }) {
   const { mutate, isPending, config } = useEntityMutation(entityName, entityId);
 
@@ -31,6 +32,7 @@ function Form({
     config?.inputs?.url,
     config?.inputs?.headers,
     config?.inputs?.isPrivate,
+    queryOptions,
     mode == "edit" && config?.inputs?.url ? true : false
   );
 
@@ -43,7 +45,11 @@ function Form({
 
       config?.inputs[user?.role].forEach((input) => {
         if (dataSource && dataSource[input.name] !== undefined) {
-          values[input.name] = dataSource[input.name];
+          if (input.type == "select") {
+            values[input.name] = [String(dataSource[input.name])];
+          } else {
+            values[input.name] = String(dataSource[input.name]);
+          }
         }
       });
 
@@ -51,6 +57,8 @@ function Form({
     }
     return {};
   }, [data, mode, config?.inputs]);
+
+  console.log(defaultValues);
 
   const {
     control,
