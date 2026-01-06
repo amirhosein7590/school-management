@@ -16,19 +16,19 @@ export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1000 * 60 * 5,
-            gcTime: 1000 * 60 * 30,
-            refetchOnWindowFocus: false,
-            refetchOnReconnect: true,
-            refetchOnMount: false,
-            retry: 1,
-          },
-          mutations: {
-            retry: 0,
-          },
-        },
+        // defaultOptions: {
+        //   queries: {
+        //     staleTime: 1000 * 60 * 5,
+        //     gcTime: 1000 * 60 * 30,
+        //     refetchOnWindowFocus: false,
+        //     refetchOnReconnect: true,
+        //     refetchOnMount: false,
+        //     retry: 1,
+        //   },
+        //   mutations: {
+        //     retry: 0,
+        //   },
+        // },
       })
   );
   const getLayout =
@@ -37,7 +37,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <HydrationBoundary state={pageProps.dehydratedState}>
         <UserContext.Provider value={pageProps.user || null}>
           <ModalProvider>

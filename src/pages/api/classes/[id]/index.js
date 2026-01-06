@@ -46,9 +46,16 @@ export default async function SingleClass(req, res) {
             res,
             nationalCode
           );
-          if (!manager.actionsPermissions.editClass) {
+
+          if (!manager) {
+            return res
+              .status(403)
+              .json({ error: "دسترسی غیر مجاز", success: false });
+          }
+
+          if (!manager?.actionsPermissions?.editClass) {
             return res.status(403).json({
-              error: "این عملیات از سوی مالک محدود شده است",
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
               success: false,
             });
           }
@@ -62,17 +69,24 @@ export default async function SingleClass(req, res) {
               .status(422)
               .json({ error: "فرمت یا فیلد نامعتبر است", success: false });
           }
-          const cls = await classModel.findOneAndDelete({
-            _id: req.query.id,
-            school: manager.school,
-          });
+          const cls = await classModel.findOneAndUpdate(
+            {
+              _id: req.query.id,
+              school: manager.school,
+            },
+            {
+              ...req.body,
+              grade: Number(req.body.grade),
+              school: manager.school,
+            }
+          );
           if (!cls) {
             return res
               .status(404)
               .json({ error: "کلاس یافت نشد", success: false });
           }
           return res.json({
-            error: "اطلاعات کلاس با موفقیت تغییر کرد",
+            message: "اطلاعات کلاس با موفقیت تغییر کرد",
             success: true,
           });
         }
@@ -88,7 +102,7 @@ export default async function SingleClass(req, res) {
           );
           if (!manager.actionsPermissions.deleteClass) {
             return res.status(403).json({
-              error: "این عملیات از سوی مالک محدود شده است",
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
               success: false,
             });
           }

@@ -9,6 +9,7 @@ export const permission = {
       "profile",
       "changePassword",
       "schoolSettings",
+      "classesManagement",
     ],
   },
   teacher: {

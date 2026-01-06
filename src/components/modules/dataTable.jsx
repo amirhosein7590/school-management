@@ -20,6 +20,7 @@ import useCustomeQuery from "@/hooks/useCustomeQuery";
 import SelectAllCheckbox from "./Table/Cell/SelectAllCheckbox";
 import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
 import { useModal } from "@/contexts/ModalContext";
+import DataTableSkelton from "./Table/dataTableSkelton";
 
 function DataTable({ enableRowSelection = false, user, entityName }) {
   const registry = registryEntity[entityName]?.table;
@@ -38,7 +39,7 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
 
   const columnHelper = useMemo(() => createColumnHelper(), []);
   const { showModal } = useModal();
-  let columns = registry.columns(user.role, showModal);
+  let columns = registry.columns(user.role, showModal, user);
 
   if (enableRowSelection) {
     const selectColumn = columnHelper.display({
@@ -67,7 +68,7 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
   });
 
   if (isPending) {
-    return "";
+    return <DataTableSkelton enableRowSelection={enableRowSelection} />;
   }
 
   return (
@@ -112,7 +113,7 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
             <TableFooter>
               <TableRow>
                 <TableCell>
-                  <SelectAction />
+                  <SelectAction registry={registry} />
                 </TableCell>
               </TableRow>
             </TableFooter>

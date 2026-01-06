@@ -96,7 +96,7 @@ export default async function Classes(req, res) {
         }
         if (!manager.actionsPermissions.createClass) {
           return res.status(403).json({
-            error: "این عملیات از سوی مالک محدود شده است",
+            error: "این عملیات از سوی مدیر سیستم محدود شده است",
             success: false,
           });
         }
@@ -109,7 +109,11 @@ export default async function Classes(req, res) {
             .status(409)
             .json({ error: "کلاسی با این مشخصات وجود دارد", success: false });
         }
-        await classModel.create({ ...req.body, school: manager.school });
+        await classModel.create({
+          ...req.body,
+          grade: Number(req.body.grade),
+          school: manager.school,
+        });
         return res
           .status(201)
           .json({ message: "کلاس با موفقیت ایجاد شد", success: true });
@@ -119,7 +123,7 @@ export default async function Classes(req, res) {
 
       default: {
         return res
-          .status(400)
+          .status(405)
           .json({ error: "این درخواست مجاز نیست", success: false });
       }
     }

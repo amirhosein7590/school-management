@@ -25,7 +25,13 @@ const baseInputs = [
     name: "phone",
     placeholder: "شماره تلفن",
     className: "!text-sm !rounded-none",
-    rules: { required: "لطفا شماره تلفن را وارد کنید" },
+    rules: {
+      required: "لطفا شماره تلفن را وارد کنید",
+      pattern: {
+        value: /^(?:\+?98|0)9\d{9}$/,
+        message: "شماره تلفن نا معتبر است",
+      },
+    },
   },
   {
     type: "text",

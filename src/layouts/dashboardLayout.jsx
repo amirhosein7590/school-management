@@ -7,9 +7,9 @@ function DashboardLayout({ children, user }) {
       <Nav user={user} />
 
       <div className="flex flex-col flex-grow container w-full md:w-10/12">
-        <main className="mt-5 flex-grow">{children}</main>
+        <main className="flex-grow m-3">{children}</main>
 
-        <footer className="text-center text-sm p-6 bg-[#f5f5f5] text-[#000000de]">
+        <footer className="text-center text-sm p-6 bg-[#eee] text-[#000000de]">
           سامانه مداد | نسخه 0.1.0
         </footer>
       </div>

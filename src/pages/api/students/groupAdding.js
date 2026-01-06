@@ -27,7 +27,7 @@ export default async function GroupAdding(req, res) {
 
     if (!manager.actionsPermissions?.createStudent) {
       return res.status(403).json({
-        error: "این عملیات از سوی مالک محدود شده است",
+        error: "این عملیات از سوی مدیر سیستم محدود شده است",
         success: false,
       });
     }
@@ -85,6 +85,8 @@ export default async function GroupAdding(req, res) {
       success: true,
     });
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", dbError : error, success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", dbError: error, success: false });
   }
 }

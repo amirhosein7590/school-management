@@ -128,13 +128,13 @@ export default async function Message(req, res) {
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
 
-        // حالت خاص: مدیر به مالک پیام می‌دهد
+        // حالت خاص: مدیر به مدیر سیستم پیام می‌دهد
         if (receiver[0] === "owner" && role === "manager") {
           const owner = await ownerModel.findOne();
           if (!owner) {
             return res
               .status(404)
-              .json({ error: "مالک یافت نشد", success: false });
+              .json({ error: "مدیر سیستم یافت نشد", success: false });
           }
 
           await messageModel.create({

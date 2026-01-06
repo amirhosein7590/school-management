@@ -58,8 +58,6 @@ function Form({
     return {};
   }, [data, mode, config?.inputs]);
 
-  console.log(defaultValues);
-
   const {
     control,
     formState: { errors, submitCount },
@@ -95,7 +93,11 @@ function Form({
 
   const inputGenerator = (input, field) => {
     if (mode == "edit" && inputsPending) {
-      return <Skeleton className="h-6 rounded-none w-[250px]" />;
+      return (
+        <div className="flex flex-col gap-10">
+          <Skeleton className={`h-4 w-full`} />
+        </div>
+      );
     }
 
     const commonProps = {

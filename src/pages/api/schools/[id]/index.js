@@ -124,7 +124,7 @@ export default async function SingleSchool(req, res) {
           }
           if (!manager.actionsPermissions.overrideSchoolSettings) {
             return res.status(403).json({
-              error: "این عملیات از سوی مالک محدود شده است",
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
               success: false,
             });
           }

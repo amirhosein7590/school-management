@@ -1,6 +1,7 @@
 import { cn } from "@/utils/shadcn-utils";
+import { memo } from "react";
 
-function Skeleton({ className, ...props }) {
+const Skeleton = memo(({ className, ...props }) => {
   return (
     <div
       data-slot="skeleton"
@@ -8,6 +9,6 @@ function Skeleton({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Skeleton };

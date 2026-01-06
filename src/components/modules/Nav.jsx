@@ -153,7 +153,7 @@ function Nav({ user }) {
           </Button>
           <p className="text-white sans-bold text-sm lg:text-lg">
             {user?.role == "owner"
-              ? "مالک"
+              ? "مدیر سیستم"
               : data?.user && data?.user?.school?.name}
           </p>
         </div>

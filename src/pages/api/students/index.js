@@ -125,7 +125,7 @@ export default async function Students(req, res) {
         }
         if (!manager.actionsPermissions?.createStudent) {
           return res.status(403).json({
-            error: "این عملیات از سوی مالک محدود شده است",
+            error: "این عملیات از سوی مدیر سیستم محدود شده است",
             success: false,
           });
         }

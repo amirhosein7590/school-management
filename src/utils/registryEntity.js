@@ -9,6 +9,8 @@ import pageGuideConfig from "@/constants/pageGuide";
 import profileConfig from "@/constants/profile";
 import changePasswordConfig from "@/constants/changePassword";
 import editSchoolConfig from "@/constants/school/editSchool";
+import addClassConfig from "@/constants/class/addClass";
+import editDeleteClassConfig from "@/constants/class/editDeleteClass";
 
 export default {
   login: loginFormConfig,
@@ -22,4 +24,6 @@ export default {
   profile: profileConfig,
   changePassword: changePasswordConfig,
   editSchool: editSchoolConfig,
+  addClass: addClassConfig,
+  editDeleteClass: editDeleteClassConfig,
 };

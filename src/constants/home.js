@@ -45,8 +45,8 @@ const homeConfig = {
       },
       {
         id: "classes",
-        text: "کلاس ها",
-        href: "/school/classes",
+        text: "مدیریت کلاس ها",
+        href: "/school/classesManagement",
         icon: "Backpack",
       },
     ],

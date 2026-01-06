@@ -70,7 +70,7 @@ const inSystemMessageConfig = {
               label: `${teacher.firstName} ${teacher.lastName}`,
               value: teacher._id,
             }));
-            return [{ label: "مالک", value: "owner" }, ...teachers];
+            return [{ label: "مدیر سیستم", value: "owner" }, ...teachers];
           },
         },
       },
@@ -139,12 +139,18 @@ const inSystemMessageConfig = {
       columnHelper.display({
         id: "sender",
         header: "فرستنده",
-        cell: ({ row }) => row.original.sender.fullName,
+        cell: ({ row }) =>
+          row.original.sender.role != "owner"
+            ? row.original.sender.fullName
+            : "مدیر سیستم",
       }),
       columnHelper.display({
         id: "receiver",
         header: "گیرنده",
-        cell: ({ row }) => row.original.receiver.fullName,
+        cell: ({ row }) =>
+          row.original.receiver.role == "owner"
+            ? "مدیر سیستم"
+            : row.original.receiver.fullName,
       }),
       columnHelper.accessor("replay", {
         header: "پاسخ",

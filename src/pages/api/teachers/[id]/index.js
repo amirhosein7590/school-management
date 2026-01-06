@@ -67,7 +67,7 @@ export default async function SingleTeacher(req, res) {
 
         if (!permissions.editTeacher) {
           return res.status(403).json({
-            error: "این عملیات از سوی مالک محدود شده است",
+            error: "این عملیات از سوی مدیر سیستم محدود شده است",
             success: false,
           });
         }
@@ -96,7 +96,7 @@ export default async function SingleTeacher(req, res) {
         );
         if (!permissions.deleteTeacher) {
           return res.status(403).json({
-            error: "این عملیات از سوی مالک محدود شده است",
+            error: "این عملیات از سوی مدیر سیستم محدود شده است",
             success: false,
           });
         }

@@ -6,6 +6,11 @@ import classModel from "@/models/class";
 import managerModel from "@/models/manager";
 import ownerModel from "@/models/owner";
 import studentModel from "@/models/student";
+import messageModel from "@/models/message";
+import suggestModel from "@/models/suggest";
+import studentAttendanceModel from "@/models/studentAttendance";
+import teacherAttendanceModel from "@/models/teacherAttendance";
+
 
 export default async function connectToDb() {
   if (!mongoose.connections[0].readyState) {
