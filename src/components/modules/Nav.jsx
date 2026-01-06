@@ -275,7 +275,7 @@ function Nav({ user }) {
         <div className="links bg-white h-full">
           <ul dir="rtl" className="flex flex-col gap-y-3">
             <Button
-              className="flex items-center text-sm !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer"
+              className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer"
               variant="ghost"
               href="/school/home"
               isActiveAware={true}
@@ -289,7 +289,7 @@ function Nav({ user }) {
               return (
                 <Button
                   key={button.id}
-                  className="flex items-center text-sm !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
+                  className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
                   variant="ghost"
                   href={button.href}
                   isActiveAware={true}

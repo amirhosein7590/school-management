@@ -21,13 +21,13 @@ const homeConfig = {
       },
       {
         id: "teachers",
-        text: "معلمان",
+        text: "مدیریت معلمان",
         href: "/school/teachers",
         icon: "GraduationCap",
       },
       {
         id: "students",
-        text: "دانش آموزان",
+        text: "مدیریت دانش آموزان",
         href: "/school/students",
         icon: "Users",
       },
