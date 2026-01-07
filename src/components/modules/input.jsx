@@ -1,47 +1,48 @@
-import { memo } from "react";
-
+import { memo, forwardRef } from "react";
 import { cn } from "@/utils/shadcn-utils";
 import { Label } from "./label";
 
-const Input = memo(({ className, type, labels, ...props }) => {
-  return (
-    <>
-      {labels?.length > 0 &&
-        labels.map((label) => (
-          <>
-            {label.position == "before" && (
+const Input = memo(
+  forwardRef(function Input(
+    { className, type = "text", labels, onChange, ...props },
+    ref
+  ) {
+    return (
+      <>
+        {labels?.map(
+          (label) =>
+            label.position === "before" && (
               <Label key={label.id} {...label}>
                 {label.text}
               </Label>
-            )}
-          </>
-        ))}
-      <input
-        {...props}
-        type={type}
-        data-slot="input"
-        value={props.value || ""}
-        ref={props.ref}
-        className={cn(
-          "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 text-sm md:text-[16px]",
-          "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-          "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-          className
+            )
         )}
-        onChange={(e) => props.onChange(e.target.value)}
-      />
-      {labels?.length > 0 &&
-        labels.map((label) => (
-          <>
-            {label.position == "after" && (
+
+        <input
+          {...props}
+          ref={ref}
+          type={type}
+          data-slot="input"
+          className={cn(
+            "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none text-sm md:text-[16px]",
+            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+            className
+          )}
+          onChange={onChange}
+        />
+
+        {labels?.map(
+          (label) =>
+            label.position === "after" && (
               <Label key={label.id} {...label}>
                 {label.text}
               </Label>
-            )}
-          </>
-        ))}
-    </>
-  );
-});
+            )
+        )}
+      </>
+    );
+  })
+);
 
 export { Input };

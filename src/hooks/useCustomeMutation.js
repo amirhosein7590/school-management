@@ -30,26 +30,53 @@ function useCustomeMutation(
       client[reqType](finalUrl, data, headers && { headers }).then(
         (res) => res.data
       ),
-    onSuccess: (response) => {
-      toast.success(response?.message);
-      queryClient.invalidateQueries({ queryKey: finalKey });
-    },
     onError: (err) => {
       const errorMessage = err.response.data.error;
       toast.error(errorMessage);
     },
   });
 
+  const defaultOnSuccess = (response) => {
+    toast.success(response?.message);
+    queryClient.invalidateQueries({ queryKey: finalKey });
+  };
+
   const mutate = (data, options = {}) => {
-    const { paramId } = options;
+    const { paramId, onSuccess, ...restOptions } = options;
     const finalUrl = paramId ? injectIdToUrl(url, paramId) : url;
-    return baseMutation.mutate({ data, finalUrl }, options);
+    return baseMutation.mutate(
+      { data, finalUrl },
+      {
+        ...restOptions,
+        onSuccess: (response, variables, context) => {
+          if (!onSuccess) {
+            defaultOnSuccess(response);
+            return;
+          }
+
+          onSuccess(response, variables, context);
+        },
+      }
+    );
   };
 
   const mutateAsync = (data, options = {}) => {
-    const { paramId } = options;
+    const { paramId, onSuccess, ...restOptions } = options;
     const finalUrl = paramId ? injectIdToUrl(url, paramId) : url;
-    return baseMutation.mutateAsync({ data, finalUrl }, options);
+    return baseMutation.mutateAsync(
+      { data, finalUrl },
+      {
+        ...restOptions,
+        onSuccess: (response, variables, context) => {
+          if (!onSuccess) {
+            defaultOnSuccess(response);
+            return;
+          }
+
+          onSuccess(response, variables, context);
+        },
+      }
+    );
   };
 
   return {

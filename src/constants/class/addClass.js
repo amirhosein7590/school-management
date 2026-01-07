@@ -7,7 +7,7 @@ const addClassConfig = {
         placeholder: "نام کلاس",
         className: "!text-sm !rounded-none",
         rules: {
-          required: "لطفا نام مدرسه را وارد نمایید",
+          required: "لطفا نام کلاس را وارد نمایید",
         },
       },
       {

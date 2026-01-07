@@ -8,6 +8,7 @@ function ShowClasses({ user }) {
       user={user}
       enableRowSelection={true}
       infiniteScroll={true}
+      search={true}
     />
   );
 }

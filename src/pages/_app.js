@@ -37,7 +37,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} position="right" />
+      {/* <ReactQueryDevtools initialIsOpen={false} position="right" /> */}
       <HydrationBoundary state={pageProps.dehydratedState}>
         <UserContext.Provider value={pageProps.user || null}>
           <ModalProvider>
