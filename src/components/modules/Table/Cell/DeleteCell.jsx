@@ -5,14 +5,15 @@ import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useModal } from "@/contexts/ModalContext";
 import { Spinner } from "../../spinner";
 
-function DeleteCell({ id, url, key, entityName }) {
+function DeleteCell({ id, url, mutationKey, entityName, dataArrayName }) {
   const { mutateAsync, isPending } = useCustomeMutation(
-    key,
+    mutationKey,
     null,
     `${url}/${id}`,
     null,
     "delete",
-    true
+    true,
+    dataArrayName
   );
   const { showModal } = useModal();
   const deleteEntity = async (close) => {

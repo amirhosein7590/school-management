@@ -7,6 +7,7 @@ function ShowClasses({ user }) {
       entityName="editDeleteClass"
       user={user}
       enableRowSelection={true}
+      infiniteScroll={true}
     />
   );
 }

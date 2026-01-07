@@ -25,6 +25,7 @@ function SelectAction({ registry }) {
     if (!selectedRows || selectedRows.length === 0) return;
     await mutateAsync({ ids: selectedRows });
     selectAll([]);
+    console.log(selected, selectedRows);
   }, [mutateAsync, selectedRows]);
 
   if (selectedRows.length < 2) {

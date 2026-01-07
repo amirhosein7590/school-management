@@ -12,7 +12,7 @@ function useCustomeQuery(
   enabled = true
 ) {
   const finalHeaders = headers ? { headers } : null;
-  const finalKey = deps ? [key, deps] : [key];
+  const finalKey = [key, deps ?? null];
   function finalUrl() {
     const { paramId } = options;
     if (!paramId) return url;

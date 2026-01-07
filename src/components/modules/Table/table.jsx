@@ -6,7 +6,7 @@ const Table = React.memo(({ className, ...props }) => {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="relative w-full overflow-auto h-100"
     >
       <table
         data-slot="table"

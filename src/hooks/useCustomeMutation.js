@@ -18,10 +18,11 @@ function useCustomeMutation(
   url,
   headers,
   reqType,
-  isPrivate = false
+  isPrivate = false,
+  dataArrayName
 ) {
   const queryClient = useQueryClient();
-  const finalKey = deps ? [key, deps] : [key];
+  const finalKey = [key, deps ?? null];
   const client = isPrivate ? axiosPrivate : axiosPublic;
   const baseMutation = useMutation({
     mutationKey: finalKey,
@@ -30,8 +31,8 @@ function useCustomeMutation(
         (res) => res.data
       ),
     onSuccess: (response) => {
-      queryClient.invalidateQueries(finalKey);
       toast.success(response?.message);
+      queryClient.invalidateQueries({ queryKey: finalKey });
     },
     onError: (err) => {
       const errorMessage = err.response.data.error;

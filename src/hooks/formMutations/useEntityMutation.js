@@ -18,7 +18,8 @@ export default function useEntityMutation(entityName, entityId) {
     finalUrl(),
     headers,
     method,
-    isPrivate
+    isPrivate,
+    config?.table?.dataArrayName
   );
 
   const handler = useCallback(

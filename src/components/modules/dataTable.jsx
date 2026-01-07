@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useMemo, useRef, useEffect } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -16,15 +16,30 @@ import {
 } from "@/components/modules/Table/table";
 import SelectAction from "./Button/SelectAction";
 import registryEntity from "@/utils/registryEntity";
-import useCustomeQuery from "@/hooks/useCustomeQuery";
 import SelectAllCheckbox from "./Table/Cell/SelectAllCheckbox";
 import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
 import { useModal } from "@/contexts/ModalContext";
 import DataTableSkelton from "./Table/dataTableSkelton";
+import useInfiniteCustomeQuery from "@/hooks/useCustomeInfiniteQuery";
 
-function DataTable({ enableRowSelection = false, user, entityName }) {
+function DataTable({
+  enableRowSelection = false,
+  user,
+  entityName,
+  search = false,
+}) {
   const registry = registryEntity[entityName]?.table;
-  const { data, isPending } = useCustomeQuery(
+  const dataArrayName = registry.dataArrayName;
+  const {
+    data: pages,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    error,
+    refetch,
+  } = useInfiniteCustomeQuery(
     registry.key,
     registry.deps,
     registry.url,
@@ -32,9 +47,15 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
     registry.isPrivate
   );
 
+  const flatData = useMemo(() => {
+    if (!pages || !pages.pages) return [];
+    const arr = pages.pages.flatMap((p) => p?.[dataArrayName] ?? []);
+    return arr;
+  }, [pages, dataArrayName]);
+
   const allRowIds = useMemo(
-    () => data && data?.[registry.dataArrayName]?.map((d) => d._id),
-    [data]
+    () => flatData?.map((d) => d._id) ?? [],
+    [flatData]
   );
 
   const columnHelper = useMemo(() => createColumnHelper(), []);
@@ -60,22 +81,55 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
   }
 
   const table = useReactTable({
-    data: data?.[registry?.dataArrayName] || [],
+    data: flatData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row._id,
     meta: { allRowIds },
   });
 
-  if (isPending) {
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (e.isIntersecting) {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage().catch(() => {
+              /* swallow */
+            });
+          }
+        }
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+    observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isLoading) {
     return <DataTableSkelton enableRowSelection={enableRowSelection} />;
+  }
+
+  if (isError) {
+    return (
+      <div className="p-4">
+        <p>خطا در بارگذاری داده‌ها.</p>
+        <pre>{String(error)}</pre>
+        <button onClick={() => refetch()}>تلاش مجدد</button>
+      </div>
+    );
   }
 
   return (
     <>
       <div className="rounded-md border bg-card shadow-sm overflow-hidden my-4 w-full">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0">
             {table?.getHeaderGroups()?.map((hg) => (
               <TableRow className="bg-gray-100" key={hg.id}>
                 {hg.headers.map((header) => (
@@ -90,7 +144,6 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
               </TableRow>
             ))}
           </TableHeader>
-
           <TableBody>
             {table && table?.getRowModel()?.rows?.length > 0 ? (
               table?.getRowModel()?.rows?.map((row) => (
@@ -107,12 +160,12 @@ function DataTable({ enableRowSelection = false, user, entityName }) {
                 <TableCell>رکوردی برای نمایش وجود ندارد</TableCell>
               </TableRow>
             )}
+            <tr className="w-[1px] h-[1px] opacity-0" ref={observerRef}></tr>
           </TableBody>
-
           {enableRowSelection && (
-            <TableFooter>
-              <TableRow>
-                <TableCell>
+            <TableFooter className="sticky bottom-0">
+              <TableRow className="bg-white">
+                <TableCell className="bg-white">
                   <SelectAction registry={registry} />
                 </TableCell>
               </TableRow>

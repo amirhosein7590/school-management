@@ -83,15 +83,17 @@ const editDeleteClassConfig = {
               id={row.original._id}
               url="/classes"
               entityName="کلاس"
+              dataArrayName="classes"
+              mutationKey="classes"
             />
             <EditCell
               id={row.original._id}
               user={user}
               entityName="editDeleteClass"
               modalTitle={`ویرایش ${
-                row.original.name.includes("کلاس")
+                row.original.name && row.original.name.includes("کلاس")
                   ? row.original.name
-                  : `کلاس ${row.original.name}`
+                  : `کلاس ${row.original.name ?? ""}`
               }`}
             />
           </div>
