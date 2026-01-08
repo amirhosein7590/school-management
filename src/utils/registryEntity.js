@@ -11,6 +11,8 @@ import changePasswordConfig from "@/constants/changePassword";
 import editSchoolConfig from "@/constants/school/editSchool";
 import addClassConfig from "@/constants/class/addClass";
 import editDeleteClassConfig from "@/constants/class/editDeleteClass";
+import addTeacherConfig from "@/constants/teacher/addTeacher";
+import editDeleteTeacher from "@/constants/teacher/editDeleteTeacher";
 
 export default {
   login: loginFormConfig,
@@ -26,4 +28,6 @@ export default {
   editSchool: editSchoolConfig,
   addClass: addClassConfig,
   editDeleteClass: editDeleteClassConfig,
+  addTeacher: addTeacherConfig,
+  editDeleteTeacher: editDeleteTeacher,
 };

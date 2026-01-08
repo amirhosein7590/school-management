@@ -22,7 +22,7 @@ const homeConfig = {
       {
         id: "teachers",
         text: "مدیریت معلمان",
-        href: "/school/teachers",
+        href: "/school/teachersManagement",
         icon: "GraduationCap",
       },
       {

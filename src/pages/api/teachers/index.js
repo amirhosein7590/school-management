@@ -143,6 +143,7 @@ export default async function Teachers(req, res) {
           ...req.body,
           school: manager.school,
           manager: manager._id,
+          gender: req.body.gender[0],
         });
 
         return res

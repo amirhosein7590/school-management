@@ -78,7 +78,7 @@ export default async function SingleTeacher(req, res) {
             school: schoolId,
             manager: managerId,
           },
-          { ...req.body }
+          { ...req.body, gender: req.body.gender[0] }
         );
 
         return res.json({
