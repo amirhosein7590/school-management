@@ -16,8 +16,10 @@ const teacherAttendanceSchema = new mongoose.Schema({
 });
 
 teacherAttendanceSchema.index({ teacher: 1, date: 1 });
+teacherAttendanceSchema.index({ manager: 1, date: 1 });
 teacherAttendanceSchema.index({ date: 1 });
 teacherAttendanceSchema.index({ manager: 1 });
+teacherAttendanceSchema.index({ manager: 1, status: 1, teacher: 1 });
 
 const teacherAttendanceModel =
   mongoose.models.TeacherAttendance ||

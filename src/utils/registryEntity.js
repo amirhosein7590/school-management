@@ -13,6 +13,18 @@ import addClassConfig from "@/constants/class/addClass";
 import editDeleteClassConfig from "@/constants/class/editDeleteClass";
 import addTeacherConfig from "@/constants/teacher/addTeacher";
 import editDeleteTeacher from "@/constants/teacher/editDeleteTeacher";
+import teachersClassificationConfig from "@/constants/teacher/teachersClassification";
+import addStudentsConfig from "@/constants/student/addStudent";
+import editDeleteStudentConfig from "@/constants/student/editDeleteStudent";
+import studentsClassificationConfig from "@/constants/student/studentsClassification";
+import addTeacherAttendanceConfig from "@/constants/teacherAttendances/addTeacherAttendance";
+import editDeleteTeacherAttendancesConfig from "@/constants/teacherAttendances/editDeleteTeacherAttendances";
+import searchTeacherReportConfig from "@/constants/teacherAttendances/report/search";
+import showTeacherReportConfig from "@/constants/teacherAttendances/report/showReport";
+import addStudentAttendanceConfig from "@/constants/studentAttendances/addStudentAttendance";
+import editDeleteStudentAttendancesConfig from "@/constants/studentAttendances/editDeleteStudentAttendances";
+import searchStudentReportConfig from "@/constants/studentAttendances/report/search";
+import showStudentReportConfig from "@/constants/studentAttendances/report/showReport";
 
 export default {
   login: loginFormConfig,
@@ -30,4 +42,16 @@ export default {
   editDeleteClass: editDeleteClassConfig,
   addTeacher: addTeacherConfig,
   editDeleteTeacher: editDeleteTeacher,
+  teachersClassification: teachersClassificationConfig,
+  addStudent: addStudentsConfig,
+  editDeleteStudent: editDeleteStudentConfig,
+  studentsClassification: studentsClassificationConfig,
+  addTeacherAttendance: addTeacherAttendanceConfig,
+  editDeleteTeacherAttendances: editDeleteTeacherAttendancesConfig,
+  searchTeacherReport: searchTeacherReportConfig,
+  showTeacherReport: showTeacherReportConfig,
+  addStudentAttendance: addStudentAttendanceConfig,
+  editDeleteStudentAttendances: editDeleteStudentAttendancesConfig,
+  searchStudentReport: searchStudentReportConfig,
+  showStudentReport : showStudentReportConfig
 };

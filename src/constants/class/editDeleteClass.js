@@ -4,6 +4,21 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper();
 
+const classesGradeName = {
+  1: "اول",
+  2: "دوم",
+  3: "سوم",
+  4: "چهارم",
+  5: "پنجم",
+  6: "ششم",
+  7: "هفتم",
+  8: "هشتم",
+  9: "نهم",
+  10: "دهم",
+  11: "یازدهم",
+  12: "دوازدهم",
+};
+
 const editDeleteClassConfig = {
   inputs: {
     manager: [
@@ -11,7 +26,7 @@ const editDeleteClassConfig = {
         type: "text",
         name: "name",
         placeholder: "نام کلاس",
-        className: "!text-sm !rounded-none",
+        className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا نام مدرسه را وارد نمایید",
         },
@@ -19,7 +34,7 @@ const editDeleteClassConfig = {
       {
         type: "number",
         name: "capacity",
-        className: "!text-sm !rounded-none my-5",
+        className: "!text-sm !rounded-[5px] my-5",
         placeholder: "ظرفیت کلاس",
         rules: {
           required: "لطفا ظرفیت کلاس را وارد نمایید",
@@ -66,14 +81,22 @@ const editDeleteClassConfig = {
         cell: ({ row }) => row.original.name,
       }),
       columnHelper.display({
+        id: "teacher",
+        header: "معلم",
+        cell: ({ row }) =>
+          `${row.original?.teacher?.firstName ?? ""} ${
+            row.original?.teacher?.lastName ?? ""
+          }`,
+      }),
+      columnHelper.display({
         id: "capacity",
         header: "ظرفیت کلاس",
-        cell: ({ row }) => row.original.capacity,
+        cell: ({ row }) => row.original.capacity + " نفر",
       }),
       columnHelper.display({
         id: "grade",
         header: "پایه",
-        cell: ({ row }) => row.original.grade,
+        cell: ({ row }) => classesGradeName[row.original.grade],
       }),
       columnHelper.accessor("actions", {
         header: "حذف / ویرایش",

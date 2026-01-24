@@ -40,14 +40,11 @@ export default async function sendSms({
         "Content-Type": "application/json",
       };
 
-      console.log(bodyReq);
 
       const res = await axios.post(url, bodyReq, { headers });
       const data = await res.data;
-      console.log(data);
       return { ...data, success: true };
     } catch (error) {
-      console.log(error);
       return { ...error, success: false };
     }
   }

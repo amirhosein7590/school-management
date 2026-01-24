@@ -53,10 +53,7 @@ async function Managers(req, res) {
           "gender",
         ];
 
-        const isBodyPropsValid = exceptedProps.every(
-          (prop) =>
-            req.body[prop.trim()] != null && req.body[prop.trim()] != undefined
-        );
+        const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
         if (!isBodyPropsValid) {
           return res
             .status(422)
@@ -84,7 +81,7 @@ async function Managers(req, res) {
           notifications: [
             {
               text: "مدیر محترم ، ثبت نام شما در سامانه مداد با موفقیت انجام شد \n به جمع مدیران پیش رو و نوآور خوش آمدید \n در صورت نیاز به راهنمایی \n شماره تماس : 09375117590",
-              status : 'success'
+              status: "success",
             },
           ],
         });

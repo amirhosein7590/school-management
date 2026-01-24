@@ -3,7 +3,7 @@ const baseInputs = [
     type: "text",
     name: "name",
     placeholder: "نام مدرسه",
-    className: "!text-sm !rounded-none",
+    className: "!text-sm !rounded-[5px]",
     rules: {
       required: "لطفا نام مدرسه را وارد کنید",
     },
@@ -12,7 +12,7 @@ const baseInputs = [
     type: "text",
     name: "address",
     placeholder: "آدرس مدرسه",
-    className: "!text-sm !rounded-none",
+    className: "!text-sm !rounded-[5px]",
     rules: {
       required: "لطفا آدرس مدرسه را وارد کنید",
     },
@@ -21,7 +21,7 @@ const baseInputs = [
     type: "select",
     name: "level",
     placeholder: "دوره مدرسه",
-    className: "!text-sm !rounded-none !w-full",
+    className: "!text-sm !rounded-[5px] !w-full",
     multiple: false,
     options: [
       { label: "دوره اول", value: "1" },
@@ -37,7 +37,7 @@ const baseInputs = [
     name: "shift",
     multiple: false,
     placeholder: "شیفت مدرسه",
-    className: "!text-sm !rounded-none !w-full",
+    className: "!text-sm !rounded-[5px] !w-full",
     options: [
       { label: "شیفت صبح", value: "morning" },
       { label: "شیفت عصر", value: "evening" },
@@ -51,10 +51,11 @@ const baseInputs = [
     name: "gender",
     placeholder: "پسرانه / دخترانه",
     multiple: false,
-    className: "!text-sm !rounded-none !w-full",
+    className: "!text-sm !rounded-[5px] !w-full",
     options: [
       { label: "پسرانه", value: "boyish" },
       { label: "دخترانه", value: "girlish" },
+      { label: "مختلط", value: "mixed" },
     ],
     rules: {
       required: "لطفا دوره مدرسه را وارد کنید",
@@ -64,7 +65,7 @@ const baseInputs = [
     type: "text",
     name: "phone",
     placeholder: "شماره مدرسه",
-    className: "!text-sm !rounded-none",
+    className: "!text-sm !rounded-[5px]",
     rules: {
       required: "لطفا شماره مدرسه را وارد کنید",
     },

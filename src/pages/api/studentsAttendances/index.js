@@ -1,166 +1,169 @@
-import managerModel from "@/models/manager";
-import teacherModel from "@/models/teacher";
 import studentAttendanceModel from "@/models/studentAttendance";
+import managerModel from "@/models/manager";
+import studentModel from "@/models/student";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
+import teacherModel from "@/models/teacher";
 
-export default async function StudentsAttendances(req, res) {
-  const auth = RBAC(req, res, ["owner", "manager", "teacher"], {
-    status: false,
-  });
+const statusConfig = {
+  present: {
+    requireProps: ["students", "date", "status"],
+    message: "تمامی مقادیر الزامی هستند",
+  },
+  absent: {
+    requireProps: ["students", "date", "status"],
+    message: "تمامی مقادیر الزامی هستند",
+  },
+  excused: {
+    requireProps: ["description"],
+    message: "برای وضعیت غیبت موجه توضیحات الزامی است",
+  },
+  other: {
+    requireProps: ["description"],
+    message: "برای وضعیت سایر توضیحات الزامی است",
+  },
+  late: {
+    requireProps: ["description", "time"],
+    message: "برای وضعیت غیبت موجه توضیحات و ساعت الزامی است",
+  },
+};
+
+export default async function TeachersAttendances(req, res) {
+  const auth = RBAC(req, res, ["owner", "teacher"], { status: false });
   if (!auth) return;
 
-  const { nationalCode, role } = auth;
+  const { nationalCode } = auth;
 
   try {
     await connectToDb();
-    const { attendances } = req.body;
 
-    if (!Array.isArray(attendances) || attendances.length === 0) {
-      return res.status(422).json({
-        error: "فیلد یا مقدار نامعتبر است",
+    // ------------------ Manager validation ------------------
+    const teacher = await teacherModel.findOne({ nationalCode }).lean();
+    if (!teacher) {
+      return res.status(403).json({
+        error: "شما مجاز به انجام این عملیات نیستید",
         success: false,
       });
     }
 
-    // ============================================================
-    // =========================== PUT =============================
-    // ============================================================
-    if (req.method === "PUT") {
-      // ----------- Validate input -----------
-      for (const a of attendances) {
-        if (!a.id || !a.status || !a.teacher || !a.class || !a.student) {
-          return res.status(422).json({
-            error: "اطلاعات ناقص است",
-            success: false,
+    if (!teacher.class) {
+      return res
+        .status(403)
+        .json({ error: "برای شما کلاسی تعریف نشده است", success: false });
+    }
+
+    switch (req.method) {
+      case "GET": {
+        const today = new Date().toISOString().slice(0, 10);
+        if (req.query.page) {
+          const page = Number(req.query.page);
+          const limit = Number(req.query.limit) || 10;
+          const skip = (page - 1) * limit;
+
+          const [attendances, total] = await Promise.all([
+            studentAttendanceModel
+              .find({
+                date: new Date(today),
+                teacher: teacher._id,
+                class: teacher.class,
+              })
+              .populate("student", "_id firstName lastName")
+              .skip(skip)
+              .limit(limit),
+            studentAttendanceModel.countDocuments(),
+          ]);
+
+          return res.json({
+            attendances,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            success: true,
           });
-        }
-        if (a.status === "late" && !a.time) {
-          return res.status(422).json({
-            error: "برای تأخیر باید زمان ثبت شود",
-            success: false,
-          });
-        }
-        if (["excused", "other"].includes(a.status) && !a.description) {
-          return res.status(422).json({
-            error: "توضیحات لازم است",
-            success: false,
-          });
+        } else {
+          const attendances = await studentAttendanceModel
+            .find({
+              date: new Date(today),
+              teacher: teacher._id,
+              class: teacher.class,
+            })
+            .populate("student", "_id firstName lastName");
+
+          return res.json({ attendances });
         }
       }
 
-      // ----------- Role-based student filter -----------
-      let allowFilter = {};
+      case "POST": {
+        const { students, status: statusArray, date } = req.body;
+        const status = statusArray?.[0];
+        if (!Array.isArray(students) || !status || !date) {
+          return res
+            .status(422)
+            .json({ error: "تمامی مقادیر الزامی هستند", success: false });
+        }
 
-      if (role === "manager") {
-        const manager = await managerModel.findOne({ nationalCode }).lean();
-        allowFilter.school = manager.school.toString();
-      }
+        if (statusConfig[status]) {
+          const config = statusConfig[status];
+          const isPropsValid = config.requireProps.every(
+            (prop) => req.body[prop]
+          );
 
-      if (role === "teacher") {
-        const teacher = await teacherModel.findOne({ nationalCode }).lean();
-        allowFilter.class = teacher.class.toString();
-      }
-
-      // ----------- Find existing attendance records -----------
-      const ids = attendances.map((a) => a.id);
-
-      const existing = await studentAttendanceModel
-        .find({ _id: { $in: ids } })
-        .populate("student", "school class")
-        .lean();
-
-      if (existing.length !== ids.length) {
-        return res.status(404).json({
-          error: "برخی رکوردها یافت نشدند",
-          success: false,
-        });
-      }
-
-      // ----------- Check access permissions -----------
-      for (const record of existing) {
-        if (role === "manager") {
-          if (record.student.school.toString() !== allowFilter.school) {
-            return res.status(403).json({
-              error: "دسترسی غیر مجاز",
-              success: false,
-            });
+          if (!isPropsValid) {
+            return res
+              .status(422)
+              .json({ error: config.message, success: false });
           }
         }
 
-        if (role === "teacher") {
-          if (record.student.class.toString() !== allowFilter.class) {
-            return res.status(403).json({
-              error: "دسترسی غیر مجاز",
-              success: false,
-            });
-          }
+        const studentsInfo = await studentModel.find({
+          _id: { $in: students },
+          teacher: teacher._id,
+          class: teacher.class,
+        });
+
+        if (students?.length != studentsInfo.length) {
+          return res
+            .status(404)
+            .json({ error: "برخی دانش آموزان یافت نشدند", success: false });
         }
-      }
 
-      // ----------- Prepare bulkWrite operations -----------
-      const operations = attendances.map((a) => ({
-        updateOne: {
-          filter: { _id: a.id },
-          update: {
-            $set: {
-              ...a
-            },
-          },
-        },
-      }));
+        const selectedDate = new Date(date).toISOString().slice(0, 10);
 
-      await studentAttendanceModel.bulkWrite(operations);
+        const duplicate = await studentAttendanceModel.find({
+          student: { $in: students },
+          teacher: teacher._id,
+          class: teacher.class,
+          date: new Date(selectedDate),
+        });
 
-      return res.status(200).json({
-        message: "ویرایش با موفقیت انجام شد",
-        success: true,
-      });
-    }
-
-    // ============================================================
-    // =========================== POST ============================
-    // ============================================================
-    if (req.method === "POST") {
-      for (const a of attendances) {
-        if (!a.student || !a.teacher || !a.date || !a.status) {
+        if (duplicate.length > 0) {
           return res.status(422).json({
-            error: "اطلاعات ناقص است",
+            error: `تعداد ${duplicate.length} غیبت قبلا ثبت شده است`,
             success: false,
           });
         }
+
+        for (let student of studentsInfo) {
+          await studentAttendanceModel.create({
+            ...req.body,
+            student: student._id,
+            teacher: teacher._id,
+            class: teacher.class,
+            status,
+            date: new Date(selectedDate),
+            school: teacher.school,
+          });
+        }
+        return res
+          .status(201)
+          .json({ message: "عملیات با موفقیت انجام شد", success: true });
       }
 
-      // Prevent duplicates
-      const duplicates = await studentAttendanceModel.find({
-        student: { $in: attendances.map((a) => a.student) },
-        date: { $in: attendances.map((a) => new Date(a.date)) },
-      });
-
-      if (duplicates.length > 0) {
-        return res.status(409).json({
-          error: "برخی رکوردها قبلاً ثبت شده‌اند",
-          success: false,
-        });
+      default: {
+        return res
+          .status(405)
+          .json({ error: "این درخواست مجاز نیست", success: false });
       }
-
-      const prepared = attendances.map((a) => ({
-        ...a,
-        date: new Date(a.date),
-      }));
-
-      await studentAttendanceModel.insertMany(prepared);
-
-      return res.status(201).json({
-        message: "با موفقیت ثبت شد",
-        success: true,
-      });
     }
-
-    return res.status(405).json({
-      error: "متد مجاز نیست",
-      success: false,
-    });
   } catch (error) {
     return res.status(500).json({
       error: "خطای ناشناخته",

@@ -75,6 +75,8 @@ const sizeClasses = (size) => {
       return "!max-w-3xl";
     case "xl":
       return "!max-w-5xl";
+    case "2xl":
+      return "lg:!max-w-7xl";
     default:
       return "!max-w-xl";
   }

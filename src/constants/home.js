@@ -2,22 +2,16 @@ const homeConfig = {
   buttons: {
     manager: [
       {
-        id: "daily-report",
-        text: "گزارش روزانه",
-        href: "/school/dashboard",
+        id: "dashboard",
+        text: "داشبورد",
+        href: "/school/dashboard/manager",
         icon: "LayoutDashboard",
       },
       {
-        id: "techers-attendances",
-        text: "حضور و غیاب معلمان",
-        href: "/school/teachersAttendances",
-        icon: "UserCheck",
-      },
-      {
-        id: "school-settings",
-        text: "تنظیمات مدرسه",
-        href: "/school/schoolSettings",
-        icon: "Settings",
+        id: "classes",
+        text: "مدیریت کلاس ها",
+        href: "/school/classesManagement",
+        icon: "Backpack",
       },
       {
         id: "teachers",
@@ -26,16 +20,28 @@ const homeConfig = {
         icon: "GraduationCap",
       },
       {
-        id: "students",
-        text: "مدیریت دانش آموزان",
-        href: "/school/students",
-        icon: "Users",
-      },
-      {
         id: "teachers-classification",
         text: "کلاس بندی معلمان",
         href: "/school/teachersClassification",
         icon: "School",
+      },
+      {
+        id: "techers-attendances",
+        text: "حضور و غیاب معلمان",
+        href: "/school/teachersAttendances",
+        icon: "UserCheck",
+      },
+      {
+        id: "teachers-report",
+        text: "گزارش گیری معلمان",
+        href: "/school/teachersReport",
+        icon: "Notebook",
+      },
+      {
+        id: "students",
+        text: "مدیریت دانش آموزان",
+        href: "/school/studentsManagement",
+        icon: "Users",
       },
       {
         id: "students-classification",
@@ -44,19 +50,25 @@ const homeConfig = {
         icon: "UserRoundPen",
       },
       {
-        id: "classes",
-        text: "مدیریت کلاس ها",
-        href: "/school/classesManagement",
-        icon: "Backpack",
+        id: "students-report",
+        text: "گزارش گیری دانش آموزان",
+        href: "/school/studentsReport",
+        icon: "Notebook",
+      },
+      {
+        id: "school-settings",
+        text: "تنظیمات مدرسه",
+        href: "/school/schoolSettings",
+        icon: "Settings",
       },
     ],
     owner: [
-      {
-        id: "daily-report",
-        text: "گزارش روزانه",
-        href: "/school/dashboard",
-        icon: "LayoutDashboard",
-      },
+      // {
+      //   id: "dashboard",
+      //   text: "داشبورد",
+      //   href: "/school/dashboard/owner",
+      //   icon: "LayoutDashboard",
+      // },
       {
         id: "schools",
         text: "مدرسه ها",
@@ -78,9 +90,9 @@ const homeConfig = {
     ],
     teacher: [
       {
-        id: "daily-report",
-        text: "گزارش روزانه",
-        href: "/school/dashboard",
+        id: "dashboard",
+        text: "داشبورد",
+        href: "/school/dashboard/teacher",
         icon: "LayoutDashboard",
       },
       {
@@ -88,6 +100,12 @@ const homeConfig = {
         text: "حضور و غیاب دانش آموزان",
         href: "/school/studentsAttendances",
         icon: "UserCheck",
+      },
+      {
+        id: "students-report",
+        text: "گزارش گیری دانش آموزان",
+        href: "/school/studentsReport",
+        icon: "Notebook",
       },
     ],
   },

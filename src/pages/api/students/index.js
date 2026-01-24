@@ -1,11 +1,15 @@
+import classModel from "@/models/class";
 import managerModel from "@/models/manager";
 import ownerModel from "@/models/owner";
 import studentModel from "@/models/student";
+import teacherModel from "@/models/teacher";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 
 export default async function Students(req, res) {
-  const auth = RBAC(req, res, ["owner", "manager"], { status: false });
+  const auth = RBAC(req, res, ["owner", "manager", "teacher"], {
+    status: false,
+  });
 
   if (!auth) return;
   const { nationalCode, role } = auth;
@@ -16,88 +20,66 @@ export default async function Students(req, res) {
     switch (req.method) {
       case "GET": {
         const page = Number(req.query.page);
-        const limit = Number(req.query.limit) || 10;
+        const limit = Number(req.query.limit) || 45;
         const skip = (page - 1) * limit;
-
-        if (role == "owner") {
-          const owner = await ownerModel.findOne({ nationalCode });
-          if (!owner) {
-            return res.status(403).json({
-              error: "شما مجاز به انجام این عملیات نیستید",
-              success: false,
-            });
-          }
-          if (page) {
-            const [students, total] = await Promise.all([
-              studentModel
-                .find({}, "-actionsPermissions -userName -password")
-                .skip(skip)
-                .limit(limit)
-                .populate("school", "name _id")
-                .populate("manager", "firstName lastName _id ")
-                .populate("teacher", "firstName lastName _id")
-                .populate("class", "name _id"),
-              studentModel.countDocuments(),
-            ]);
-            return res.json({
-              students,
-              totalPages: Math.ceil(total / limit),
-              currentPage: page,
-              success: true,
-            });
-          }
-          const students = await studentModel
-            .find({}, "-actionsPermissions -userName -password")
-            .populate("teacher", "firstName lastName _id")
-            .populate("school", "name _id")
-            .populate("manager", "firstName lastName _id ")
-            .populate("class", "name _id");
-          return res.json({ students, success: true });
-        } else if (role == "manager") {
+        const query = {};
+        if (role == "manager") {
           const manager = await managerModel.findOne({ nationalCode });
           if (!manager) {
-            return res.status(403).json({
-              error: "شما مجاز به انجام این عملیات نیستید",
-              success: false,
-            });
+            return res.status(403).json({ error: "", success: false });
           }
-          if (page) {
-            const [students, total] = await Promise.all([
-              studentModel
-                .find(
-                  { school: manager.school, manager: manager._id },
-                  "-manager -school"
-                )
-                .skip(skip)
-                .limit(limit)
-                .populate("teacher", "firstName lastName _id")
-                .populate("class", "name _id"),
-              studentModel.countDocuments({
-                school: manager.school,
-                manager: manager._id,
-              }),
-            ]);
-            return res.json({
-              students,
-              totalPages: Math.ceil(total / limit),
-              currentPage: page,
-              success: true,
-            });
+          query.manager = manager._id;
+          query.school = manager.school;
+        } else if (role == "teacher") {
+          const teacher = await teacherModel.findOne({ nationalCode });
+          if (!teacher) {
+            return res
+              .status(403)
+              .json({ error: "دسترسی غیر مجاز", success: false });
           }
-          const students = await studentModel
-            .find(
-              {
-                school: manager.school,
-                manager: manager._id,
-              },
-              "-manager -school"
-            )
-            .populate("school", "name _id")
-            .populate("teacher", "firstName lastName _id")
-            .populate("class", "name _id");
-
-          return res.json({ students, success: true });
+          if (!teacher?.class) {
+            return res
+              .status(403)
+              .json({ error: "برای شما کلاسی تعریف نشده", success: false });
+          }
+          query.school = teacher.school;
+          query.manager = teacher.manager;
+          query.teacher = teacher._id;
+          query.class = teacher.class;
+        } else {
+          const owner = await ownerModel.findOne({ nationalCode });
+          if (!owner) {
+            return res
+              .status(403)
+              .json({ error: "دسترسی غیر مجاز", success: false });
+          }
         }
+        if (page) {
+          const [students, total] = await Promise.all([
+            studentModel
+              .find(query)
+              .skip(skip)
+              .limit(limit)
+              .populate("school", "name _id")
+              .populate("manager", "firstName lastName _id ")
+              .populate("teacher", "firstName lastName _id")
+              .populate("class", "name _id"),
+            studentModel.countDocuments(),
+          ]);
+          return res.json({
+            students,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            success: true,
+          });
+        }
+        const students = await studentModel
+          .find(query, "-actionsPermissions -userName -password")
+          .populate("teacher", "firstName lastName _id")
+          .populate("school", "name _id")
+          .populate("manager", "firstName lastName _id ")
+          .populate("class", "name _id");
+        return res.json({ students, success: true });
       }
 
       case "POST": {
@@ -107,7 +89,6 @@ export default async function Students(req, res) {
           "nationalCode",
           "parentPhone",
           "birthDay",
-          "grade",
         ];
         const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
         if (!isBodyPropsValid) {
@@ -141,11 +122,38 @@ export default async function Students(req, res) {
             success: false,
           });
         }
-        await studentModel.create({
+
+        const newStudent = await studentModel.create({
           ...req.body,
           manager: manager._id,
           school: manager.school,
         });
+
+        if (req.body?.class?.[0]) {
+          const cls = await classModel.findOne({ _id: req.body.class[0] });
+          if (!cls) {
+            return res
+              .status(404)
+              .json({ error: "کلاس یافت نشد", success: false });
+          }
+          if (!cls.teacher) {
+            return res.status(403).json({
+              error: "نخست باید کلاس بندی معلم انجام شود",
+              success: false,
+            });
+          }
+          if (cls.capacity < 1) {
+            return res
+              .status(403)
+              .json({ error: "کلاس ظرفیت ندارد", success: false });
+          }
+          cls.capacity = cls.capacity - 1;
+          await cls.save();
+          newStudent.teacher = cls.teacher;
+          newStudent.class = cls._id;
+          await newStudent.save();
+        }
+
         return res
           .status(201)
           .json({ message: "دانش آموز با موفقیت ایجاد شد", success: true });
@@ -158,6 +166,8 @@ export default async function Students(req, res) {
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

@@ -28,7 +28,7 @@ const studentSchema = new mongoose.Schema({
   birthDay: { type: Date, required: true },
   grade: {
     type: Number,
-    required: true,
+    required: false,
     enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   },
 });

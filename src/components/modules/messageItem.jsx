@@ -1,0 +1,25 @@
+import React from "react";
+
+function MessageItem({
+  receiverId,
+  isYouSend,
+  text,
+  createdAt,
+  receiver,
+  sender,
+}) {
+  const date = new Date(createdAt);
+  const time = date.toLocaleString("FA").slice(11,-3);
+  return (
+    <div
+      className={`flex flex-col py-2 px-4 ${
+        isYouSend ? "bg-sky-300" : "bg-gray-300"
+      }`}
+    >
+      {text}
+      <span className="text-xs mt-1 text-white">{time}</span>
+    </div>
+  );
+}
+
+export default MessageItem;

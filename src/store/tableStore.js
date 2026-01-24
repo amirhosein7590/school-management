@@ -15,9 +15,14 @@ const useTableStore = create((set, get) => ({
   setAllRowState: (newValue) => set((state) => ({ rowState: newValue })),
   toggleRowSelected: (id) =>
     set((state) => {
-      const cur = !!state.selected[id];
+      // const cur = !!state.selected[id];
+      // return {
+      //   selected: { ...state.selected, [id]: !cur },
+      //   lastSelectedId: id,
+      // };
+      const curr = state.selected[id];
       return {
-        selected: { ...state.selected, [id]: !cur },
+        selected: { ...state.selected, [id]: !curr },
         lastSelectedId: id,
       };
     }),

@@ -5,7 +5,7 @@ import RBAC from "@/utils/RBAC";
 import teacherModel from "@/models/teacher";
 import { isValidObjectId } from "mongoose";
 import messageModel from "@/models/message";
-import findUserByProp from "@/utils/findUserByProp";
+import mongoose from "mongoose";
 
 const configs = {
   owner: {
@@ -13,15 +13,15 @@ const configs = {
     receiverModel: managerModel,
     receiverModelError: "مدیر یافت نشد",
   },
-  manager: {
-    model: managerModel,
-    receiverModel: teacherModel,
-    receiverModelError: "معلم یافت نشد",
-  },
   teacher: {
     model: teacherModel,
     receiverModel: managerModel,
     receiverModelError: "مدیر یافت نشد",
+  },
+  manager: {
+    model: managerModel,
+    receiverModel: teacherModel,
+    receiverModelError: "معلم یافت نشد",
   },
 };
 
@@ -37,6 +37,7 @@ export default async function Message(req, res) {
 
     switch (req.method) {
       case "GET": {
+        const ownerInfo = await ownerModel.findOne({});
         const user = await configs[role]?.model?.findOne({ nationalCode });
         if (!user) {
           return res
@@ -44,92 +45,141 @@ export default async function Message(req, res) {
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
 
-        const populateMessageUsers = async (message) => {
-          const senderInfo = await findUserByProp("_id", message.sender);
-          const receiverInfo = await findUserByProp("_id", message.receiver);
+        const { receiver: receiverId } = req.query;
+        if (!receiverId) {
+          return res
+            .status(422)
+            .json({ error: "اطلاعات مخاطب نامعتبر است", success: false });
+        }
 
-          return {
-            _id: message._id,
-            text: message.text,
-            replay: message.replay,
-            createdAt: message.createdAt, // اگر فیلد createdAt داری اضافه کن
-            sender: {
-              _id: senderInfo?._id,
-              fullName: `${senderInfo?.firstName || ""} ${
-                senderInfo?.lastName || ""
-              }`.trim(),
-              role: senderInfo?.role,
-            },
-            receiver: {
-              _id: receiverInfo?._id,
-              fullName: `${receiverInfo?.firstName || ""} ${
-                receiverInfo?.lastName || ""
-              }`.trim(),
-              role: receiverInfo?.role,
-            },
-          };
+        const resolvedReceiverId = () => {
+          if (receiverId === "owner") return ownerInfo?._id;
+
+          if (receiverId === "manager" && role === "teacher") {
+            return user.manager ?? null;
+          }
+
+          return receiverId;
         };
+
+        const finalReceiverId = resolvedReceiverId();
+
+        if (!finalReceiverId) {
+          return res
+            .status(422)
+            .json({ error: "اطلاعات مخاطب نامعتبر است", success: false });
+        }
+
+        const receiverObjectId =
+          typeof finalReceiverId === "string"
+            ? new mongoose.Types.ObjectId(finalReceiverId)
+            : finalReceiverId;
 
         const page = Number(req.query.page);
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
+
         if (page) {
-          const [messages, total] = await Promise.all([
-            messageModel
-              .find({ $or: [{ sender: user._id }, { receiver: user._id }] })
-              .skip(skip)
-              .limit(limit),
-            messageModel.countDocuments({
-              $or: [{ sender: user._id }, { receiver: user._id }],
-            }),
+          const messages = await messageModel.aggregate([
+            {
+              $match: {
+                $or: [
+                  {
+                    sender: user._id,
+                    receiver: receiverObjectId,
+                  },
+                  {
+                    sender: receiverObjectId,
+                    receiver: user._id,
+                  },
+                ],
+              },
+            },
+
+            { $skip: skip },
+            { $limit: limit },
+
+            {
+              $addFields: {
+                isYouSend: {
+                  $eq: ["$sender", user._id],
+                },
+              },
+            },
+
+            {
+              $project: {
+                __v: 0,
+              },
+            },
           ]);
 
-          const formatedMessages = await Promise.all(
-            messages.map(populateMessageUsers)
-          );
+          const total = await messageModel.countDocuments({
+            $or: [
+              { sender: user._id, receiver: receiverObjectId },
+              { sender: receiverObjectId, receiver: user._id },
+            ],
+          });
+
           return res.json({
-            messages: formatedMessages,
+            messages,
             totalPages: Math.ceil(total / limit),
             currentPage: page,
             success: true,
           });
         } else {
-          const [messages, total] = await Promise.all([
-            messageModel
-              .find({ $or: [{ sender: user._id }, { receiver: user._id }] })
-              .skip(skip)
-              .limit(limit),
-            messageModel.countDocuments({
-              $or: [{ sender: user._id }, { receiver: user._id }],
-            }),
+          const messages = await messageModel.aggregate([
+            {
+              $match: {
+                $or: [
+                  {
+                    sender: user._id,
+                    receiver: receiverObjectId,
+                  },
+                  {
+                    sender: receiverObjectId,
+                    receiver: user._id,
+                  },
+                ],
+              },
+            },
+
+            {
+              $addFields: {
+                isYouSend: {
+                  $eq: ["$sender", user._id],
+                },
+              },
+            },
+
+            {
+              $project: {
+                __v: 0,
+              },
+            },
           ]);
 
-          const formatedMessages = await Promise.all(
-            messages.map(populateMessageUsers)
-          );
-          return res.json({ messages: formatedMessages, success: true });
+          return res.json({ messages, success: true });
         }
       }
 
       case "POST": {
-        const { text, receiver } = req.body;
+        const { text, receiver: receiverId } = req.body;
 
-        if (!text || !receiver) {
+        if (!text || !receiverId) {
           return res
             .status(422)
             .json({ error: "تمامی مقادیر الزامی است", success: false });
         }
-        const config = configs[role];
 
-        const user = await config.model.findOne({ nationalCode });
+        const user = await configs[role].model.findOne({ nationalCode });
         if (!user) {
           return res
             .status(403)
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
 
-        // حالت خاص: مدیر به مدیر سیستم پیام می‌دهد
-        if (receiver[0] === "owner" && role === "manager") {
+        if (receiverId === "owner" && role === "manager") {
           const owner = await ownerModel.findOne();
           if (!owner) {
             return res
@@ -146,18 +196,31 @@ export default async function Message(req, res) {
           return res
             .status(201)
             .json({ message: "پیام با موفقیت ارسال شد", success: true });
-        } else {
-          if (!isValidObjectId(receiver[0])) {
-            return res
-              .status(422)
-              .json({ error: "شناسه گیرنده نامعتبر است", success: false });
-          }
-
-          const receiverInfo = await config.receiverModel.findById(receiver[0]);
-          if (!receiverInfo) {
+        } else if (receiverId == "manager" && role == "teacher") {
+          const manager = await managerModel.findOne({ _id: user.manager });
+          if (!manager) {
             return res
               .status(404)
-              .json({ error: config.receiverModelError, success: false });
+              .json({ error: "مدیر یافت نشد", success: false });
+          }
+          await messageModel.create({
+            text,
+            sender: user._id,
+            receiver: user.manager,
+          });
+
+          return res
+            .status(201)
+            .json({ message: "پیام با موفقیت ارسال شد", success: true });
+        } else {
+          const receiverInfo = await configs[role].receiverModel.findById(
+            receiverId
+          );
+          if (!receiverInfo) {
+            return res.status(404).json({
+              error: configs[role].receiverModelError,
+              success: false,
+            });
           }
 
           await messageModel.create({
@@ -173,7 +236,9 @@ export default async function Message(req, res) {
       }
 
       default: {
-        return res.status(405).json({ error: "متد مجاز نیست", success: false });
+        return res
+          .status(405)
+          .json({ error: "این درخواست مجاز نیست", success: false });
       }
     }
   } catch (error) {

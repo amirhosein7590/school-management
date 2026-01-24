@@ -21,8 +21,10 @@ function EditCell({ id, entityName, user, modalTitle }) {
               user={user}
               queryOptions={{ paramId: { id } }}
               submitButtonText="ذخیره تغییرات"
-              submitButtonClassName="mt-4"
+              submitButtonClassName="w-full lg:w-auto flex justify-center items-center mt-4"
               afterSubmitFn={close}
+              clearFormButton={false}
+              datePickerPortal={false}
             />
           ),
         })

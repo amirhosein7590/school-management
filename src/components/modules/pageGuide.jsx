@@ -13,12 +13,11 @@ function PageGuide({ entityName, pageName }) {
       <Button
         onClick={() =>
           showModal({
-            title: pageName,
             size: "lg",
             content: () => (
               <ul
                 dir="rtl"
-                className="text-guide-container flex flex-col gap-y-2 list-disc"
+                className="text-guide-container flex flex-col gap-y-2 list-disc mt-4"
               >
                 {texts.map((text) => (
                   <li className="text-sm" key={text}>

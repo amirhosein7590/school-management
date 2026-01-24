@@ -6,7 +6,11 @@ const schoolSchema = new mongoose.Schema({
   level: { type: Number, required: true, enum: [1, 2, 3] }, // برای دوره اول 1 و برای دوره دوم مدرسه 2
   shift: { type: String, required: true, enum: ["morning", "evening"] },
   phone: { type: String, required: true, unique: true },
-  gender: { type: String, required: true, enum: ["boyish", "girlish"] },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["boyish", "girlish", "mixed"],
+  },
   manager: { type: mongoose.Types.ObjectId, ref: "Manager", required: false },
 });
 

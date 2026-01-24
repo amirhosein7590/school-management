@@ -103,6 +103,7 @@ export default async function SingleTeacher(req, res) {
         await teacherModel.findOneAndDelete({
           school: schoolId,
           manager: managerId,
+          _id: req.query?.id,
         });
 
         return res.json({ message: "معلم با موفقیت حذف شد", success: true });

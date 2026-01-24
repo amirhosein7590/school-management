@@ -29,6 +29,7 @@ function ForgotPassword() {
           submitButtonText="دریافت کد بازیابی رمز عبور"
           className="w-full md:w-4/12 md:mx-auto mb-5 flex flex-col items-center"
           afterSubmitFn={afterSubmitFn}
+          clearFormButton={false}
         />
         <Button
           variant="ghost"

@@ -3,6 +3,7 @@ import managerModel from "@/models/manager";
 import studentModel from "@/models/student";
 import RBAC from "@/utils/RBAC";
 import connectToDb from "@/utils/db";
+import { isValidObjectId } from "mongoose";
 
 export default async function StudentClassification(req, res) {
   if (req.method !== "POST") {
@@ -13,10 +14,7 @@ export default async function StudentClassification(req, res) {
   }
 
   // --- RBAC ---
-  const auth = RBAC(req, res, ["owner", "manager"], {
-    status: true,
-    errorMessage: "آیدی نادرست است",
-  });
+  const auth = RBAC(req, res, ["owner", "manager"], { status: false });
   if (!auth) return;
 
   const { nationalCode } = auth;
@@ -38,35 +36,32 @@ export default async function StudentClassification(req, res) {
     }
 
     // --- Validate body ---
-    const { classId } = req.body;
-    if (!classId?.trim()) {
+    const { classId, studentIds } = req.body;
+    if (!classId?.[0] || !isValidObjectId(classId?.[0])) {
       return res.status(422).json({
-        error: "کلاس مشخص نشده است",
+        error: "کلاس نامعتبر است",
         success: false,
       });
     }
 
-    // ---- Student ----
-    const student = await studentModel.findOne(
-      {
-        _id: req.query.id,
-        manager: manager._id,
-        school: manager.school,
-      },
-      { _id: 1, class: 1 }
-    );
+    if (!studentIds || !Array.isArray(studentIds)) {
+      return res
+        .status(422)
+        .json({ error: "آیدی دانش آموزان نامعتبر است", success: false });
+    }
 
-    if (!student) {
-      return res.status(404).json({
-        error: "دانش آموز یافت نشد",
-        success: false,
-      });
+    const isStudentIdsValid = studentIds.every((id) => isValidObjectId(id));
+
+    if (!isStudentIdsValid) {
+      return res
+        .status(422)
+        .json({ error: "آیدی دانش آموزان نامعتبر است", success: false });
     }
 
     // ---- Class ----
     const cls = await classModel.findOne(
       {
-        _id: classId,
+        _id: classId?.[0],
         school: manager.school,
       },
       { capacity: 1, teacher: 1 }
@@ -81,10 +76,10 @@ export default async function StudentClassification(req, res) {
 
     // ---- Capacity Check ----
     const count = await studentModel.countDocuments({
-      class: classId,
+      class: classId?.[0],
     });
 
-    if (count >= cls.capacity) {
+    if (count > cls.capacity) {
       return res.status(403).json({
         error: "کلاس ظرفیت ندارد",
         success: false,
@@ -98,17 +93,22 @@ export default async function StudentClassification(req, res) {
       });
     }
 
-    // ---- Update Student ----
-    await studentModel.updateOne(
-      { _id: student._id },
+    // ---- Update Students ----
+
+    const update = await studentModel.updateMany(
       {
-        class: classId,
-        teacher: cls.teacher,
-      }
+        _id: { $in: studentIds },
+        school: manager.school,
+        manager: manager._id,
+      },
+      { class: classId?.[0], teacher: cls.teacher }
     );
 
+    cls.capacity = cls.capacity - update.matchedCount;
+    await cls.save();
+
     return res.json({
-      message: "دانش آموز با موفقیت به کلاس منتقل شد",
+      message: "دانش آموزان با موفقیت به کلاس منتقل شدند",
       success: true,
     });
   } catch (error) {

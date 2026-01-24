@@ -41,7 +41,7 @@ export default async function BanTeacher(req, res) {
     if (!teacher) {
       return res.status(404).json({ error: "معلم یافت نشد", success: false });
     }
-    const message = teacher.isBanned ? "معلم رفع بن شد" : "معلم بن شد";
+    const message = teacher.isBanned ? "معلم رفع مسدودیت شد" : "معلم مسدود شد";
     teacher.isBanned = isBanned;
     await teacher.save();
 

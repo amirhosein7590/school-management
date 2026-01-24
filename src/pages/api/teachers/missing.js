@@ -7,7 +7,9 @@ import managerModel from "@/models/manager";
 
 export default async function TodayTeacherAttendanceReport(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "متد مجاز نیست", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
   const auth = await RBAC(req, res, ["manager", "owner"], { status: false });

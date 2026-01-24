@@ -1,3 +1,4 @@
+import classModel from "@/models/class";
 import managerModel from "@/models/manager";
 import ownerModel from "@/models/owner";
 import teacherModel from "@/models/teacher";
@@ -133,18 +134,53 @@ export default async function Teachers(req, res) {
             { personnelCode: req.body?.personnelCode },
             { phone: req.body?.phone },
           ],
+          school: manager.school,
+          manager: manager._id,
         });
         if (teacher) {
           return res
             .status(409)
             .json({ error: "معلمی با این مشخصات وجود دارد", success: false });
         }
-        await teacherModel.create({
+
+        if (req.body?.class?.[0]) {
+          const duplicate = await teacherModel.findOne({
+            school: manager.school,
+            manager: manager._id,
+            class: req.body?.class?.[0],
+          });
+
+          if (duplicate) {
+            return res.status(409).json({
+              error: `این کلاس متعلق به ${duplicate.firstName} ${duplicate.lastName} است`,
+              success: false,
+            });
+          }
+        }
+
+        const newTeacher = await teacherModel.create({
           ...req.body,
           school: manager.school,
           manager: manager._id,
           gender: req.body.gender[0],
+          class: req.body?.class?.[0] || null,
         });
+
+        if (req.body?.class?.[0]) {
+          const cls = await classModel.findOne({
+            _id: req.body?.class?.[0],
+            school: manager.school,
+          });
+          if (!cls) {
+            newTeacher.class = null;
+            await newTeacher.save();
+            return res
+              .status(404)
+              .json({ error: "کلاس یافت نشد", success: false });
+          }
+          cls.teacher = newTeacher._id;
+          await cls.save();
+        }
 
         return res
           .status(201)
@@ -152,11 +188,13 @@ export default async function Teachers(req, res) {
       }
       default: {
         return res
-          .status(400)
+          .status(405)
           .json({ error: "این درخواست مجاز نیست", success: false });
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

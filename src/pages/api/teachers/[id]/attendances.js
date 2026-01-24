@@ -5,7 +5,9 @@ import RBAC from "@/utils/RBAC";
 
 export default async function TeacherAttendances(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "متد مجاز نیست", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
   const auth = RBAC(req, res, ["owner", "manager"], {
@@ -34,11 +36,13 @@ export default async function TeacherAttendances(req, res) {
         success: false,
       });
     }
-    const report = await teacherAttendanceModel.find({
-      date: { $gte: new Date(fromDate), $lte: new Date(toDate) },
-      teacher: req.query.id,
-      manager: manager._id,
-    }).lean()
+    const report = await teacherAttendanceModel
+      .find({
+        date: { $gte: new Date(fromDate), $lte: new Date(toDate) },
+        teacher: req.query.id,
+        manager: manager._id,
+      })
+      .lean();
 
     const attendances = {
       absent: [],

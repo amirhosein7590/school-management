@@ -21,11 +21,6 @@ import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
 import { useModal } from "@/contexts/ModalContext";
 import DataTableSkelton from "./Table/dataTableSkelton";
 import useInfiniteCustomeQuery from "@/hooks/useCustomeInfiniteQuery";
-import { Input } from "./input";
-import { Search } from "lucide-react";
-import { Button } from "./Button/button";
-import useCustomeMutation from "@/hooks/useCustomeMutation";
-import { useQueryClient } from "@tanstack/react-query";
 
 function DataTable({
   enableRowSelection = false,
@@ -34,7 +29,6 @@ function DataTable({
   search = false,
 }) {
   const registry = registryEntity[entityName]?.table;
-  const queryClient = useQueryClient();
   const dataArrayName = registry.dataArrayName;
   const {
     data: pages,
@@ -52,41 +46,6 @@ function DataTable({
     registry.headers,
     registry.isPrivate
   );
-
-  const { mutate, isPending } = useCustomeMutation(
-    registry.key,
-    registry.deps,
-    `${registry.url}/search`,
-    { "content-type": "application/json" },
-    "post",
-    true,
-    dataArrayName
-  );
-
-  const searchInputRef = useRef(null);
-
-  const handleSearch = () => {
-    const value = searchInputRef.current?.value?.trim();
-    mutate(
-      { value },
-      {
-        onSuccess: (response) => {
-          const finalKey = [registry.key, registry.deps];
-          queryClient.setQueryData(finalKey, (oldData) => {
-            return {
-              pages: [
-                {
-                  [dataArrayName]: response[dataArrayName],
-                },
-              ],
-              pageParams: [undefined],
-            };
-          });
-        },
-      }
-    );
-  };
-
   const flatData = useMemo(() => {
     if (!pages || !pages.pages) return [];
     const arr = pages.pages.flatMap((p) => p?.[dataArrayName] ?? []);
@@ -144,7 +103,7 @@ function DataTable({
         }
       },
       {
-        threshold: 0.5,
+        threshold: 0.1,
       }
     );
     observer.observe(observerRef.current);
@@ -167,31 +126,11 @@ function DataTable({
 
   return (
     <>
-      {search && (
-        <div className="flex flex-row-reverse">
-          <div className="input-container w-100 border-1 rounded-sm flex items-center">
-            <Input
-              ref={searchInputRef}
-              placeholder="جستجو ..."
-              className="w-100 !text-sm border-0 !shadow-none focus:!ring-0"
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSearch}
-              className="cursor-pointer flex items-center justify-center"
-            >
-              <Search />
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <div className="rounded-md border bg-card shadow-sm overflow-hidden my-4 w-full">
-        <Table>
-          <TableHeader className="sticky top-0">
+      <div className="rounded-[5px] border bg-card shadow-sm overflow-hidden my-4 w-full">
+        <Table className="relative">
+          <TableHeader className="sticky top-0 hover:bg-gray-100">
             {table?.getHeaderGroups()?.map((hg) => (
-              <TableRow className="bg-gray-100" key={hg.id}>
+              <TableRow className="bg-gray-100 hover:bg-gray-100" key={hg.id}>
                 {hg.headers.map((header) => (
                   <TableHead key={header.id} className="text-center py-3">
                     {header.isPlaceholder
@@ -220,12 +159,12 @@ function DataTable({
                 <TableCell>رکوردی برای نمایش وجود ندارد</TableCell>
               </TableRow>
             )}
-            <tr className="w-[1px] h-[1px] opacity-0" ref={observerRef}></tr>
+            <tr className="w-[.1px] h-[.1px] opacity-0" ref={observerRef}></tr>
           </TableBody>
           {enableRowSelection && (
             <TableFooter className="sticky bottom-0">
-              <TableRow className="bg-white">
-                <TableCell className="bg-white">
+              <TableRow className="bg-transparent">
+                <TableCell className="bg-transparent">
                   <SelectAction registry={registry} />
                 </TableCell>
               </TableRow>

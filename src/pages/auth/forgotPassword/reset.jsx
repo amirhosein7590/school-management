@@ -74,6 +74,7 @@ function Reset() {
               submitButtonText="تایید کد فعال سازی"
               className="w-full md:w-4/12 md:mx-auto mb-1 flex flex-col items-center"
               afterSubmitFn={checkOtpAfterSubmit}
+              clearFormButton={false}
             />
             {timer > 0 ? (
               <p className="text-center text-[var(--light-blue)] text-xs md:text-sm ">

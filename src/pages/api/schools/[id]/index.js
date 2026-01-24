@@ -159,7 +159,9 @@ export default async function SingleSchool(req, res) {
         }
       }
       default: {
-        return res.status(405).json({ error: "متد مجاز نیست", success: false });
+        return res
+          .status(405)
+          .json({ error: "این درخواست مجاز نیست", success: false });
       }
     }
   } catch (error) {

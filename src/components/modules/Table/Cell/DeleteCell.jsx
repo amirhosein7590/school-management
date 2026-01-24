@@ -5,7 +5,14 @@ import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useModal } from "@/contexts/ModalContext";
 import { Spinner } from "../../spinner";
 
-function DeleteCell({ id, url, mutationKey, entityName, dataArrayName }) {
+function DeleteCell({
+  id,
+  url,
+  mutationKey,
+  entityName,
+  dataArrayName,
+  className,
+}) {
   const { mutateAsync, isPending } = useCustomeMutation(
     mutationKey,
     null,
@@ -22,6 +29,7 @@ function DeleteCell({ id, url, mutationKey, entityName, dataArrayName }) {
   };
   return (
     <Button
+      className={`cursor-pointer ${className}`}
       onClick={() =>
         showModal({
           size: "sm",
@@ -57,7 +65,6 @@ function DeleteCell({ id, url, mutationKey, entityName, dataArrayName }) {
           ),
         })
       }
-      className="cursor-pointer"
       size="sm"
       variant="ghost"
     >

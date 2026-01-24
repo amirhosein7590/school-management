@@ -44,7 +44,7 @@ export default async function GetOtp(req, res) {
 
       return res
         .status(403)
-        .json({ error: "حساب کاربری شما بن شده است", success: false });
+        .json({ error: "حساب کاربری شما مسدود شده است", success: false });
     }
 
     const sendedCode = await otpModel.findOne({ phone: user.phone });

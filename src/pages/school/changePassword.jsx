@@ -15,6 +15,8 @@ function ChangePassword({ user }) {
         entityName="changePassword"
         inputsContainerClassName="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-y-4 lg:gap-y-0 lg:gap-x-4 mb-5"
         submitButtonText="ذخیره تغییرات"
+        submitButtonClassName="w-full lg:w-auto flex justify-center items-center"
+        clearFormButton={false}
       />
     </div>
   );

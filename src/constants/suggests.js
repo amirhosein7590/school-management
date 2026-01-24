@@ -9,8 +9,8 @@ const suggestConfig = {
         rules: { required: "لطفا نوع بازخورد را مشخص کنید" },
         placeholder: "نوع بازخورد",
         options: [
-          { label: "گزارش اشکال در نرم افزار", value: "problem" },
-          { label: "پیشنهادی برای بهبود", value: "suggest" },
+          { label: "گزارش مشکلات سامانه", value: "problem" },
+          { label: "پیشنهادی برای بهبود سامانه", value: "suggest" },
           { label: "سایر", value: "other" },
         ],
       },
@@ -22,7 +22,7 @@ const suggestConfig = {
           required: "لطفا توضیحات را وارد کنید",
         },
         placeholder:
-          "لطفا نظرات ، انتقادات و پیشنهادات خود را در رابطه با عملکرد سامانه مداد ، با ما در میان بگذارید ... ",
+          "لطفا نظرات ، انتقادات و پیشنهادات خود را در رابطه با عملکرد سامانه مداد را با ما در میان بگذارید ... ",
         labels: [
           {
             name: "description",
@@ -34,7 +34,7 @@ const suggestConfig = {
             name: "opinion",
             className: "text-gray-400 text-xs mt-3",
             position: "after",
-            text: "نظرات شما برای ما بسیار با ارزش است",
+            text: "نظرات شما برای ما بسیار ارزشمند است",
           },
         ],
       },

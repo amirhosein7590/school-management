@@ -5,7 +5,9 @@ import teacherAttendanceModel from "@/models/teacherAttendance";
 
 export default async function MostAbsentTeacher(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "متد مجاز نیست", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
   const auth = RBAC(req, res, ["owner", "manager"], { status: false });

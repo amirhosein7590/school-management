@@ -18,8 +18,7 @@ function useCustomeMutation(
   url,
   headers,
   reqType,
-  isPrivate = false,
-  dataArrayName
+  isPrivate = false
 ) {
   const queryClient = useQueryClient();
   const finalKey = [key, deps ?? null];

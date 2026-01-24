@@ -4,28 +4,28 @@ const addTeacherConfig = {
       {
         type: "text",
         name: "firstName",
-        placeholder: "نام معلم",
-        className: "!text-sm !rounded-none",
+        placeholder: "نام",
+        className: "!text-sm !rounded-[5px]",
         rules: {
-          required: "لطفا نام معلم را وارد نمایید",
+          required: "لطفا نام را وارد نمایید",
         },
       },
       {
         type: "text",
         name: "lastName",
-        className: "!text-sm !rounded-none",
-        placeholder: "نام خانوادگی معلم",
+        className: "!text-sm !rounded-[5px]",
+        placeholder: "نام خانوادگی",
         rules: {
-          required: "لطفا نام خانوادگی معلم را وارد نمایید",
+          required: "لطفا نام خانوادگی را وارد نمایید",
         },
       },
       {
         type: "text",
         name: "phone",
-        placeholder: "شماره تلفن معلم",
-        className: "!text-sm !rounded-none",
+        placeholder: "شماره تلفن",
+        className: "!text-sm !rounded-[5px]",
         rules: {
-          required: "لطفا شماره تلفن معلم را وارد کنید",
+          required: "لطفا شماره تلفن را وارد کنید",
           pattern: {
             value: /^(?:\+?98|0)9\d{9}$/,
             message: "شماره تلفن نا معتبر است",
@@ -35,40 +35,63 @@ const addTeacherConfig = {
       {
         type: "text",
         name: "nationalCode",
-        placeholder: "کد ملی معلم",
-        className: "!text-sm !rounded-none",
+        placeholder: "کد ملی",
+        className: "!text-sm !rounded-[5px]",
         rules: {
-          required: "لطفا کد ملی معلم را وارد نمایید",
+          required: "لطفا کد ملی را وارد نمایید",
         },
       },
       {
         type: "text",
         name: "personnelCode",
-        placeholder: "کد پرسنلی معلم",
-        className: "!text-sm !rounded-none",
+        placeholder: "کد پرسنلی",
+        className: "!text-sm !rounded-[5px]",
         rules: {
-          required: "لطفا کد پرسنلی معلم را وارد نمایید",
+          required: "لطفا کد پرسنلی را وارد نمایید",
         },
       },
       {
         type: "select",
         name: "gender",
-        placeholder: "جنسیت معلم",
-        className: "!text-sm !rounded-none !w-full",
+        placeholder: "جنسیت",
+        className: "!text-sm !rounded-[5px] !w-full",
         options: [
-          { label: "مرد", value: "male" },
-          { label: "زن", value: "female" },
+          { label: "آقا", value: "male" },
+          { label: "خانم", value: "female" },
         ],
         rules: {
-          required: "لطفا جنسیت معلم را وارد نمایید",
+          required: "لطفا جنسیت را وارد نمایید",
         },
       },
       {
         type: "datePicker",
         name: "birthDay",
-        placeholder: "تاریخ تولد معلم",
-        className: "!text-sm !rounded-none",
-        rules: { required: "لطفا تاریخ تولد معلم را وارد کنید" },
+        placeholder: "تاریخ تولد",
+        className: "!text-sm !rounded-[5px] !text-sm",
+        rules: { required: "لطفا تاریخ تولد را وارد کنید" },
+      },
+      {
+        type: "select",
+        name: "class",
+        placeholder: "کلاس (اختیاری)",
+        className: "w-full",
+        multiple: false,
+        options: {
+          url: "/classes",
+          method: "get",
+          key: "classes",
+          deps: null,
+          headers: null,
+          isPrivate: true,
+          optionsGenerator: (data) => {
+            if (!data || !data) return [];
+            return data?.map((cls) => ({
+              label: `${cls.name}`,
+              value: cls._id,
+            }));
+          },
+          dataArrayName: "classes",
+        },
       },
     ],
   },
@@ -78,6 +101,7 @@ const addTeacherConfig = {
   headers: { "content-type": "application/json" },
   deps: null,
   isPrivate: true,
+  dataArrayName: "teachers",
 };
 
 export default addTeacherConfig;

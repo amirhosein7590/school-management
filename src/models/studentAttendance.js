@@ -4,6 +4,7 @@ const studentAttendanceSchema = new mongoose.Schema({
   student: { type: mongoose.Types.ObjectId, ref: "Student", required: true },
   class: { type: mongoose.Types.ObjectId, ref: "Class", required: true },
   teacher: { type: mongoose.Types.ObjectId, ref: "Teacher", required: true },
+  school: { type: mongoose.Types.ObjectId, ref: "School", required: true },
 
   date: { type: Date, required: true }, // فقط روز، بدون ساعت
 
@@ -21,6 +22,7 @@ const studentAttendanceSchema = new mongoose.Schema({
 studentAttendanceSchema.index({ class: 1, date: 1 });
 studentAttendanceSchema.index({ student: 1, date: 1 });
 studentAttendanceSchema.index({ date: 1 });
+studentAttendanceSchema.index({ class: 1 });
 
 const studentAttendanceModel =
   mongoose.models.StudentAttendance ||

@@ -22,10 +22,11 @@ export default async function SingleStudent(req, res) {
             .status(403)
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
+
         const student = await studentModel.findOne({
           _id: req.query.id,
           manager: manager._id,
-          school: school._id,
+          school: manager.school,
         });
         if (!student) {
           return res
@@ -41,12 +42,11 @@ export default async function SingleStudent(req, res) {
           "nationalCode",
           "parentPhone",
           "birthDay",
-          "grade",
         ];
         const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
         if (!isBodyPropsValid) {
           return res.status(422).json({
-            error: "فرمت یا مقدار فیلد نامعتبر نیست",
+            error: "فرمت یا مقدار فیلد معتبر نیست",
             success: false,
           });
         }

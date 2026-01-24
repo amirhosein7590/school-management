@@ -57,7 +57,7 @@ export default async function Schools(req, res) {
             .status(422)
             .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
-
+        
         if (isNaN(Number(req.body.level))) {
           return res
             .status(22)

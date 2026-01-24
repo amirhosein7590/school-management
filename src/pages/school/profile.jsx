@@ -16,6 +16,8 @@ function Profile({ user }) {
         mode="edit"
         inputsContainerClassName="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mb-5"
         submitButtonText="ذخیره تغییرات"
+        submitButtonClassName="w-full lg:w-auto flex justify-center items-center"
+        clearFormButton={false}
       />
     </div>
   );

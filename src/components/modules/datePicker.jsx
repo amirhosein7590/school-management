@@ -5,9 +5,21 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { Button } from "./Button/button";
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
+import useTableStore from "@/store/tableStore";
 
 const DatePicker = memo(
-  ({ value, onChange, placeholder, size = "md", name, onBlur, className }) => {
+  ({
+    value,
+    onChange,
+    placeholder,
+    size = "md",
+    name,
+    onBlur,
+    className,
+    mode,
+    rowId,
+    datePickerPortal = true,
+  }) => {
     const weekDays = ["ش", "ی", "د", "س", "چ", "پ", "ج"];
 
     const todayPersian = new DateObject({
@@ -71,6 +83,18 @@ const DatePicker = memo(
       }
     };
 
+    const setRowState = useTableStore((s) => s.setRowState);
+    const rowState = useTableStore((s) => s.rowState[rowId]);
+
+    const showPlaceholderHandler = () => {
+      if (mode == "attendance") {
+        if (rowState?.date) return rowState?.date;
+        else return placeholder;
+      } else {
+        return placeholder || "انتخاب تاریخ";
+      }
+    };
+
     const currentDate = getDateObjectValue(value) || todayPersian;
 
     const displayValue = (v) => {
@@ -84,25 +108,34 @@ const DatePicker = memo(
       <MultiDatePicker
         value={getDateObjectValue(value)}
         onChange={(dateObject) => {
-          if (!dateObject) {
-            onChange(null);
-            if (typeof onBlur === "function") onBlur();
-            return;
-          }
-          const isoDate = dateObject.toDate().toISOString();
-          onChange(isoDate);
+          if (mode == "attendance") {
+            if (!dateObject) {
+              setRowState(rowId, { date: null });
+            }
+            const isoDate = dateObject.toDate().toISOString().slice(0, 10);
+            setRowState(rowId, { date: isoDate });
+          } else {
+            if (!dateObject) {
+              onChange(null);
+              if (typeof onBlur === "function") onBlur();
+              return;
+            }
+            const isoDate = dateObject.toDate().toISOString();
+            onChange(isoDate);
 
-          if (typeof onBlur === "function") onBlur();
+            if (typeof onBlur === "function") onBlur();
+          }
         }}
         calendar={persian}
         locale={persian_fa}
         format="YYYY/MM/DD"
-        placeholder={placeholder || "انتخاب تاریخ"}
-        portal={true}
+        placeholder={showPlaceholderHandler()}
+        portal={!!datePickerPortal}
         weekDays={weekDays}
         minDate={minPersianDate}
         maxDate={todayPersian}
         currentDate={currentDate}
+        className="relative z-100"
         renderButton={(direction, onClick) => {
           return (
             <button
@@ -123,7 +156,7 @@ const DatePicker = memo(
             <Button
               type="button"
               variant="outline"
-              size={"lg"}
+              size="lg"
               onClick={(e) => {
                 e.preventDefault();
                 openCalendar();

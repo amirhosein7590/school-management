@@ -20,6 +20,7 @@ import {
   Lock,
   LogOut,
   House,
+  Notebook,
 } from "lucide-react";
 
 import { memo, useEffect, useState } from "react";
@@ -52,6 +53,7 @@ const icons = {
   Lock,
   LogOut,
   House,
+  Notebook,
 };
 
 function Nav({ user }) {
@@ -130,7 +132,8 @@ function Nav({ user }) {
             afterSubmitFn={close}
             entityName="suggest"
             submitButtonText="ثبت"
-            submitButtonClassName="bg-green-500 cursor-pointer mt-4 px-4 rounded-sm"
+            submitButtonClassName="bg-green-500 !rounded-[5px] flex justify-center items-center cursor-pointer mt-4 px-4 rounded-sm"
+            clearFormButton={false}
           />
         );
       },
@@ -201,12 +204,12 @@ function Nav({ user }) {
       {isSideBarShow && (
         <div
           onClick={sideBarShowHandler}
-          className="overlay h-[100vh] w-[100w] bg-[rgba(0,0,0,0.2)] fixed inset-0"
+          className="overlay h-[100vh] w-[100w] bg-[rgba(0,0,0,0.2)] fixed inset-0 z-10"
         ></div>
       )}
       <nav
         className={`fixed ${
-          isSideBarShow ? "right-0 z-10" : "-right-1000"
+          isSideBarShow ? "right-0 z-[200]" : "-right-1000"
         }  lg:right-0 flex flex-col w-8/12 lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
       >
         <div
@@ -275,7 +278,7 @@ function Nav({ user }) {
         <div className="links bg-white h-full">
           <ul dir="rtl" className="flex flex-col gap-y-3">
             <Button
-              className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer"
+              className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-[5px] transition duration-300 cursor-pointer"
               variant="ghost"
               href="/school/home"
               isActiveAware={true}
@@ -289,7 +292,7 @@ function Nav({ user }) {
               return (
                 <Button
                   key={button.id}
-                  className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-none transition duration-300 cursor-pointer hover:bg-gray-50"
+                  className="flex items-center !text-sm sans-medium !py-6 lg:text-[16px] gap-x-2 w-full rounded-[5px] transition duration-300 cursor-pointer hover:bg-gray-50"
                   variant="ghost"
                   href={button.href}
                   isActiveAware={true}

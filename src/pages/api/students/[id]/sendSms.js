@@ -7,7 +7,9 @@ import sendSms from "@/utils/sendSms";
 
 export default async function SendSmd(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "متد مجاز نیست", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
   const auth = await RBAC(req, res, ["manager", "owner"], {

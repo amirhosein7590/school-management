@@ -10,6 +10,10 @@ import { Textarea } from "./textarea";
 import useCustomeQuery from "@/hooks/useCustomeQuery";
 import DatePicker from "./datePicker";
 import { Skeleton } from "./skeleton";
+import { Search } from "lucide-react";
+import useCustomeMutation from "@/hooks/useCustomeMutation";
+import { useQueryClient } from "@tanstack/react-query";
+import TimePicker from "./timePicker";
 
 function Form({
   mode,
@@ -23,7 +27,16 @@ function Form({
   inputsContainerClassName,
   entityId,
   queryOptions = {},
+  search = false,
+  validSearchProps = [],
+  countEntityButton = false,
+  clearFormButton = true,
+  submitButton = true,
+  searchEndPoint = true,
+  datePickerPortal = true,
 }) {
+  const queryClient = useQueryClient();
+
   const { mutate, isPending, config } = useEntityMutation(entityName, entityId);
 
   const { data, isPending: inputsPending } = useCustomeQuery(
@@ -35,6 +48,37 @@ function Form({
     queryOptions,
     mode == "edit" && config?.inputs?.url ? true : false
   );
+
+  const searchUrl = searchEndPoint ? `${config?.url}/search` : config?.url;
+
+  const { mutate: searchMutate, isPending: searchPending } = useCustomeMutation(
+    config?.key,
+    config?.deps,
+    searchUrl,
+    config?.headers,
+    "post",
+    true
+  );
+
+  const { mutate: countEntityMutate, isPending: countEntiyPending } =
+    useCustomeMutation(
+      `${config?.key}/search`,
+      config?.deps,
+      `${config?.url}/quantity`,
+      { "content-type": "application/json" },
+      "post",
+      true
+    );
+
+  const { mutate: attendanceAllMutate, isPending: attendanceAllPending } =
+    useCustomeMutation(
+      config?.key,
+      config?.deps,
+      `${config?.url}/all`,
+      { "content-type": "application/json" },
+      "post",
+      true
+    );
 
   const defaultValues = useMemo(() => {
     if (mode === "edit" && data && config?.inputs) {
@@ -63,7 +107,50 @@ function Form({
     formState: { errors, submitCount },
     reset,
     handleSubmit,
+    getValues,
   } = useForm({ mode: "onSubmit", reValidateMode: "onSubmit", defaultValues });
+
+  const searchHandler = () => {
+    const values = getValues();
+
+    const fillFields = validSearchProps.reduce((acc, curr) => {
+      if (
+        values[curr] &&
+        (Array.isArray(values[curr]) ? values[curr].length > 0 : true)
+      ) {
+        acc[curr] = values[curr];
+      }
+      return acc;
+    }, {});
+    searchMutate(fillFields, {
+      onSuccess: (response) => {
+        const finalKey = [config.key, config.deps];
+        queryClient.setQueryData(finalKey, (oldData) => {
+          return {
+            pages: [
+              {
+                [config?.dataArrayName]: response[config?.dataArrayName],
+              },
+            ],
+            pageParams: [undefined],
+          };
+        });
+      },
+    });
+  };
+
+  const countEntityHandler = () => {
+    countEntityMutate({});
+  };
+
+  const attendanceAllHandler = (status) => {
+    const date = getValues()["date"];
+    if (!date) {
+      toast.error("لطفا تاریخ را وارد کنید");
+      return;
+    }
+    attendanceAllMutate({ date, status });
+  };
 
   useEffect(() => {
     if (mode === "edit" && data && inputs && !inputsPending) {
@@ -104,7 +191,7 @@ function Form({
       name: field.name,
       value: field.value || "",
       onChange: field.onChange,
-      onBlur: field.onBlur, // مهم: onBlur هم باید پاس داده شود
+      onBlur: field.onBlur,
       className: input?.className,
       placeholder: input.placeholder,
       ...input,
@@ -125,6 +212,25 @@ function Form({
             onChange={(value) => {
               field.onChange(value);
             }}
+            size="sm"
+            datePickerPortal={datePickerPortal}
+          />
+        );
+      }
+
+      case "timePicker": {
+        return (
+          <TimePicker
+            {...commonProps}
+            value={field.value}
+            onChange={(t) =>
+              field.onChange(
+                `${String(t.hour).padStart(2, "0")}:${String(t.minute).padStart(
+                  2,
+                  "0"
+                )}`
+              )
+            }
           />
         );
       }
@@ -148,14 +254,79 @@ function Form({
             />
           ))}
       </div>
-      <Button
-        disabled={isPending}
-        className={`rounded-[3px] cursor-pointer ${submitButtonClassName}`}
-        type="submit"
-        size="sm"
-      >
-        {isPending ? <Spinner size="sm" /> : submitButtonText}
-      </Button>
+
+      <div className="buttons-container flex flex-col lg:flex-row lg:items-center">
+        {submitButton && (
+          <Button
+            disabled={isPending}
+            className={`rounded-[3px] cursor-pointer ${submitButtonClassName}`}
+            type="submit"
+            size="sm"
+          >
+            {isPending ? <Spinner size="sm" /> : submitButtonText}
+          </Button>
+        )}
+
+        <div className="w-full lg:w-auto mt-4 lg:mr-2 lg:mt-0 flex lg:justify-start items-center gap-x-2 flex-wrap gap-y-2">
+          {search && (
+            <Button
+              disabled={searchPending}
+              className="rounded-[3px] flex justify-center items-center cursor-pointer bg-[var(--base-orange)] hover:bg-[var(--base-orange)] border-[var(--base-orange)]"
+              size="sm"
+              varinat="ghost"
+              onClick={searchHandler}
+              type="button"
+            >
+              {searchPending ? <Spinner size="sm" /> : "جستجو"}
+              <Search />
+            </Button>
+          )}
+          {mode == "attendance" && (
+            <>
+              <Button
+                type="button"
+                onClick={() => attendanceAllHandler("present")}
+                className="present-for-all cursor-pointer rounded-[3px] !bg-green-200 !text-green-600"
+                variant="ghost"
+                size="sm"
+              >
+                حضور همه
+              </Button>
+
+              <Button
+                type="button"
+                onClick={() => attendanceAllHandler("absent")}
+                className="present-for-all cursor-pointer rounded-[3px] !bg-red-200 !text-red-600"
+                variant="ghost"
+                size="sm"
+              >
+                غیبت غیر موجه همه
+              </Button>
+            </>
+          )}
+          {clearFormButton && (
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => reset({})}
+              className="clear-form-button cursor-pointer rounded-[3px]"
+            >
+              پاک کردن فرم
+            </Button>
+          )}
+          {countEntityButton && (
+            <Button
+              onClick={countEntityHandler}
+              type="button"
+              disabled={!countEntityButton || countEntiyPending}
+              variant="outline"
+              className="count-of-entity-button cursor-pointer rounded-[3px] "
+            >
+              {countEntiyPending ? <Spinner size="sm" /> : "تعداد"}
+            </Button>
+          )}
+        </div>
+      </div>
     </form>
   );
 }

@@ -5,7 +5,7 @@ const changePasswordConfig = {
         type: "password",
         name: "oldPassword",
         placeholder: "رمز عبور فعلی",
-        className: "!text-sm !rounded-none",
+        className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا رمز عبور فعلی خود را وارد کنید",
         },
@@ -14,7 +14,7 @@ const changePasswordConfig = {
         type: "password",
         name: "newPassword",
         placeholder: "رمز عبور جدید",
-        className: "!text-sm !rounded-none",
+        className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا رمز عبور جدید خود را وارد کنید",
         },

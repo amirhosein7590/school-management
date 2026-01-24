@@ -17,15 +17,16 @@ function SelectAction({ registry }) {
   );
 
   const selectedRows = React.useMemo(
-    () => Object.keys(selected).filter((id) => !!id),
+    () => Object.values(selected).filter((id) => id),
     [selected]
   );
 
+  const ids = Object.keys(selected).filter((id) => selected[id]);
+
   const handleDelete = useCallback(async () => {
     if (!selectedRows || selectedRows.length === 0) return;
-    await mutateAsync({ ids: selectedRows });
+    await mutateAsync({ ids });
     selectAll([]);
-    console.log(selected, selectedRows);
   }, [mutateAsync, selectedRows]);
 
   if (selectedRows.length < 2) {
@@ -36,7 +37,7 @@ function SelectAction({ registry }) {
     <Button
       size="sm"
       variant="destructive"
-      className={`${
+      className={`!rounded-[5px] ${
         isPending || selectedRows.length === 0
           ? "cursor-not-allowed"
           : "cursor-pointer"

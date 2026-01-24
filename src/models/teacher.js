@@ -15,19 +15,16 @@ const teacherSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
     ref: "School",
-    unique: true,
   },
   class: {
     type: mongoose.Types.ObjectId,
     required: false,
     ref: "Class",
-    unique: true,
   },
   manager: {
     type: mongoose.Types.ObjectId,
     required: true,
     ref: "Manager",
-    unique: true,
   },
   birthDay: { type: Date, required: true },
   gender: { type: String, required: true, enum: ["male", "female"] },
@@ -74,6 +71,10 @@ teacherSchema.virtual("suggests", {
   ref: "Suggest",
   foreignField: "sender",
 });
+
+teacherSchema.index({ manager: 1, school: 1 });
+teacherSchema.index({ school: 1 });
+teacherSchema.index({ manager: 1 });
 
 const teacherModel =
   mongoose.models.Teacher || mongoose.model("Teacher", teacherSchema);

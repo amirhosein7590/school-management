@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 import {
   Popover,
   PopoverContent,
@@ -6,6 +6,7 @@ import {
 } from "@/components/modules/popover";
 import { Button } from "@/components/modules/Button/button";
 import { TimerIcon } from "lucide-react";
+import { Input } from "./input";
 
 /**
  * Fixed Material-like Analog TimePicker
@@ -40,7 +41,7 @@ function degToRad(d) {
 }
 
 // ---------- presentational pieces ----------
-function ClockFace({ size = 280, children }) {
+const ClockFace = memo(({ size = 280, children }) => {
   return (
     <div
       className="relative rounded-full border bg-background"
@@ -49,9 +50,9 @@ function ClockFace({ size = 280, children }) {
       {children}
     </div>
   );
-}
+});
 
-function Numbers({ size }) {
+const Numbers = memo(({ size }) => {
   const r = size / 2;
   return Array.from({ length: 12 }).map((_, i) => {
     const value = i + 1;
@@ -72,9 +73,9 @@ function Numbers({ size }) {
       </div>
     );
   });
-}
+});
 
-function MinuteDots({ size }) {
+const MinuteDots = memo(({ size }) => {
   const r = size / 2;
   return Array.from({ length: 60 }).map((_, i) => {
     const angle = i * 6;
@@ -95,12 +96,12 @@ function MinuteDots({ size }) {
       />
     );
   });
-}
+});
 
-function Hand({ angle, length, width, color }) {
+const Hand = memo(({ angle, length, width, color, className }) => {
   return (
     <div
-      className="absolute left-1/2 top-1/2"
+      className={`absolute left-1/2 top-1/2`}
       style={{
         width,
         height: length,
@@ -111,17 +112,20 @@ function Hand({ angle, length, width, color }) {
       }}
     />
   );
-}
+});
 
 // ---------- main component ----------
-export default function TimePicker({
+const TimePicker = ({
   initialHour = 12,
   initialMinute = 0,
   onChange,
   onClose,
-} = {}) {
-  const [hour, setHour] = useState(initialHour);
-  const [minute, setMinute] = useState(initialMinute);
+  name,
+  placeholder,
+  defaultTime,
+} = {}) => {
+  const [hour, setHour] = useState(null);
+  const [minute, setMinute] = useState(null);
   const [mode, setMode] = useState("hour"); // hour | minute
   const [open, setOpen] = useState(false);
 
@@ -129,14 +133,30 @@ export default function TimePicker({
   const dragging = useRef(null); // 'hour' | 'minute' | null
   const size = 280;
 
-  useEffect(() => {
-    if (typeof onChange === "function") onChange({ hour, minute });
-  }, [hour, minute, onChange]);
-
   const value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(
     2,
     "0"
   )}`;
+
+  function setHourSafe(newHour) {
+    setHour((prev) => {
+      if (prev === newHour) return prev;
+      if (typeof onChange === "function") {
+        onChange({ hour: newHour, minute });
+      }
+      return newHour;
+    });
+  }
+
+  function setMinuteSafe(newMinute) {
+    setMinute((prev) => {
+      if (prev === newMinute) return prev;
+      if (typeof onChange === "function") {
+        onChange({ hour, minute: newMinute });
+      }
+      return newMinute;
+    });
+  }
 
   function computeHandTips(rect, hourVal, minuteVal) {
     const cx = rect.left + rect.width / 2;
@@ -188,9 +208,8 @@ export default function TimePicker({
       dragging.current = "minute";
       setMode("minute");
     } else {
-      // click on face: set minute directly, do not start dragging
       const angle = getAngleFromCenter(cx, cy, x, y);
-      setMinute(angleToMinute(angle));
+      setMinuteSafe(angleToMinute(angle));
       dragging.current = null;
     }
 
@@ -207,6 +226,7 @@ export default function TimePicker({
   function onPointerMove(e) {
     if (!ref.current) return;
     if (!dragging.current) return;
+
     const rect = ref.current.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
@@ -214,11 +234,9 @@ export default function TimePicker({
     const angle = getAngleFromCenter(cx, cy, e.clientX, e.clientY);
 
     if (dragging.current === "minute") {
-      const newMin = angleToMinute(angle);
-      setMinute((prev) => (prev === newMin ? prev : newMin));
+      setMinuteSafe(angleToMinute(angle));
     } else if (dragging.current === "hour") {
-      const newHour = angleToHour(angle);
-      setHour((prev) => (prev === newHour ? prev : newHour));
+      setHourSafe(angleToHour(angle));
     }
   }
 
@@ -232,6 +250,28 @@ export default function TimePicker({
     dragging.current = null;
   }
 
+  const displayTime =
+    hour !== null && minute !== null
+      ? `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
+      : "انتخاب زمان";
+
+  useEffect(() => {
+    if (!value) return;
+    const [h, m] = value.split(":").map(Number);
+    if (!Number.isNaN(h)) setHour(h);
+    if (!Number.isNaN(m)) setMinute(m);
+  }, [value]);
+
+  useEffect(() => {
+    if (defaultTime) {
+      const [h, m] = defaultTime.split(":").map(Number);
+      if (!Number.isNaN(h) && !Number.isNaN(m)) {
+        setHour(h);
+        setMinute(m);
+      }
+    }
+  }, [defaultTime]);
+
   return (
     <Popover
       open={open}
@@ -243,29 +283,51 @@ export default function TimePicker({
       }}
     >
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="!p-0">
-          <TimerIcon className="!w-4 !h-4" />
+        <Button variant="ghost" className="flex items-center border">
+          {displayTime}
         </Button>
       </PopoverTrigger>
 
       <PopoverContent className="p-4 w-auto">
         <div className="flex flex-col items-center gap-3">
-          <div className="flex gap-2 text-lg font-semibold">
-            <Button
-              className={mode === "minute" ? "text-primary" : "opacity-60"}
-              onClick={() => setMode("minute")}
-              variant="ghost"
-            >
-              {String(minute).padStart(2, "0")}
-            </Button>
+          <div className="flex gap-2 text-lg font-semibold mb-5">
+            <Input
+              type="number"
+              min={0}
+              max={23}
+              value={hour ?? ""}
+              onChange={(e) => {
+                const h = parseInt(e.target.value);
+                if (!isNaN(h) && h >= 0 && h <= 23) {
+                  setHourSafe(h);
+                } else if (e.target.value === "") {
+                  setHour(null);
+                }
+              }}
+              className={`w-15 text-center border-b border-gray-300 focus:outline-none text-sm ${
+                mode === "hour" ? "text-primary" : "opacity-60"
+              }`}
+              onFocus={() => setMode("hour")}
+            />
             <span>:</span>
-            <Button
-              className={mode === "hour" ? "text-primary" : "opacity-60"}
-              onClick={() => setMode("hour")}
-              variant="ghost"
-            >
-              {String(hour).padStart(2, "0")}
-            </Button>
+            <Input
+              type="number"
+              min={0}
+              max={59}
+              value={minute ?? ""}
+              onChange={(e) => {
+                const m = parseInt(e.target.value);
+                if (!isNaN(m) && m >= 0 && m <= 59) {
+                  setMinuteSafe(m);
+                } else if (e.target.value === "") {
+                  setMinute(null);
+                }
+              }}
+              className={`w-15 text-center border-b border-gray-300 focus:outline-none text-sm ${
+                mode === "minute" ? "text-primary" : "opacity-60"
+              }`}
+              onFocus={() => setMode("minute")}
+            />
           </div>
 
           <div
@@ -296,11 +358,13 @@ export default function TimePicker({
                 color="var(--primary)"
               />
 
-              <div className="absolute left-1/2 top-1/2 w-2 h-2 bg-primary rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+              <div className="absolute flex items-center left-1/2 top-1/2 w-2 h-2 bg-primary rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             </ClockFace>
           </div>
         </div>
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export default memo(TimePicker);

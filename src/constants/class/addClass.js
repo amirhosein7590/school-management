@@ -5,7 +5,7 @@ const addClassConfig = {
         type: "text",
         name: "name",
         placeholder: "نام کلاس",
-        className: "!text-sm !rounded-none",
+        className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا نام کلاس را وارد نمایید",
         },
@@ -13,7 +13,7 @@ const addClassConfig = {
       {
         type: "number",
         name: "capacity",
-        className: "!text-sm !rounded-none",
+        className: "!text-sm !rounded-[5px]",
         placeholder: "ظرفیت کلاس",
         rules: {
           required: "لطفا ظرفیت کلاس را وارد نمایید",
@@ -51,6 +51,7 @@ const addClassConfig = {
   headers: { "content-type": "application/json" },
   deps: null,
   isPrivate: true,
+  dataArrayName: "classes",
 };
 
 export default addClassConfig;

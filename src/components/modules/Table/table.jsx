@@ -6,7 +6,7 @@ const Table = React.memo(({ className, ...props }) => {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-auto h-100"
+      className="relative w-full overflow-auto max-h-109"
     >
       <table
         data-slot="table"
@@ -41,10 +41,7 @@ const TableFooter = React.memo(({ className, ...props }) => {
   return (
     <tfoot
       data-slot="table-footer"
-      className={cn(
-        "bg-muted/50 border-t",
-        className
-      )}
+      className={cn("bg-muted/50 border-t", className)}
       {...props}
     />
   );

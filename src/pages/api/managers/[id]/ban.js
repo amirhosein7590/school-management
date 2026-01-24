@@ -37,7 +37,7 @@ export default async function BanManager(req, res) {
     if (!manager) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
-    const message = manager.isBanned ? "مدیر رفع بن شد" : "مدیر بن شد";
+    const message = manager.isBanned ? "مدیر رفع مسدودیت شد" : "مدیر مسدود شد";
     manager.isBanned = isBanned;
     await manager.save();
 

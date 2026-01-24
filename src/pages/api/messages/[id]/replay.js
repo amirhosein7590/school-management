@@ -7,7 +7,9 @@ import { isValidObjectId } from "mongoose";
 export default async function ReplayMessage(req, res) {
   try {
     if (req.method != "POST") {
-      return res.status(405).json({ error: "متد مجاز نیست", success: false });
+      return res
+        .status(405)
+        .json({ error: "این درخواست مجاز نیست", success: false });
     }
     const { id } = req.query;
     const { text } = req.body;

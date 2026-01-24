@@ -45,7 +45,7 @@ export default async function RefreshToken(req, res) {
 
     return res
       .status(403)
-      .json({ error: "حساب کاربری شما بن شده است", success: false });
+      .json({ error: "حساب کاربری شما مسدود شده است", success: false });
   }
   const newToken = generateToken({ nationalCode, role });
   const newRefreshToken = generateRefreshToken({ nationalCode, role });

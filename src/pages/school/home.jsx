@@ -10,10 +10,10 @@ import {
   School,
   UserRoundPen,
   Backpack,
+  Notebook,
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
 import DatePicker from "react-multi-date-picker";
-
 
 const icons = {
   LayoutDashboard,
@@ -24,6 +24,7 @@ const icons = {
   School,
   UserRoundPen,
   Backpack,
+  Notebook,
 };
 function Home({ user }) {
   return (

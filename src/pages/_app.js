@@ -37,14 +37,19 @@ export default function App({ Component, pageProps }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} position="right" /> */}
+      {/* <ReactQueryDevtools initialIsOpen={false} position="left" /> */}
       <HydrationBoundary state={pageProps.dehydratedState}>
         <UserContext.Provider value={pageProps.user || null}>
           <ModalProvider>
             {getLayout(<Component {...pageProps} />)}
           </ModalProvider>
-        </UserContext.Provider>{" "}
-        <Toaster dir="rtl" richColors position="top-center" />
+        </UserContext.Provider>
+        <Toaster
+          dir="rtl"
+          className="!-mx-8 lg:!mx-0"
+          richColors
+          position="top-center"
+        />
       </HydrationBoundary>
     </QueryClientProvider>
   );

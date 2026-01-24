@@ -8,7 +8,9 @@ import { isValidObjectId } from "mongoose";
 
 export default async function StudentAttendances(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "متد مجاز نیست", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجاز نیست", success: false });
   }
 
   const auth = RBAC(req, res, ["owner", "manager", "teacher"], {
@@ -18,11 +20,13 @@ export default async function StudentAttendances(req, res) {
   if (!auth) return;
 
   const { nationalCode, role } = auth;
-  const {fromDate, toDate } = req.body;
+  const { fromDate, toDate } = req.body;
 
   // ------------------ Validate Inputs ------------------
   if (!isValidObjectId(req.query?.id)) {
-    return res.status(422).json({ error: "آیدی دانش آموز معتبر نیست", success: false });
+    return res
+      .status(422)
+      .json({ error: "آیدی دانش آموز معتبر نیست", success: false });
   }
 
   if (isNaN(Date.parse(fromDate)) || isNaN(Date.parse(toDate))) {
@@ -43,7 +47,6 @@ export default async function StudentAttendances(req, res) {
       if (!manager) {
         return res.status(403).json({ error: "دسترسی ندارید", success: false });
       }
-      // مدیر به همه کلاس‌ها دسترسی دارد
     }
 
     if (role === "teacher") {
@@ -63,11 +66,15 @@ export default async function StudentAttendances(req, res) {
     // ------------------ Student Validation ------------------
     const student = await studentModel.findById(req.query?.id).lean();
     if (!student) {
-      return res.status(404).json({ error: "دانش آموز یافت نشد", success: false });
+      return res
+        .status(404)
+        .json({ error: "دانش آموز یافت نشد", success: false });
     }
 
-    // اگر teacher باشد باید دانش آموز حتماً در کلاس خودش باشد
-    if (role === "teacher" && student.class.toString() !== allowedClass.toString()) {
+    if (
+      role === "teacher" &&
+      student.class.toString() !== allowedClass.toString()
+    ) {
       return res.status(403).json({
         error: "شما به این دانش آموز دسترسی ندارید",
         success: false,
@@ -80,9 +87,9 @@ export default async function StudentAttendances(req, res) {
         student: req.query?.id,
         date: { $gte: new Date(fromDate), $lte: new Date(toDate) },
       })
-      .populate('student' , '_id firstName lastName')
-      .populate('class' , '_id name')
-      .populate('teacher' , '_id firstName lastName')
+      .populate("student", "_id firstName lastName")
+      .populate("class", "_id name")
+      .populate("teacher", "_id firstName lastName")
       .lean();
 
     const attendances = {
@@ -100,9 +107,7 @@ export default async function StudentAttendances(req, res) {
     }
 
     return res.json({ success: true, attendances });
-
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       error: "خطای ناشناخته",
       dbError: error.message,

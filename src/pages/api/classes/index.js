@@ -60,7 +60,8 @@ export default async function Classes(req, res) {
                 .find({ school: manager.school })
                 .skip(skip)
                 .limit(limit)
-                .populate("school", "name _id"),
+                .populate("school", "name _id")
+                .populate("teacher", "firstName lastName"),
               classModel.countDocuments({ school: manager.school }),
             ]);
             return res.json({
@@ -72,7 +73,8 @@ export default async function Classes(req, res) {
           }
           const classes = await classModel
             .find({ school: manager.school })
-            .populate("school", "name _id");
+            .populate("school", "name _id")
+            .populate("teacher", "_id firstName lastName");
           return res.json({ classes, success: true });
         }
       }

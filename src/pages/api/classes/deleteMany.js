@@ -127,7 +127,6 @@ export default async function DeleteManyClasses(req, res) {
       message: `${result.deletedCount} کلاس با موفقیت حذف شد`,
     });
   } catch (error) {
-    console.error("Error in DeleteManyClasses:", error);
 
     if (error.name === "MongoError" && error.code === 11000) {
       return res.status(409).json({
