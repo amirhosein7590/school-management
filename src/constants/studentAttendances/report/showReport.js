@@ -44,6 +44,11 @@ const showStudentReportConfig = {
           }`,
       }),
       columnHelper.display({
+        id: "class",
+        header: "کلاس",
+        cell: ({ row }) => row.original?.class?.name ?? "کلاس سلب شده",
+      }),
+      columnHelper.display({
         id: "status",
         header: "وضعیت حضور",
         cell: ({ row }) => (

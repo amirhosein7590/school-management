@@ -115,10 +115,14 @@ export default async function handler(req, res) {
         : {}),
     };
 
-    const neverAbsentTeachers = await teacherModel
+    const neverAbsentTeachersArray = await teacherModel
       .find(neverAbsentMatch)
       .select("_id firstName lastName nationalCode")
       .lean();
+
+    const neverAbsentTeachers = neverAbsentTeachersArray.map((t) => ({
+      teacher: t,
+    }));
 
     const mostLate = mostLateResults[0] || null;
 

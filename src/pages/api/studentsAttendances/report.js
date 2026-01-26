@@ -45,7 +45,8 @@ export default async function Report(req, res) {
         }
         const report = await studentAttendanceModel
           .find(query)
-          .populate("student", "_id firstName lastName");
+          .populate("student", "_id firstName lastName")
+          .populate("class", "_id name");
 
         return res.json({ report });
       }
@@ -132,7 +133,8 @@ export default async function Report(req, res) {
 
         const report = await studentAttendanceModel
           .find(query)
-          .populate("student", "_id firstName lastName");
+          .populate("student", "_id firstName lastName")
+          .populate("class", "_id name");
         return res.json({ report, success: true });
       }
 

@@ -1,11 +1,13 @@
-import TeacherAttendanceStats from "@/components/templates/managerDashboard/teacherAttendanceStats";
+import AttendanceStats from "@/components/templates/managerDashboard/attendanceStats";
 import { requireRole } from "@/lib/requireRole";
 import React, { memo } from "react";
 
-function ManagerDashboard({user}) {
-  return <div dir="rtl" className="flex flex-col gap-y-10">
-        <TeacherAttendanceStats />
-  </div>;
+function ManagerDashboard() {
+  return (
+    <div dir="rtl" className="flex flex-col gap-y-10">
+      <AttendanceStats />
+    </div>
+  );
 }
 
 export default memo(ManagerDashboard);

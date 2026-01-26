@@ -5,10 +5,12 @@ const Item = memo(({ fullName, count }) => {
     <div className="flex items-center justify-between text-sm">
       <span className="text-gray-800 truncate max-w-[70%]">{fullName}</span>
 
-      <span className="font-medium text-gray-600">
-        {count}
-        <span className="text-xs text-gray-400"> بار</span>
-      </span>
+      {count && (
+        <span className="font-medium text-gray-600">
+          {count}
+          <span className="text-xs text-gray-400"> بار</span>
+        </span>
+      )}
     </div>
   );
 });

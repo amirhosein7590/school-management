@@ -28,6 +28,7 @@ export const permission = {
       "changePassword",
       "studentsAttendances",
       "studentsReport",
+      "TeacherDashboard",
     ],
   },
 };
