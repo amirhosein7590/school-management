@@ -2,6 +2,7 @@ import connectToDb from "@/utils/db";
 import otpModel from "@/models/otp";
 import sendSms from "@/utils/sendSms";
 import findUserByProp from "@/utils/findUserByProp";
+import crypto from "crypto";
 
 export default async function GetOtp(req, res) {
   if (req.method != "POST") {
@@ -55,7 +56,7 @@ export default async function GetOtp(req, res) {
           .json({ error: "کد قبلی هنوز منقضی نشده است", success: false });
       } else {
         await otpModel.findOneAndDelete({ phone: sendedCode.phone });
-        const code = Math.floor(10000 + Math.random() * 9999);
+        const code = crypto.randomInt(99999);
         const expTime = Date.now() + Number(process.env.expOtpTime);
         const { success } = await sendSms({
           patternKey: process.env.otpPattern,

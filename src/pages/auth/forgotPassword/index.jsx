@@ -45,6 +45,5 @@ function ForgotPassword() {
 
 
 export default ForgotPassword;
-ForgotPassword.getLayout = (page) => <>{page}</>; // blank layout
 
 

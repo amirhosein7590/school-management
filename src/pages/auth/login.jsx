@@ -57,5 +57,3 @@ function Login() {
 }
 
 export default Login;
-
-Login.getLayout = (page) => <>{page}</>; // blank layout

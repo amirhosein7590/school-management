@@ -60,7 +60,10 @@ function Reset() {
   };
 
   return (
-    <div dir="rtl" className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full">
+    <div
+      dir="rtl"
+      className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full"
+    >
       <Steper currentStep={currentStep} className="mb-2" />
       <div className="form-wrapper bg-white shadow-sm flex flex-col py-2 px-4">
         {currentStep == 2 ? (
@@ -119,5 +122,3 @@ function Reset() {
 }
 
 export default Reset;
-
-Reset.getLayout = (page) => <>{page}</>; // blank layout

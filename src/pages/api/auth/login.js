@@ -36,15 +36,15 @@ export default async function Login(req, res) {
     }
 
     if (user.isBanned) {
-      if (user.expTime < Date.now()) {
-        return res
-          .status(403)
-          .json({ error: "اشتراک شما به پایان رسیده است", success: false });
-      }
-
       return res
         .status(403)
         .json({ error: "حساب کاربری شما مسدود شده است", success: false });
+    }
+
+    if (user.expTime < Date.now()) {
+      return res
+        .status(403)
+        .json({ error: "اشتراک شما به پایان رسیده است", success: false });
     }
 
     const isPasswordValid = await verifyPassword(password, user.password);
@@ -54,15 +54,19 @@ export default async function Login(req, res) {
         .json({ error: "رمز عبور نادرست است", success: false });
     }
 
-    const token = generateToken({
+    const payload = {
       nationalCode: user.nationalCode,
       role: user.role,
-    });
+      isBanned: user.isBanned,
+    };
 
-    const refreshToken = generateRefreshToken({
-      nationalCode: user.nationalCode,
-      role: user.role,
-    });
+    if (user.role == "manager") {
+      payload.expTime = user.expTime;
+    }
+
+    const token = generateToken(payload);
+
+    const refreshToken = generateRefreshToken(payload);
 
     return res
       .setHeader("Set-Cookie", [

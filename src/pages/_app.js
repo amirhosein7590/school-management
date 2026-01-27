@@ -13,27 +13,20 @@ import { UserContext } from "@/contexts/UserContext";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App({ Component, pageProps }) {
-  const [queryClient] = React.useState(
-    () =>
-      new QueryClient({
-        // defaultOptions: {
-        //   queries: {
-        //     staleTime: 1000 * 60 * 5,
-        //     gcTime: 1000 * 60 * 30,
-        //     refetchOnWindowFocus: false,
-        //     refetchOnReconnect: true,
-        //     refetchOnMount: false,
-        //     retry: 1,
-        //   },
-        //   mutations: {
-        //     retry: 0,
-        //   },
-        // },
-      })
-  );
+  const [queryClient] = React.useState(() => new QueryClient({}));
   const getLayout =
     Component.getLayout ||
-    ((page) => <DashboardLayout user={pageProps.user}>{page}</DashboardLayout>);
+    ((page) => {
+      if (
+        Component.name === "ErrorPage" ||
+        pageProps.statusCode ||
+        !pageProps.user
+      ) {
+        return <>{page}</>;
+      }
+
+      return <DashboardLayout user={pageProps.user}>{page}</DashboardLayout>;
+    });
 
   return (
     <QueryClientProvider client={queryClient}>

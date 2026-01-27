@@ -47,8 +47,15 @@ export default async function RefreshToken(req, res) {
       .status(403)
       .json({ error: "حساب کاربری شما مسدود شده است", success: false });
   }
-  const newToken = generateToken({ nationalCode, role });
-  const newRefreshToken = generateRefreshToken({ nationalCode, role });
+
+  const payload = { nationalCode, role, isBanned: user.isBanned };
+
+  if (role == "manager") {
+    payload.expTime = user.expTime;
+  }
+
+  const newToken = generateToken(payload);
+  const newRefreshToken = generateRefreshToken(payload);
 
   return res
     .status(200)
