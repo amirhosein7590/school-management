@@ -13,6 +13,7 @@ function AddClass({ user }) {
       search={true}
       validSearchProps={validSearchProps}
       countEntityButton={true}
+      exportToExcel={true}
     />
   );
 }

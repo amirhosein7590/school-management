@@ -18,7 +18,7 @@ const removeStudentFromClass = (showModal, studentId, classId) => {
         null,
         `/students/${studentId}/deleteClass`,
         { "content-type": "application/json" },
-        "post"
+        "post",
       );
       return (
         <div className="flex flex-col">
@@ -150,7 +150,7 @@ const editDeleteStudentConfig = {
                   removeStudentFromClass(
                     showModal,
                     row.original?._id,
-                    row.original?.class?._id
+                    row.original?.class?._id,
                   )
                 }
                 variant="ghost"

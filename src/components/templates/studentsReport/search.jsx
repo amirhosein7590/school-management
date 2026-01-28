@@ -14,6 +14,7 @@ function search({ user }) {
       countEntityButton={false}
       submitButton={false}
       searchEndPoint={false}
+      exportToExcel={true}
     />
   );
 }

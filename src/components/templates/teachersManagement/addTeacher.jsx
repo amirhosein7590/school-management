@@ -23,6 +23,7 @@ function AddTeacher({ user }) {
       search={true}
       validSearchProps={validSearchProps}
       countEntityButton={true}
+      exportToExcel={true}
     />
   );
 }

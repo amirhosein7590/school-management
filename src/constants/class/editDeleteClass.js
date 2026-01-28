@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 const columnHelper = createColumnHelper();
 
-const classesGradeName = {
+const gradeLabels = {
   1: "اول",
   2: "دوم",
   3: "سوم",
@@ -96,7 +96,7 @@ const editDeleteClassConfig = {
       columnHelper.display({
         id: "grade",
         header: "پایه",
-        cell: ({ row }) => classesGradeName[row.original.grade],
+        cell: ({ row }) => gradeLabels[row.original.grade],
       }),
       columnHelper.accessor("actions", {
         header: "حذف / ویرایش",

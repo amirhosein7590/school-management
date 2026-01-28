@@ -1,9 +1,7 @@
 import { Button } from "@/components/modules/Button/button";
 import DescriptionCell from "@/components/modules/Table/Cell/DescriptionCell";
-import { useModal } from "@/contexts/ModalContext";
 import dateToSolar from "@/utils/dateToSolar";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Edit } from "lucide-react";
 
 const columnHelper = createColumnHelper();
 const showDateHandler = (date) => {

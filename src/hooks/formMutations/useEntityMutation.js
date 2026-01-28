@@ -4,6 +4,7 @@ import { useCallback, useMemo } from "react";
 
 export default function useEntityMutation(entityName, entityId) {
   const config = registryEntity[entityName];
+  const exportToExcel = registryEntity?.[`${config?.key}ToExcel`];
   if (!config) throw new Error(`Unknown entity: ${entityName}`);
   const { url, headers, method, isPrivate, key } = config;
 
@@ -19,7 +20,7 @@ export default function useEntityMutation(entityName, entityId) {
     headers,
     method,
     isPrivate,
-    config?.table?.dataArrayName
+    config?.table?.dataArrayName,
   );
 
   const handler = useCallback(
@@ -27,7 +28,7 @@ export default function useEntityMutation(entityName, entityId) {
       if (mutateAsync) return mutateAsync(payload, options);
       return mutate(payload, options);
     },
-    [mutate, mutateAsync]
+    [mutate, mutateAsync],
   );
   return useMemo(
     () => ({
@@ -35,8 +36,10 @@ export default function useEntityMutation(entityName, entityId) {
       isPending,
       isError,
       data,
-      config,
+      config: exportToExcel
+        ? { ...config, exportToExcelConfig: exportToExcel }
+        : config,
     }),
-    [handler, isPending, isError, data, config]
+    [handler, isPending, isError, data, config],
   );
 }

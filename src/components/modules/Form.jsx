@@ -34,6 +34,7 @@ function Form({
   submitButton = true,
   searchEndPoint = true,
   datePickerPortal = true,
+  exportToExcel = false,
 }) {
   const queryClient = useQueryClient();
 
@@ -46,7 +47,7 @@ function Form({
     config?.inputs?.headers,
     config?.inputs?.isPrivate,
     queryOptions,
-    mode == "edit" && config?.inputs?.url ? true : false
+    mode == "edit" && config?.inputs?.url ? true : false,
   );
 
   const searchUrl = searchEndPoint ? `${config?.url}/search` : config?.url;
@@ -57,7 +58,7 @@ function Form({
     searchUrl,
     config?.headers,
     "post",
-    true
+    true,
   );
 
   const { mutate: countEntityMutate, isPending: countEntiyPending } =
@@ -67,7 +68,7 @@ function Form({
       `${config?.url}/quantity`,
       { "content-type": "application/json" },
       "post",
-      true
+      true,
     );
 
   const { mutate: attendanceAllMutate, isPending: attendanceAllPending } =
@@ -77,7 +78,7 @@ function Form({
       `${config?.url}/all`,
       { "content-type": "application/json" },
       "post",
-      true
+      true,
     );
 
   const defaultValues = useMemo(() => {
@@ -152,6 +153,24 @@ function Form({
     attendanceAllMutate({ date, status });
   };
 
+  const { exportToExcelConfig } = config;
+
+  const exportToExcelHandler = async () => {
+    if (!exportToExcel || !exportToExcelConfig) return;
+    const data = queryClient.getQueryData([config?.key, config?.deps]);
+    const flatData = () => {
+      if (!data || !data.pages) return [];
+      const arr = data.pages.flatMap((p) => p?.[config?.dataArrayName] ?? []);
+      return arr;
+    };
+    if (flatData()?.length < 1) {
+      toast.error("رکوردی برای خروجی اکسل ، وجود ندارد");
+      return;
+    }
+
+    await exportToExcelConfig(flatData);
+  };
+
   useEffect(() => {
     if (mode === "edit" && data && inputs && !inputsPending) {
       reset(defaultValues);
@@ -174,7 +193,7 @@ function Form({
         return result;
       } catch (error) {}
     },
-    [mutate]
+    [mutate],
   );
   const inputs = config.inputs?.all || config.inputs[user.role];
 
@@ -227,8 +246,8 @@ function Form({
               field.onChange(
                 `${String(t.hour).padStart(2, "0")}:${String(t.minute).padStart(
                   2,
-                  "0"
-                )}`
+                  "0",
+                )}`,
               )
             }
           />
@@ -323,6 +342,18 @@ function Form({
               className="count-of-entity-button cursor-pointer rounded-[3px] "
             >
               {countEntiyPending ? <Spinner size="sm" /> : "تعداد"}
+            </Button>
+          )}
+          {exportToExcel && (
+            <Button
+              type="button"
+              onClick={exportToExcelHandler}
+              size="sm"
+              variant="ghost"
+              disabled={!exportToExcel}
+              className="bg-green-600 text-white cursor-pointer rounded-[3px]"
+            >
+              خروجی اکسل
             </Button>
           )}
         </div>

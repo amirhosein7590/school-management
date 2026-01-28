@@ -25,6 +25,11 @@ import addStudentAttendanceConfig from "@/constants/studentAttendances/addStuden
 import editDeleteStudentAttendancesConfig from "@/constants/studentAttendances/editDeleteStudentAttendances";
 import searchStudentReportConfig from "@/constants/studentAttendances/report/search";
 import showStudentReportConfig from "@/constants/studentAttendances/report/showReport";
+import exportClassesToExcel from "@/constants/exportToExcel/classes";
+import exportTeachersToExcel from "@/constants/exportToExcel/teachers";
+import exportStudentsToExcel from "@/constants/exportToExcel/students";
+import exportTeacherAttendancesToExcel from "@/constants/exportToExcel/teacherAttendances";
+import exportStudentAttendancesToExcel from "@/constants/exportToExcel/studentsAttendances";
 
 export default {
   login: loginFormConfig,
@@ -53,5 +58,10 @@ export default {
   addStudentAttendance: addStudentAttendanceConfig,
   editDeleteStudentAttendances: editDeleteStudentAttendancesConfig,
   searchStudentReport: searchStudentReportConfig,
-  showStudentReport : showStudentReportConfig
+  showStudentReport: showStudentReportConfig,
+  classesToExcel: exportClassesToExcel,
+  teachersToExcel: exportTeachersToExcel,
+  studentsToExcel: exportStudentsToExcel,
+  "teachersAttendances/reportToExcel": exportTeacherAttendancesToExcel,
+  "studentsAttendances/reportToExcel": exportStudentAttendancesToExcel,
 };
