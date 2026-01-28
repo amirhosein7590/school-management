@@ -24,11 +24,12 @@ export default async function exportClassesToExcel(dataFn) {
   }));
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("کلاس ها");
+  worksheet.views = [{ rightToLeft: true }];
   worksheet.columns = [
     { header: "پایه", key: "grade", width: 15 },
     { header: "ظرفیت", key: "capacity", width: 15 },
     { header: "معلم", key: "teacher", width: 15 },
-    { header: "نام", key: "name", width: 30 },
+    { header: "نام کلاس", key: "name", width: 30 },
   ];
 
   worksheet.views = [{ showGridLines: true }];

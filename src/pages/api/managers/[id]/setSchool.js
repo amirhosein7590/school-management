@@ -7,7 +7,9 @@ import RBAC from "@/utils/RBAC";
 
 export default async function SetSchool(req, res) {
   if (req.method != "POST") {
-    return res.status(400).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(405)
+      .json({ error: "این درخواست مجازنیست", success: false });
   }
 
   const auth = RBAC(req, res, ["owner"], {
@@ -43,6 +45,8 @@ export default async function SetSchool(req, res) {
     }
 
     manager.school = schoolId;
+    school.manager = req.query?.id;
+    await school.save();
     await manager.save();
 
     return res.json({ message: "عملیات موفقیت آمیز بود", success: true });

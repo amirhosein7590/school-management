@@ -13,7 +13,7 @@ function SendMessage({ receiverId }) {
     "/messages",
     { "content-type": "application/json" },
     "post",
-    true
+    true,
   );
   const disableHandler = useCallback(() => {
     return text.length < 1 || isPending ? true : false;
@@ -22,6 +22,12 @@ function SendMessage({ receiverId }) {
   const sendMessageHandler = () => {
     if (disableHandler()) return;
     mutate({ text, receiver: receiverId?.[0] });
+  };
+
+  const keyPressHandler = (event) => {
+    if (event.code == "Enter") {
+      sendMessageHandler();
+    }
   };
 
   return (
@@ -43,6 +49,7 @@ function SendMessage({ receiverId }) {
         className="border-0 border-b-1 border-b-gray-300 rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-b-gray-500"
         type="text"
         value={text}
+        onKeyPress={(event) => keyPressHandler(event)}
         onChange={(e) => setText(e.target.value)}
       />
     </div>

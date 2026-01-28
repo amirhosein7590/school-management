@@ -1,6 +1,6 @@
 export const permission = {
   owner: {
-    pages: ["home", "inSystemMessage", "profile", "changePassword", "test"],
+    pages: ["home", "inSystemMessage", "profile", "changePassword"],
   },
   manager: {
     pages: [

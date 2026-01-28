@@ -37,6 +37,8 @@ export default async function exportStudentAttendancesToExcel(dataFn) {
   }));
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("حضور و غیاب دانش آموزان");
+  worksheet.views = [{ rightToLeft: false }];
+
   worksheet.columns = [
     { header: "توضیحات", key: "description", width: 40 },
     { header: "ساعت", key: "time", width: 20 },

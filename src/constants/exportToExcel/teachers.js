@@ -15,6 +15,8 @@ export default async function exportTeachersToExcel(dataFn) {
   }));
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("معلمان");
+  worksheet.views = [{ rightToLeft: false }];
+
   worksheet.columns = [
     { header: "وضعیت مسدودیت", key: "isBanned", width: 20 },
     { header: "کلاس", key: "class", width: 20 },

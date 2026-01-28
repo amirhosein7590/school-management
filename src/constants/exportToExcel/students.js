@@ -12,6 +12,8 @@ export default async function exportStudentsToExcel(dataFn) {
   }));
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("دانش آموزان");
+  worksheet.views = [{ rightToLeft: false }];
+
   worksheet.columns = [
     { header: "کلاس", key: "class", width: 20 },
     { header: "تاریخ تولد", key: "birthDay", width: 20 },
