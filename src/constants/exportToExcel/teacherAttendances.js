@@ -1,6 +1,6 @@
 import dateToSolar from "@/utils/dateToSolar";
-import toPersianNumber from "@/utils/toPersianNumber";
 import ExcelJS from "exceljs";
+import persianJs from "persianjs";
 
 const showDateHandler = (date) => {
   const originalTime = new Date(date).getTime();
@@ -36,7 +36,7 @@ export default async function exportTeacherAttendancesToExcel(dataFn) {
     fullName: `${item?.teacher?.firstName ?? "حذف شده"} ${item?.teacher?.lastName ?? ""}`,
     status: statusAttendanceConfig[item?.status]?.text,
     date: showDateHandler(item?.date),
-    time: toPersianNumber(item?.time) ?? "",
+    time: item?.time ? persianJs(item.time).persianNumber().toString() : "",
     description: item?.description ?? "",
   }));
   const workbook = new ExcelJS.Workbook();

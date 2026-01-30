@@ -14,6 +14,7 @@ import { Search } from "lucide-react";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import TimePicker from "./timePicker";
+import ImportFromExcel from "./Button/importFromExcel";
 
 function Form({
   mode,
@@ -35,6 +36,8 @@ function Form({
   searchEndPoint = true,
   datePickerPortal = true,
   exportToExcel = false,
+  importFromExcel = false,
+  importFromExcelButtonText = "",
 }) {
   const queryClient = useQueryClient();
 
@@ -355,6 +358,15 @@ function Form({
             >
               خروجی اکسل
             </Button>
+          )}
+          {importFromExcel && (
+            <ImportFromExcel
+              disabled={!importFromExcel || !importFromExcelButtonText}
+              queryKey={config?.key}
+              text={importFromExcelButtonText}
+              user={user}
+              importConfig={config?.importFromExcelConfig}
+            />
           )}
         </div>
       </div>

@@ -42,6 +42,7 @@ export default async function SingleStudent(req, res) {
           "nationalCode",
           "parentPhone",
           "birthDay",
+          "grade",
         ];
         const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
         if (!isBodyPropsValid) {
@@ -62,7 +63,7 @@ export default async function SingleStudent(req, res) {
             manager: manager._id,
             school: manager.school,
           },
-          { ...req.body }
+          { ...req.body, grade: Number(req.body.grade?.[0]) },
         );
 
         if (!student) {
@@ -101,6 +102,8 @@ export default async function SingleStudent(req, res) {
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", dbError: error, success: false });
   }
 }

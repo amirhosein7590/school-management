@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "react";
 export default function useEntityMutation(entityName, entityId) {
   const config = registryEntity[entityName];
   const exportToExcel = registryEntity?.[`${config?.key}ToExcel`];
+  const importFromExcel = registryEntity?.[`${config?.key}FromExcel`];
   if (!config) throw new Error(`Unknown entity: ${entityName}`);
   const { url, headers, method, isPrivate, key } = config;
 
@@ -36,9 +37,14 @@ export default function useEntityMutation(entityName, entityId) {
       isPending,
       isError,
       data,
-      config: exportToExcel
-        ? { ...config, exportToExcelConfig: exportToExcel }
-        : config,
+      config:
+        exportToExcel || importFromExcel
+          ? {
+              ...config,
+              exportToExcelConfig: exportToExcel,
+              importFromExcelConfig: importFromExcel,
+            }
+          : config,
     }),
     [handler, isPending, isError, data, config],
   );

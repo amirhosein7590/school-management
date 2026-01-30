@@ -1,5 +1,5 @@
-import toPersianNumber from "@/utils/toPersianNumber";
 import ExcelJS from "exceljs";
+import persianJs from "persianjs";
 
 export default async function exportClassesToExcel(dataFn) {
   const gradeLabels = {
@@ -19,7 +19,7 @@ export default async function exportClassesToExcel(dataFn) {
   const data = dataFn()?.map((item) => ({
     name: item.name,
     teacher: `${item?.teacher?.firstName ?? ""} ${item?.teacher?.lastName ?? ""}`,
-    capacity: toPersianNumber(item.capacity),
+    capacity: persianJs(item.capacity).persianNumber().toString(),
     grade: gradeLabels?.[item.grade],
   }));
   const workbook = new ExcelJS.Workbook();

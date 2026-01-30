@@ -57,6 +57,21 @@ const removeStudentFromClass = (showModal, studentId, classId) => {
   });
 };
 
+const gradeLabels = {
+  1: "اول",
+  2: "دوم",
+  3: "سوم",
+  4: "چهارم",
+  5: "پنجم",
+  6: "ششم",
+  7: "هفتم",
+  8: "هشتم",
+  9: "نهم",
+  10: "دهم",
+  11: "یازدهم",
+  12: "دوازدهم",
+};
+
 const editDeleteStudentConfig = {
   inputs: {
     manager: [
@@ -101,10 +116,35 @@ const editDeleteStudentConfig = {
         },
       },
       {
+        type: "select",
+        name: "grade",
+        placeholder: "پایه",
+        className: "!w-full",
+        multiple: false,
+        options: [
+          { label: "پایه اول", value: "1" },
+          { label: "پایه دوم", value: "2" },
+          { label: "پایه سوم", value: "3" },
+          { label: "پایه چهارم", value: "4" },
+          { label: "پایه پنجم", value: "5" },
+          { label: "پایه ششم", value: "6" },
+          { label: "پایه هفتم", value: "7" },
+          { label: "پایه هشتم", value: "8" },
+          { label: "پایه نهم", value: "9" },
+          { label: "پایه دهم", value: "10" },
+          { label: "پایه یازدهم", value: "11" },
+          { label: "پایه دوازدهم", value: "12" },
+          ,
+        ],
+        rules: {
+          required: "لطفا پایه را وارد نمایید",
+        },
+      },
+      {
         type: "datePicker",
         name: "birthDay",
         placeholder: "تاریخ تولد ",
-        className: "!text-sm !rounded-[5px] !w-full",
+        className: "!text-sm !rounded-[5px] !w-full mt-4",
         rules: { required: "لطفا تاریخ تولد را وارد کنید" },
       },
     ],
@@ -137,6 +177,11 @@ const editDeleteStudentConfig = {
         id: "birthDay",
         header: "تاریخ تولد",
         cell: ({ row }) => dateToSolar(row.original.birthDay),
+      }),
+      columnHelper.display({
+        id: "grade",
+        header: "پایه",
+        cell: ({ row }) => gradeLabels[row.original?.grade] ?? "",
       }),
       columnHelper.display({
         id: "class",

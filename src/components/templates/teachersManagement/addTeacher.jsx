@@ -24,6 +24,8 @@ function AddTeacher({ user }) {
       validSearchProps={validSearchProps}
       countEntityButton={true}
       exportToExcel={true}
+      importFromExcel={true}
+      importFromExcelButtonText="ایجاد گروهی معلمان"
     />
   );
 }

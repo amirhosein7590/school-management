@@ -89,6 +89,7 @@ export default async function Students(req, res) {
           "nationalCode",
           "parentPhone",
           "birthDay",
+          "grade",
         ];
         const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
         if (!isBodyPropsValid) {
@@ -125,6 +126,7 @@ export default async function Students(req, res) {
 
         const newStudent = await studentModel.create({
           ...req.body,
+          grade: Number(req.body.grade?.[0]),
           manager: manager._id,
           school: manager.school,
         });

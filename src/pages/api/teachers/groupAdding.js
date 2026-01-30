@@ -85,7 +85,7 @@ export default async function GroupAdding(req, res) {
         manager: manager._id,
         userName: t.nationalCode,
         password: await hashPassword(t.personnelCode),
-      }))
+      })),
     );
 
     await teacherModel.insertMany(preparedTeachers, {
@@ -97,6 +97,8 @@ export default async function GroupAdding(req, res) {
       success: true,
     });
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

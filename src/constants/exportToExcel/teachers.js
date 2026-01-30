@@ -1,14 +1,14 @@
 import dateToSolar from "@/utils/dateToSolar";
 import ExcelJS from "exceljs";
-import toPersianNumber from "@/utils/toPersianNumber";
+import persianJs from "persianjs";
 
 export default async function exportTeachersToExcel(dataFn) {
   const data = dataFn()?.map((item) => ({
     fullName: `${item.firstName} ${item.lastName}`,
-    phone: toPersianNumber(item?.phone),
-    nationalCode: toPersianNumber(item?.nationalCode),
-    personnelCode: toPersianNumber(item?.personnelCode),
-    gender: item?.gender == "male" ? "مرد" : "زن",
+    phone: persianJs(item?.phone).persianNumber().toString(),
+    nationalCode: persianJs(item?.nationalCode).persianNumber().toString(),
+    personnelCode: persianJs(item?.personnelCode).persianNumber().toString(),
+    gender: item?.gender == "male" ? "آقا" : "خانم",
     birthDay: dateToSolar(item.birthDay),
     class: item?.class?.name ?? "",
     isBanned: item?.isBanned ? "مسدود" : "فعال",

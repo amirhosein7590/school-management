@@ -19,7 +19,7 @@ const removeTeacherFromClass = (showModal, teacherId, classId) => {
         null,
         `/teachers/${teacherId}/deleteClass`,
         { "content-type": "application/json" },
-        "post"
+        "post",
       );
       return (
         <div className="flex flex-col">
@@ -127,7 +127,7 @@ const editDeleteTeacher = {
         type: "datePicker",
         name: "birthDay",
         placeholder: "تاریخ تولد ",
-        className: "!text-sm !rounded-[5px] !w-full",
+        className: "!text-sm !rounded-[5px] !w-full mt-4",
         rules: { required: "لطفا تاریخ تولد را وارد کنید" },
       },
     ],
@@ -183,7 +183,7 @@ const editDeleteTeacher = {
                   removeTeacherFromClass(
                     showModal,
                     row.original?._id,
-                    row.original?.class?._id
+                    row.original?.class?._id,
                   )
                 }
                 variant="ghost"

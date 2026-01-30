@@ -30,6 +30,8 @@ import exportTeachersToExcel from "@/constants/exportToExcel/teachers";
 import exportStudentsToExcel from "@/constants/exportToExcel/students";
 import exportTeacherAttendancesToExcel from "@/constants/exportToExcel/teacherAttendances";
 import exportStudentAttendancesToExcel from "@/constants/exportToExcel/studentsAttendances";
+import importStudentsFromExcel from "@/constants/importFromExcel/students";
+import importTeachersFromExcel from "@/constants/importFromExcel/teachers";
 
 export default {
   login: loginFormConfig,
@@ -64,4 +66,6 @@ export default {
   studentsToExcel: exportStudentsToExcel,
   "teachersAttendances/reportToExcel": exportTeacherAttendancesToExcel,
   "studentsAttendances/reportToExcel": exportStudentAttendancesToExcel,
+  studentsFromExcel: importStudentsFromExcel,
+  teachersFromExcel: importTeachersFromExcel,
 };
