@@ -1,5 +1,6 @@
 import classModel from "@/models/class";
 import managerModel from "@/models/manager";
+import studentAttendanceModel from "@/models/studentAttendance";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 import { isValidObjectId } from "mongoose";
@@ -65,12 +66,10 @@ export default async function DeleteManyClasses(req, res) {
       }
 
       if (!manager.school) {
-        return res
-          .status(403)
-          .json({
-            error: "شما به مدرسه‌ای اختصاص داده نشده‌اید",
-            success: false,
-          });
+        return res.status(403).json({
+          error: "شما به مدرسه‌ای اختصاص داده نشده‌اید",
+          success: false,
+        });
       }
 
       query.school = manager.school;
@@ -122,12 +121,18 @@ export default async function DeleteManyClasses(req, res) {
       });
     }
 
+    const { _id, ...otherFields } = query;
+
+    await studentAttendanceModel.deleteMany({
+      class: { $in: ids },
+      ...otherFields,
+    });
+
     return res.status(200).json({
       success: true,
       message: `${result.deletedCount} کلاس با موفقیت حذف شد`,
     });
   } catch (error) {
-
     if (error.name === "MongoError" && error.code === 11000) {
       return res.status(409).json({
         error: "خطای تکراری در پایگاه داده",

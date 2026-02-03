@@ -57,7 +57,7 @@ export default async function SingleManager(req, res) {
           ];
 
           const isBodyPropsValid = exceptedProps.every(
-            (prop) => req.body[prop] && req.body[prop].trim()
+            (prop) => req.body[prop] && req.body[prop].trim(),
           );
 
           if (!isBodyPropsValid) {
@@ -79,7 +79,7 @@ export default async function SingleManager(req, res) {
         }
         const manager = await managerModel.findOneAndUpdate(
           { _id: req.query?.id },
-          { ...req.body }
+          { ...req.body },
         );
         if (!manager) {
           return res

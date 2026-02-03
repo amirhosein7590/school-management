@@ -8,7 +8,7 @@ import replayMessageConfig from "@/constants/replayMessage";
 import pageGuideConfig from "@/constants/pageGuide";
 import profileConfig from "@/constants/profile";
 import changePasswordConfig from "@/constants/changePassword";
-import editSchoolConfig from "@/constants/school/editSchool";
+import schoolSettingsConfig from "@/constants/school/schoolSettings";
 import addClassConfig from "@/constants/class/addClass";
 import editDeleteClassConfig from "@/constants/class/editDeleteClass";
 import addTeacherConfig from "@/constants/teacher/addTeacher";
@@ -32,6 +32,9 @@ import exportTeacherAttendancesToExcel from "@/constants/exportToExcel/teacherAt
 import exportStudentAttendancesToExcel from "@/constants/exportToExcel/studentsAttendances";
 import importStudentsFromExcel from "@/constants/importFromExcel/students";
 import importTeachersFromExcel from "@/constants/importFromExcel/teachers";
+import addSchoolConfig from "@/constants/school/addSchool";
+import editDeleteSchoolConfig from "@/constants/school/editDeleteSchool";
+import exportSchoolsToExcel from "@/constants/exportToExcel/schools";
 
 export default {
   login: loginFormConfig,
@@ -44,7 +47,9 @@ export default {
   pageGuide: pageGuideConfig,
   profile: profileConfig,
   changePassword: changePasswordConfig,
-  editSchool: editSchoolConfig,
+  addSchool: addSchoolConfig,
+  schoolSettings: schoolSettingsConfig,
+  editDeleteSchool: editDeleteSchoolConfig,
   addClass: addClassConfig,
   editDeleteClass: editDeleteClassConfig,
   addTeacher: addTeacherConfig,
@@ -68,4 +73,5 @@ export default {
   "studentsAttendances/reportToExcel": exportStudentAttendancesToExcel,
   studentsFromExcel: importStudentsFromExcel,
   teachersFromExcel: importTeachersFromExcel,
+  schoolsToExcel: exportSchoolsToExcel,
 };

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const schoolSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
-  level: { type: Number, required: true, enum: [1, 2, 3] }, // برای دوره اول 1 و برای دوره دوم مدرسه 2
+  level: { type: Number, required: true, enum: [1, 2] }, // برای دوره اول 1 و برای دوره دوم مدرسه 2
   shift: { type: String, required: true, enum: ["morning", "evening"] },
   phone: { type: String, required: true, unique: true },
   gender: {

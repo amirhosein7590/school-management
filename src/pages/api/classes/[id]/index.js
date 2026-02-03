@@ -1,6 +1,7 @@
 import classModel from "@/models/class";
 import managerModel from "@/models/manager";
 import ownerModel from "@/models/owner";
+import studentAttendanceModel from "@/models/studentAttendance";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 
@@ -35,7 +36,7 @@ export default async function SingleClass(req, res) {
         const { Class } = await CheckManagerAndSchool(
           req.query?.id,
           res,
-          nationalCode
+          nationalCode,
         );
         return res.json({ class: Class, success: true });
       }
@@ -44,7 +45,7 @@ export default async function SingleClass(req, res) {
           const { manager } = await CheckManagerAndSchool(
             req.query?.id,
             res,
-            nationalCode
+            nationalCode,
           );
 
           if (!manager) {
@@ -62,7 +63,7 @@ export default async function SingleClass(req, res) {
 
           const exceptedProps = ["name", "capacity", "grade"];
           const isBodyPropsValid = exceptedProps.every(
-            (prop) => req.body[prop]
+            (prop) => req.body[prop],
           );
           if (!isBodyPropsValid) {
             return res
@@ -78,7 +79,7 @@ export default async function SingleClass(req, res) {
               ...req.body,
               grade: Number(req.body.grade),
               school: manager.school,
-            }
+            },
           );
           if (!cls) {
             return res
@@ -98,7 +99,7 @@ export default async function SingleClass(req, res) {
           const { manager } = await CheckManagerAndSchool(
             req.query?.id,
             res,
-            nationalCode
+            nationalCode,
           );
           if (!manager.actionsPermissions.deleteClass) {
             return res.status(403).json({
@@ -110,6 +111,12 @@ export default async function SingleClass(req, res) {
             _id: req.query?.id,
             school: manager.school,
           });
+
+          await studentAttendanceModel.deleteMany({
+            class: req.query.id,
+            school: manager.school,
+          });
+
           if (!cls) {
             return res
               .status(404)

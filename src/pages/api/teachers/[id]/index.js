@@ -1,6 +1,7 @@
 import managerModel from "@/models/manager";
 import ownerModel from "@/models/owner";
 import teacherModel from "@/models/teacher";
+import teacherAttendanceModel from "@/models/teacherAttendance";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 
@@ -22,7 +23,7 @@ export default async function SingleTeacher(req, res) {
             req,
             nationalCode,
             res,
-            "owner"
+            "owner",
           );
           if (!teacher) {
             return res
@@ -35,7 +36,7 @@ export default async function SingleTeacher(req, res) {
             req,
             nationalCode,
             res,
-            "manager"
+            "manager",
           );
           return res.json({ teacher, success: true });
         }
@@ -62,7 +63,7 @@ export default async function SingleTeacher(req, res) {
           req,
           nationalCode,
           res,
-          "manager"
+          "manager",
         );
 
         if (!permissions.editTeacher) {
@@ -78,7 +79,7 @@ export default async function SingleTeacher(req, res) {
             school: schoolId,
             manager: managerId,
           },
-          { ...req.body, gender: req.body.gender[0] }
+          { ...req.body, gender: req.body.gender[0] },
         );
 
         return res.json({
@@ -92,7 +93,7 @@ export default async function SingleTeacher(req, res) {
           req,
           nationalCode,
           res,
-          "manager"
+          "manager",
         );
         if (!permissions.deleteTeacher) {
           return res.status(403).json({
@@ -104,6 +105,11 @@ export default async function SingleTeacher(req, res) {
           school: schoolId,
           manager: managerId,
           _id: req.query?.id,
+        });
+
+        await teacherAttendanceModel.deleteMany({
+          teacher: req.query.id,
+          manager: managerId,
         });
 
         return res.json({ message: "معلم با موفقیت حذف شد", success: true });
@@ -138,14 +144,14 @@ async function checkRoleAndTeacher(req, nationalCode, res, role) {
               manager: model._id,
               school: model.school,
             },
-            "-actionsPermissions -password -userName"
+            "-actionsPermissions -password -userName",
           )
           .populate("school", "name _id")
           .populate("class", "name _id")
       : teacherModel
           .findOne(
             { _id: req.query?.id },
-            "-actionsPermissions -password -userName"
+            "-actionsPermissions -password -userName",
           )
           .populate("school", "name _id")
           .populate("manager", "firstName lastName _id")

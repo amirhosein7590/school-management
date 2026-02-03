@@ -1,31 +1,34 @@
-import dateToSolar from "@/utils/dateToSolar";
 import ExcelJS from "exceljs";
-import persianJs from "persianjs";
 
-export default async function exportTeachersToExcel(dataFn) {
-  const data = dataFn()?.map((item) => ({
-    fullName: `${item.firstName} ${item.lastName}`,
-    phone: persianJs(item?.phone).persianNumber().toString(),
-    nationalCode: persianJs(item?.nationalCode).persianNumber().toString(),
-    personnelCode: persianJs(item?.personnelCode).persianNumber().toString(),
-    gender: item?.gender == "male" ? "آقا" : "خانم",
-    birthDay: dateToSolar(item.birthDay),
-    class: item?.class?.name ?? "",
-    isBanned: item?.isBanned ? "مسدود" : "فعال",
+const genderLabels = {
+  boyish: "پسرانه",
+  girlish: "دخترانه",
+  mixed: "مختلط",
+};
+
+export default async function exportSchoolsToExcel(dataFn) {
+  const data = dataFn()?.map((school) => ({
+    name: school.name,
+    address: school.address,
+    level: school.level == "1" ? "دوره اول" : "دوره دوم",
+    shift: school.shift == "morning" ? "صبح" : "عصر",
+    phone: school.phone,
+    gender: genderLabels[school.gender],
+    manager: `${school?.manager?.firstName ?? ""} ${school?.manager?.lastName ?? ""}`,
   }));
+
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("معلمان");
+  const worksheet = workbook.addWorksheet("مدارس");
   worksheet.views = [{ rightToLeft: false }];
 
   worksheet.columns = [
-    { header: "وضعیت مسدودیت", key: "isBanned", width: 20 },
-    { header: "کلاس", key: "class", width: 20 },
-    { header: "تاریخ تولد", key: "birthDay", width: 20 },
-    { header: "جنسیت", key: "gender", width: 20 },
-    { header: "کد پرسنلی", key: "personnelCode", width: 20 },
-    { header: "کد ملی", key: "nationalCode", width: 20 },
-    { header: "شماره تلفن", key: "phone", width: 20 },
-    { header: "نام و نام خانوادگی", key: "fullName", width: 35 },
+    { header: "مدیر مدرسه", key: "manager", width: 20 },
+    { header: "جنسیت مدرسه", key: "gender", width: 20 },
+    { header: "شماره تلفن مدرسه", key: "phone", width: 20 },
+    { header: "شیفت مدرسه", key: "shift", width: 20 },
+    { header: "دوره مدرسه", key: "level", width: 20 },
+    { header: "آدرس مدرسه", key: "address", width: 20 },
+    { header: "نام مدرسه", key: "name", width: 35 },
   ];
 
   // header cell style
@@ -86,6 +89,6 @@ export default async function exportTeachersToExcel(dataFn) {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "معلمان.xlsx";
+  a.download = "مدارس.xlsx";
   a.click();
 }

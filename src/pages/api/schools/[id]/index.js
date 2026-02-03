@@ -101,7 +101,12 @@ export default async function SingleSchool(req, res) {
           }
           const school = await schoolModel.findOneAndUpdate(
             { _id: req.query?.id },
-            { ...req.body }
+            {
+              ...req.body,
+              gender: req.body?.gender?.[0],
+              shift: req.body?.shift?.[0],
+              level: req.body?.level?.[0],
+            },
           );
 
           if (!school) {
@@ -144,7 +149,7 @@ export default async function SingleSchool(req, res) {
               shift: req.body.shift[0],
               level: Number(req.body.level[0]),
               gender: req.body.gender[0],
-            }
+            },
           );
           if (!school) {
             return res

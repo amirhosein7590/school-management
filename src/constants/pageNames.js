@@ -14,6 +14,7 @@ const pageNames = {
   ManagerDashboard: "داشبور",
   studentsAttendances: "حضور و غیاب دانش آموزان",
   TeacherDashboard: "داشبورد",
+  schoolsManagement: "مدیریت مدارس",
 };
 
 export default pageNames;

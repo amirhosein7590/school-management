@@ -3,6 +3,7 @@ import managerModel from "@/models/manager";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 import { isValidObjectId } from "mongoose";
+import studentAttendanceModel from "@/models/studentAttendance";
 
 export default async function DeleteManyStudents(req, res) {
   if (req.method !== "POST") {
@@ -119,6 +120,13 @@ export default async function DeleteManyStudents(req, res) {
           "ممکن است دانش آموز‌ها متعلق به مدرسه شما نباشند یا وجود نداشته باشند",
       });
     }
+
+    const { _id, ...otherFields } = query;
+
+    await studentAttendanceModel.deleteMany({
+      student: { $in: ids },
+      ...otherFields,
+    });
 
     return res.status(200).json({
       success: true,

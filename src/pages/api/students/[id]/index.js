@@ -1,5 +1,6 @@
 import managerModel from "@/models/manager";
 import studentModel from "@/models/student";
+import studentAttendanceModel from "@/models/studentAttendance";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 
@@ -71,6 +72,7 @@ export default async function SingleStudent(req, res) {
             .status(404)
             .json({ error: "دانش آموز یافت نشد", success: false });
         }
+
         return res.json({
           message: "اطلاعات دانش آموز با موفقیت تغییر کرد",
           success: true,
@@ -95,6 +97,12 @@ export default async function SingleStudent(req, res) {
             .status(404)
             .json({ error: "دانش آموز یافت نشد", success: false });
         }
+
+        await studentAttendanceModel.deleteMany({
+          student: req.query.id,
+          school: manager.school,
+        });
+
         return res.json({
           message: "دانش آموز با موفقیت حذف شد",
           success: true,

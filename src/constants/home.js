@@ -71,21 +71,15 @@ const homeConfig = {
       // },
       {
         id: "schools",
-        text: "مدرسه ها",
-        href: "/school/schools",
+        text: "مدیریت مدارس",
+        href: "/school/schoolsManagement",
         icon: "School",
       },
       {
         id: "managers",
-        text: "مدیران",
-        href: "/school/managers",
+        text: "مدیریت مدیران",
+        href: "/school/managersManagement",
         icon: "Users",
-      },
-      {
-        id: "teachers",
-        text: "معلمان",
-        href: "/school/teachers",
-        icon: "GraduationCap",
       },
     ],
     teacher: [
