@@ -8,8 +8,12 @@ import Select from "@/components/modules/select";
 import { Button } from "@/components/modules/Button/button";
 import { useModal } from "@/contexts/ModalContext";
 import MessageModalContent from "@/components/templates/InSystemMessage/messageModalContent";
+import pageNameHandler from "@/utils/pageNameHandler";
 
-function InSystemMessage({ user }) {
+function InSystemMessage({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   const inputs = inSystemMessageConfig.inputs[user.role];
   const { control, getValues } = useForm({
     mode: "onSubmit",

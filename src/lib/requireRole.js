@@ -48,7 +48,9 @@ export function requireRole(page) {
         return { redirect: { destination: "/auth/login", permanent: false } };
       }
 
-      return gssp ? await gssp({ ...context, user }) : { props: { user } };
+      return gssp
+        ? await gssp({ ...context, user, pageName: page })
+        : { props: { user, pageName: page } };
     };
   };
 }

@@ -13,7 +13,7 @@ export default async function Login(req, res) {
 
   const exceptedProps = ["userName", "password"];
   const isBodyPropValid = exceptedProps.every(
-    (prop) => req.body[prop] && req.body[prop].trim()
+    (prop) => req.body[prop] && req.body[prop].trim(),
   );
 
   if (!isBodyPropValid) {
@@ -34,18 +34,18 @@ export default async function Login(req, res) {
         .status(401)
         .json({ error: "شما در سایت ثبت نام نیستید", success: false });
     }
-
+    
+    if (user.expTime < Date.now()) {
+      return res
+        .status(403)
+        .json({ error: "اشتراک شما به پایان رسیده است", success: false });
+    }
     if (user.isBanned) {
       return res
         .status(403)
         .json({ error: "حساب کاربری شما مسدود شده است", success: false });
     }
 
-    if (user.expTime < Date.now()) {
-      return res
-        .status(403)
-        .json({ error: "اشتراک شما به پایان رسیده است", success: false });
-    }
 
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
@@ -57,12 +57,7 @@ export default async function Login(req, res) {
     const payload = {
       nationalCode: user.nationalCode,
       role: user.role,
-      isBanned: user.isBanned,
     };
-
-    if (user.role == "manager") {
-      payload.expTime = user.expTime;
-    }
 
     const token = generateToken(payload);
 
@@ -74,7 +69,7 @@ export default async function Login(req, res) {
         serialize(
           "refreshToken",
           refreshToken,
-          cookieOptions("refreshToken", "/", true)
+          cookieOptions("refreshToken", "/", true),
         ),
       ])
       .json({ message: "با موفقیت وارد شدید", success: true });

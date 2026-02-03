@@ -48,11 +48,7 @@ export default async function RefreshToken(req, res) {
       .json({ error: "حساب کاربری شما مسدود شده است", success: false });
   }
 
-  const payload = { nationalCode, role, isBanned: user.isBanned };
-
-  if (role == "manager") {
-    payload.expTime = user.expTime;
-  }
+  const payload = { nationalCode, role };
 
   const newToken = generateToken(payload);
   const newRefreshToken = generateRefreshToken(payload);
@@ -64,7 +60,7 @@ export default async function RefreshToken(req, res) {
       serialize(
         "refreshToken",
         newRefreshToken,
-        cookieOptions("refreshToken", "/", true, false)
+        cookieOptions("refreshToken", "/", true, false),
       ),
     ])
     .json({ success: true });

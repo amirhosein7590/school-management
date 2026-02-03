@@ -2,9 +2,13 @@ import PageGuide from "@/components/modules/pageGuide";
 import AddClass from "@/components/templates/ClassesManagement/addClass";
 import ShowClasses from "@/components/templates/ClassesManagement/showClasses";
 import { requireRole } from "@/lib/requireRole";
-import React from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { useEffect } from "react";
 
-function ClassesManagement({ user }) {
+function ClassesManagement({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div
       dir="rtl"

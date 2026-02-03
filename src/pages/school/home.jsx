@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/requireRole";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import homeConfig from "@/constants/home";
 import {
   LayoutDashboard,
@@ -13,7 +13,7 @@ import {
   Notebook,
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
-import DatePicker from "react-multi-date-picker";
+import pageNameHandler from "@/utils/pageNameHandler";
 
 const icons = {
   LayoutDashboard,
@@ -26,7 +26,10 @@ const icons = {
   Backpack,
   Notebook,
 };
-function Home({ user }) {
+function Home({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div className="w-full">
       <div

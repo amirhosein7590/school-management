@@ -1,8 +1,13 @@
 import AttendanceStats from "@/components/templates/teacherDashboard/attendanceStats";
 import { requireRole } from "@/lib/requireRole";
-import React, { memo } from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { memo, useEffect } from "react";
 
-function TeacherDashboard() {
+function TeacherDashboard({ pageName }) {
+  console.log(pageName);
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div dir="rtl" className="flex flex-col gap-y-10">
       <AttendanceStats />

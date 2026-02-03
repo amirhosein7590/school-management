@@ -13,7 +13,7 @@ export default async function ResetPassword(req, res) {
   const { newPassword, repeatPassword, resetToken } = req.body;
   const excepteBodyProps = ["newPassword", "repeatPassword", "resetToken"];
   const isBodyPropsValid = excepteBodyProps.every(
-    (prop) => req.body[prop?.trim()]
+    (prop) => req.body[prop?.trim()],
   );
 
   if (!isBodyPropsValid) {

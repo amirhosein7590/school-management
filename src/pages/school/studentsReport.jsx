@@ -2,9 +2,13 @@ import PageGuide from "@/components/modules/pageGuide";
 import Search from "@/components/templates/studentsReport/search";
 import ShowReport from "@/components/templates/studentsReport/showReport";
 import { requireRole } from "@/lib/requireRole";
-import React from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { useEffect } from "react";
 
-function StudentsReport({ user }) {
+function StudentsReport({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div
       dir="rtl"

@@ -2,13 +2,19 @@ import { Button } from "@/components/modules/Button/button";
 import Form from "@/components/modules/Form";
 import { Info } from "lucide-react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, memo } from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
 
 function Login() {
   const router = useRouter();
   const redirectToHome = () => {
     router.push("/school/home");
   };
+
+  useEffect(() => {
+    pageNameHandler(null, "ورود");
+  }, []);
+
   return (
     <div
       dir="rtl"
@@ -56,4 +62,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default memo(Login);

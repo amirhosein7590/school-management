@@ -1,9 +1,13 @@
 import Form from "@/components/modules/Form";
 import PageGuide from "@/components/modules/pageGuide";
 import { requireRole } from "@/lib/requireRole";
-import React from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { useEffect } from "react";
 
-function Profile({ user }) {
+function Profile({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div
       dir="rtl"

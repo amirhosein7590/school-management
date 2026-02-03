@@ -2,9 +2,13 @@ import PageGuide from "@/components/modules/pageGuide";
 import AddTeacher from "@/components/templates/teachersManagement/addTeacher";
 import ShowTeachers from "@/components/templates/teachersManagement/showTeachers";
 import { requireRole } from "@/lib/requireRole";
-import React, { memo } from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { memo, useEffect } from "react";
 
-function TeachersManagement({ user }) {
+function TeachersManagement({ user, pageName }) {
+  useEffect(() => {
+    pageNameHandler(pageName);
+  }, []);
   return (
     <div
       dir="rtl"

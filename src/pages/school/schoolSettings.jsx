@@ -2,9 +2,13 @@ import Form from "@/components/modules/Form";
 import PageGuide from "@/components/modules/pageGuide";
 import useCustomeQuery from "@/hooks/useCustomeQuery";
 import { requireRole } from "@/lib/requireRole";
-import React from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { useEffect } from "react";
 
-function SchoolSettings({ user }) {
+function SchoolSettings({ user , pageName }) {
+    useEffect(() => {
+      pageNameHandler(pageName);
+    }, []);
   const { data, isPending } = useCustomeQuery(
     "me",
     null,

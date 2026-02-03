@@ -7,6 +7,7 @@ import { Spinner } from "@/components/modules/spinner";
 import Steper from "@/components/templates/ForgotPassword/steper";
 import { toast } from "sonner";
 import { useRouter } from "next/router";
+import pageNameHandler from "@/utils/pageNameHandler";
 
 function Reset() {
   const phone = useAuthStore((s) => s.phone);
@@ -26,13 +27,17 @@ function Reset() {
     return () => clearInterval(interval);
   }, [timer]);
 
+  useEffect(() => {
+    pageNameHandler(null, "بازیابی رمز عبور");
+  }, []);
+
   const { mutate, isPending } = useCustomeMutation(
     "getOtp",
     null,
     "/auth/getOtp",
     { "content-type": "application/json" },
     "post",
-    false
+    false,
   );
   const router = useRouter();
 
@@ -47,7 +52,7 @@ function Reset() {
           setTimer(60);
           setResetToken(response.resetToken);
         },
-      }
+      },
     );
   };
   const checkOtpAfterSubmit = (result) => {
@@ -106,6 +111,7 @@ function Reset() {
               className="w-full md:w-4/12 md:mx-auto mb-5 flex flex-col items-center"
               afterSubmitFn={resetPasswordAfterSubmit}
               bodyReq={{ resetToken }}
+              clearFormButton={false}
             />
           </>
         )}
@@ -121,4 +127,4 @@ function Reset() {
   );
 }
 
-export default Reset;
+export default memo(Reset);

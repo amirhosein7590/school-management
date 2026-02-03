@@ -2,9 +2,13 @@ import PageGuide from "@/components/modules/pageGuide";
 import AddAttendance from "@/components/templates/studentsAttendances/addAttendance";
 import ShowAttendances from "@/components/templates/studentsAttendances/showAttendances";
 import { requireRole } from "@/lib/requireRole";
-import React, { memo } from "react";
+import pageNameHandler from "@/utils/pageNameHandler";
+import React, { memo, useEffect } from "react";
 
-function StudentsAttendances({ user }) {
+function StudentsAttendances({ user , pageName }) {
+    useEffect(() => {
+      pageNameHandler(pageName);
+    }, []);
   return (
     <div
       dir="rtl"
