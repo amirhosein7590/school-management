@@ -1,14 +1,26 @@
-import { Button } from "@/components/modules/Button/button";
 import DeleteCell from "@/components/modules/Table/Cell/DeleteCell";
 import EditCell from "@/components/modules/Table/Cell/EditCell";
-import useCustomeMutation from "@/hooks/useCustomeMutation";
 import dateToSolar from "@/utils/dateToSolar";
 import { createColumnHelper } from "@tanstack/react-table";
-import { CircleX } from "lucide-react";
-import { Spinner } from "@/components/modules/spinner";
 import BanCell from "@/components/modules/Table/Cell/BanCell";
+import PlanCell from "@/components/modules/Table/Cell/PlanCell";
 
 const columnHelper = createColumnHelper();
+const remainingDaysOfPlanHandler = (time) => {
+  const originalTime = Number(time);
+  const today = Date.now();
+
+  if (originalTime < today) {
+    return "منقضی شده";
+  }
+
+  const differenceMs = originalTime - today;
+
+  const millisecondsInDay = 24 * 60 * 60 * 1000;
+  const remainingDays = Math.ceil(differenceMs / millisecondsInDay);
+
+  return `${remainingDays} روز`;
+};
 
 const editDeleteManagerConfig = {
   inputs: {
@@ -123,6 +135,17 @@ const editDeleteManagerConfig = {
         header: "تاریخ تولد",
         cell: ({ row }) => dateToSolar(row.original.birthDay),
       }),
+      columnHelper.display({
+        id: "planType",
+        header: "پلن",
+        cell: ({ row }) =>
+          row.original?.plan == "free" ? "رایگان (هفت روزه)" : "اشتراک یکساله",
+      }),
+      columnHelper.display({
+        id: "remainingDaysOfPlan",
+        header: "روز های باقی مانده از پلن",
+        cell: ({ row }) => remainingDaysOfPlanHandler(row.original?.expTime),
+      }),
       columnHelper.accessor("ban", {
         header: "وضعیت مسدودیت",
         cell: ({ row }) => (
@@ -133,6 +156,10 @@ const editDeleteManagerConfig = {
             user={user}
           />
         ),
+      }),
+      columnHelper.accessor("planRenewal", {
+        header: "تمدید پلن",
+        cell: ({ row }) => <PlanCell managerId={row.original._id} />,
       }),
       columnHelper.accessor("actions", {
         header: "حذف / ویرایش",
