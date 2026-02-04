@@ -5,11 +5,11 @@ const mongoose = require("mongoose");
 const managerSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  userName: { type: String, unique: true }, // its not required just for default value
+  userName: { type: String }, // its not required just for default value
   password: { type: String }, // its not required just for default value
-  nationalCode: { type: String, required: true, unique: true },
-  personnelCode: { type: String, required: true, unique: true },
-  phone: { type: String, required: true, unique: true },
+  nationalCode: { type: String, required: true },
+  personnelCode: { type: String, required: true },
+  phone: { type: String, required: true },
   role: {
     type: String,
     enum: ["manager"],
@@ -21,7 +21,6 @@ const managerSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "School",
     required: false,
-    unique: true,
   },
   isBanned: { type: Boolean, required: true, default: false },
   expTime: {
@@ -36,6 +35,8 @@ const managerSchema = new mongoose.Schema({
       status: { type: String, enum: ["info", "error", "success", "warning"] },
     },
   ],
+  birthDay: { type: Date, required: true },
+
   actionsPermissions: {
     createStudent: { type: Boolean, default: true },
     editStudent: { type: Boolean, default: true },
@@ -85,6 +86,9 @@ managerSchema.virtual("suggests", {
   ref: "Suggest",
   foreignField: "sender",
 });
+
+managerSchema.index({ school: 1 });
+managerSchema.index({ userName: 1, nationalCode: 1, phone: 1 });
 
 const managerModel =
   mongoose.models.Manager || mongoose.model("Manager", managerSchema);

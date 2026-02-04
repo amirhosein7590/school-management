@@ -89,6 +89,11 @@ const pageGuideConfig = {
   schoolsManagement: {
     texts: ["در این بخش می توانید مدارس را ایجاد ، حذف و ویرایش کنید"],
   },
+  managersManagement: {
+    texts: [
+      "در این بخش می توانید برای مدیران عملیاتی نظیر ایجاد ، حذف ، ویرایش و ... اعمال کنید",
+    ],
+  },
 };
 
 export default pageGuideConfig;

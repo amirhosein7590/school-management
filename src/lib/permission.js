@@ -6,6 +6,7 @@ export const permission = {
       "profile",
       "changePassword",
       "schoolsManagement",
+      "managersManagement",
     ],
   },
   manager: {

@@ -1,10 +1,10 @@
 import DataTable from "@/components/modules/dataTable";
 import React, { memo } from "react";
 
-function ShowTeachers({ user }) {
+function ShowManagers({ user }) {
   return (
     <DataTable
-      entityName="editDeleteTeacher"
+      entityName="editDeleteManager"
       user={user}
       enableRowSelection={true}
       infiniteScroll={true}
@@ -13,4 +13,4 @@ function ShowTeachers({ user }) {
   );
 }
 
-export default memo(ShowTeachers);
+export default memo(ShowManagers);

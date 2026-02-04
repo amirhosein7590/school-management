@@ -3,6 +3,7 @@ import connectToDb from "@/utils/db";
 import managerModel from "@/models/manager";
 import findUserByProps from "@/utils/findUserByProps";
 import RBAC from "@/utils/RBAC";
+import teacherModel from "@/models/teacher";
 
 export default async function SingleManager(req, res) {
   const auth = RBAC(req, res, ["owner"], {
@@ -41,45 +42,53 @@ export default async function SingleManager(req, res) {
             .status(404)
             .json({ error: "مدیر یافت نشد", success: false });
         }
+        await teacherModel.deleteMany({ manager: req.query?.id });
 
         return res.json({ message: "مدیر با موفقیت حذف شد", success: true });
       }
 
-      case "PUT":
-        {
-          const exceptedProps = [
-            "firstName",
-            "lastName",
-            "nationalCode",
-            "personnelCode",
-            "phone",
-            "gender",
-          ];
+      case "PUT": {
+        const exceptedProps = [
+          "firstName",
+          "lastName",
+          "nationalCode",
+          "personnelCode",
+          "phone",
+          "gender",
+          "birthDay",
+        ];
 
-          const isBodyPropsValid = exceptedProps.every(
-            (prop) => req.body[prop] && req.body[prop].trim(),
-          );
+        const isBodyPropsValid = exceptedProps.every((prop) =>
+          typeof req.body[prop] == "string"
+            ? req.body[prop?.trim()]
+            : req.body[prop]?.length > 0,
+        );
 
-          if (!isBodyPropsValid) {
-            return res
-              .status(422)
-              .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
-          }
-        }
-        const { nationalCode, phone, personnelCode } = req.body;
-        const user = await findUserByProps({
-          nationalCode,
-          phone,
-          personnelCode,
-        });
-        if (user) {
+        if (!isBodyPropsValid) {
           return res
-            .status(409)
-            .json({ error: "شخصی با این مشخصات وجود دارد", success: false });
+            .status(422)
+            .json({ error: "تمامی فیلد ها باید تکمیل شوند", success: false });
         }
+
+        // const { nationalCode, phone, personnelCode } = req.body;
+        // const user = await findUserByProps({
+        //   nationalCode,
+        //   phone,
+        //   personnelCode,
+        // });
+        // if (user) {
+        //   return res
+        //     .status(409)
+        //     .json({ error: "شخصی با این مشخصات وجود دارد", success: false });
+        // }
+
         const manager = await managerModel.findOneAndUpdate(
           { _id: req.query?.id },
-          { ...req.body },
+          {
+            ...req.body,
+            gender: req.body.gender[0],
+            birthDay: new Date(req.body.birthDay),
+          },
         );
         if (!manager) {
           return res
@@ -88,8 +97,9 @@ export default async function SingleManager(req, res) {
         }
         return res.json({
           message: "اطلاعات مدیر با موفقیت تغییر یافت",
-          success: false,
+          success: true,
         });
+      }
 
       default: {
         return res
@@ -98,6 +108,8 @@ export default async function SingleManager(req, res) {
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

@@ -14,6 +14,7 @@ import editDeleteClassConfig from "@/constants/class/editDeleteClass";
 import addTeacherConfig from "@/constants/teacher/addTeacher";
 import editDeleteTeacher from "@/constants/teacher/editDeleteTeacher";
 import teachersClassificationConfig from "@/constants/teacher/teachersClassification";
+import addManagerConfig from "@/constants/managers/addManager";
 import addStudentsConfig from "@/constants/student/addStudent";
 import editDeleteStudentConfig from "@/constants/student/editDeleteStudent";
 import studentsClassificationConfig from "@/constants/student/studentsClassification";
@@ -35,6 +36,7 @@ import importTeachersFromExcel from "@/constants/importFromExcel/teachers";
 import addSchoolConfig from "@/constants/school/addSchool";
 import editDeleteSchoolConfig from "@/constants/school/editDeleteSchool";
 import exportSchoolsToExcel from "@/constants/exportToExcel/schools";
+import editDeleteManagerConfig from "@/constants/managers/editDeleteManagers";
 
 export default {
   login: loginFormConfig,
@@ -55,6 +57,8 @@ export default {
   addTeacher: addTeacherConfig,
   editDeleteTeacher: editDeleteTeacher,
   teachersClassification: teachersClassificationConfig,
+  addManager: addManagerConfig,
+  editDeleteManager: editDeleteManagerConfig,
   addStudent: addStudentsConfig,
   editDeleteStudent: editDeleteStudentConfig,
   studentsClassification: studentsClassificationConfig,

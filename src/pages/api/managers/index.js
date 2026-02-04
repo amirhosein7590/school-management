@@ -51,6 +51,7 @@ async function Managers(req, res) {
           "personnelCode",
           "phone",
           "gender",
+          "birthDay",
         ];
 
         const isBodyPropsValid = exceptedProps.every((prop) => req.body[prop]);
@@ -76,8 +77,10 @@ async function Managers(req, res) {
 
         await managerModel.create({
           ...req.body,
+          gender: req.body.gender[0],
           isBanned: false,
           role: "manager",
+          birthDay: new Date(req.body.birthDay),
           notifications: [
             {
               text: "مدیر محترم ، ثبت نام شما در سامانه مداد با موفقیت انجام شد \n به جمع مدیران پیش رو و نوآور خوش آمدید \n در صورت نیاز به راهنمایی \n شماره تماس : 09375117590",
@@ -97,7 +100,9 @@ async function Managers(req, res) {
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }
 

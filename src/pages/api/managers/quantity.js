@@ -1,4 +1,5 @@
 import managerModel from "@/models/manager";
+import ownerModel from "@/models/owner";
 import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 

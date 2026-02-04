@@ -2,6 +2,7 @@ import connectToDb from "@/utils/db";
 import ownerModel from "@/models/owner";
 import managerModel from "@/models/manager";
 import RBAC from "@/utils/RBAC";
+import teacherModel from "@/models/teacher";
 
 export default async function BanManager(req, res) {
   if (req.method != "POST") {
@@ -40,6 +41,10 @@ export default async function BanManager(req, res) {
     const message = manager.isBanned ? "مدیر رفع مسدودیت شد" : "مدیر مسدود شد";
     manager.isBanned = isBanned;
     await manager.save();
+    await teacherModel.updateMany(
+      { manager: req.query?.id },
+      { $set: { isBanned } },
+    );
 
     return res.json({ message, success: true });
   } catch (error) {
