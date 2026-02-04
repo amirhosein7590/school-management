@@ -1,5 +1,7 @@
 import connectToDb from "@/utils/db";
-import findUserByProp from "@/utils/findUserByProp";
+import managerModel from "@/models/manager";
+import ownerModel from "@/models/owner";
+import teacherModel from "@/models/teacher";
 import RBAC from "@/utils/RBAC";
 
 export default async function SingleNotification(req, res) {
@@ -18,24 +20,35 @@ export default async function SingleNotification(req, res) {
         if (role == "owner") {
           // will complete later
         } else {
-          const user = await findUserByProp("nationalCode", nationalCode);
-          if (!user) {
+          let userModel;
+          if (role === "owner") {
+            userModel = await ownerModel.findOne({ nationalCode });
+          } else if (role === "teacher") {
+            userModel = await teacherModel.findOne({ nationalCode });
+          } else if (role === "manager") {
+            userModel = await managerModel.findOne({ nationalCode });
+          }
+
+          if (!userModel) {
             return res
               .status(422)
               .json({ error: "دسترسی غیر مجاز", success: false });
           }
-          const notification = user.notifications.find(
-            (notif) => notif._id == req.query.id
+
+          const notification = userModel.notifications.find(
+            (notif) => notif._id.toString() == req.query.id,
           );
+
           if (!notification) {
             return res
               .status(404)
               .json({ error: "اعلان یافت نشد", success: false });
           }
-          user.notifications = user.notifications.filter(
-            (notif) => notif._id != req.query.id
+
+          userModel.notifications = userModel.notifications.filter(
+            (notif) => notif._id.toString() != req.query.id,
           );
-          user.save();
+          await userModel.save();
           return res.json({ message: "اعلان با موفقیت حذف شد", success: true });
         }
       }

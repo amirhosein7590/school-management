@@ -1,6 +1,23 @@
+import managerModel from "@/models/manager";
+import ownerModel from "@/models/owner";
+import teacherModel from "@/models/teacher";
 import connectToDb from "@/utils/db";
-import findUserByProp from "@/utils/findUserByProp";
 import { verifyToken } from "@/utils/tokenConf";
+
+const roleModels = {
+  owner: {
+    model: ownerModel,
+    rejectedProps: "-__v -password",
+  },
+  manager: {
+    model: managerModel,
+    rejectedProps: "-__v -password -actionsPermissions",
+  },
+  teacher: {
+    model: teacherModel,
+    rejectedProps: "-__v -password -actionsPermissions",
+  },
+};
 
 export default async function GetMe(req, res) {
   try {
@@ -20,16 +37,17 @@ export default async function GetMe(req, res) {
 
     const decodedToken = verifyToken(token);
 
-    if (!decodedToken?.nationalCode) {
+    if (!decodedToken?.nationalCode || !decodedToken?.role) {
       return res
         .status(409)
         .json({ error: "دسترسی شما نامعتبر است", success: false });
     }
     await connectToDb();
-
-    const user = await findUserByProp(
-      "nationalCode",
-      decodedToken?.nationalCode
+    const user = await roleModels[decodedToken?.role].model.findOne(
+      {
+        nationalCode: decodedToken?.nationalCode,
+      },
+      roleModels[decodedToken?.role].rejectedProps,
     );
     return res.json({ user, success: true });
   } catch (error) {

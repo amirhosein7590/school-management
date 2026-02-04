@@ -4,6 +4,9 @@ import managerModel from "@/models/manager";
 import findUserByProps from "@/utils/findUserByProps";
 import RBAC from "@/utils/RBAC";
 import teacherModel from "@/models/teacher";
+import teacherAttendanceModel from "@/models/teacherAttendance";
+import studentAttendanceModel from "@/models/studentAttendance";
+import studentModel from "@/models/student";
 
 export default async function SingleManager(req, res) {
   const auth = RBAC(req, res, ["owner"], {
@@ -43,6 +46,9 @@ export default async function SingleManager(req, res) {
             .json({ error: "مدیر یافت نشد", success: false });
         }
         await teacherModel.deleteMany({ manager: req.query?.id });
+        await studentModel.deleteMany({ manager: req.query?.id });
+        await teacherAttendanceModel.deleteMany({ manager: req.query.id });
+        await studentAttendanceModel.deleteMany({ school: manager.school });
 
         return res.json({ message: "مدیر با موفقیت حذف شد", success: true });
       }

@@ -4,6 +4,9 @@ import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 import { isValidObjectId } from "mongoose";
 import teacherModel from "@/models/teacher";
+import studentModel from "@/models/student";
+import teacherAttendanceModel from "@/models/teacherAttendance";
+import studentAttendanceModel from "@/models/studentAttendance";
 
 export default async function DeleteManyManagers(req, res) {
   if (req.method !== "POST") {
@@ -55,9 +58,9 @@ export default async function DeleteManyManagers(req, res) {
       .find({
         _id: { $in: ids },
       })
-      .countDocuments();
+      .lean();
 
-    if (existingManagers !== ids.length) {
+    if (existingManagers.length !== ids.length) {
       return res.status(404).json({
         error: "یک یا چند مدیر پیدا نشد",
         success: false,
@@ -66,9 +69,18 @@ export default async function DeleteManyManagers(req, res) {
       });
     }
 
+    const managersSchool = existingManagers.map((manager) => manager.school);
+
     const result = await managerModel.deleteMany({ _id: { $in: ids } });
 
     await teacherModel.deleteMany({ manager: { $in: ids } });
+    await studentModel.deleteMany({ manager: { $in: ids } });
+    await teacherAttendanceModel.deleteMany({ manager: { $in: ids } });
+    await studentAttendanceModel.deleteMany({
+      school: { $in: managersSchool },
+    });
+
+    console.log(managersSchool);
 
     return res.status(200).json({
       success: true,
