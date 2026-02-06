@@ -37,6 +37,7 @@ import addSchoolConfig from "@/constants/school/addSchool";
 import editDeleteSchoolConfig from "@/constants/school/editDeleteSchool";
 import exportSchoolsToExcel from "@/constants/exportToExcel/schools";
 import editDeleteManagerConfig from "@/constants/managers/editDeleteManagers";
+import exportManagersToExcel from "@/constants/exportToExcel/managers";
 
 export default {
   login: loginFormConfig,
@@ -78,4 +79,5 @@ export default {
   studentsFromExcel: importStudentsFromExcel,
   teachersFromExcel: importTeachersFromExcel,
   schoolsToExcel: exportSchoolsToExcel,
+  managersToExcel: exportManagersToExcel,
 };

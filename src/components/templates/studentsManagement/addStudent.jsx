@@ -9,6 +9,7 @@ function AddStudent({ user }) {
     "nationalCode",
     "birthDay",
     "class",
+    "grade"
   ];
   return (
     <Form
