@@ -1,6 +1,6 @@
 const pageNames = {
   home: "خانه",
-  inSystemMessage: "پیا درون سامانه ای",
+  inSystemMessage: "پیام درون سامانه ای",
   changePassword: "تغییر رمز عبور",
   schoolSettings: "تنظیمات مدرسه",
   classesManagement: "مدیریت کلاس ها",
@@ -16,6 +16,8 @@ const pageNames = {
   TeacherDashboard: "داشبورد",
   schoolsManagement: "مدیریت مدارس",
   managersManagement: "مدیریت مدیران",
+  packages: "بسته خریداری شده",
+  message: "پنل پیامکی"
 };
 
 export default pageNames;

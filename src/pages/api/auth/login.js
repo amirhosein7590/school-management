@@ -26,15 +26,13 @@ export default async function Login(req, res) {
     await connectToDb();
 
     const { userName, password } = req.body;
-
-    const user = await findUserByProp("userName", userName);
-
+    const user = await findUserByProp("userName", userName, false);
     if (!user) {
       return res
         .status(401)
         .json({ error: "شما در سایت ثبت نام نیستید", success: false });
     }
-    
+
     if (user.expTime < Date.now()) {
       return res
         .status(403)
@@ -45,7 +43,6 @@ export default async function Login(req, res) {
         .status(403)
         .json({ error: "حساب کاربری شما مسدود شده است", success: false });
     }
-
 
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
@@ -74,6 +71,8 @@ export default async function Login(req, res) {
       ])
       .json({ message: "با موفقیت وارد شدید", success: true });
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res
+      .status(500)
+      .json({ error: "خطای ناشناخته", success: false, dbError: error });
   }
 }

@@ -18,12 +18,19 @@ export default async function changePassword(req, res) {
 
   if (!auth) return;
   const { nationalCode, role } = auth;
-  const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword, repeatPassword } = req.body;
   if (!oldPassword?.trim() || !newPassword?.trim()) {
     return res
       .status(422)
       .json({ error: "تمامی مقادیر الزامی هستند", success: false });
   }
+
+  if (newPassword != repeatPassword) {
+    return res
+      .status(422)
+      .json({ error: "تکرار رمز عبور نادرست است", success: false });
+  }
+
   const models = {
     teacher: teacherModel,
     manager: managerModel,

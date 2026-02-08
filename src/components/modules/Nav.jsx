@@ -23,7 +23,7 @@ import {
   Notebook,
 } from "lucide-react";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { Popover, PopoverTrigger } from "./popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
@@ -63,7 +63,7 @@ function Nav({ user }) {
     null,
     "/auth/me",
     { "content-type": "application/json" },
-    true
+    true,
   );
   const { showModal } = useModal();
   const [isSideBarShow, setIsSideBarShow] = useState(false);
@@ -75,7 +75,7 @@ function Nav({ user }) {
     "/auth/logout",
     null,
     "get",
-    true
+    true,
   );
   const logout = () => {
     logoutMutate(null, {
@@ -100,7 +100,7 @@ function Nav({ user }) {
           null,
           "/auth/me",
           { "content-type": "application/json" },
-          true
+          true,
         );
         return (
           <div dir="rtl" className="notification-container flex flex-col">
@@ -243,6 +243,7 @@ function Nav({ user }) {
                     <li className="w-full flex items-center cursor-pointer transition duration-300 hover:bg-gray-50 px-4">
                       <icons.ShoppingCart color="#000000DE" size={20} />
                       <Button
+                        href="/school/packages"
                         variant="ghost"
                         className="text-[#000000DE] !px-0 mr-2 cursor-pointer"
                       >

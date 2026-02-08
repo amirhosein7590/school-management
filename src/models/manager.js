@@ -29,6 +29,7 @@ const managerSchema = new mongoose.Schema({
     default: Date.now() + Number(process.env.freePlanTime),
   }, // for future if anyone buy plan
   plan: { type: String, enum: ["free", "subscription"] }, // for fouture if anyone buy plan
+  messagesCharge: { type: Number, default: 0, required: false },
   notifications: [
     {
       text: { type: String },

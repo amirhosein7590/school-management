@@ -35,6 +35,7 @@ export default async function planRenewal(req, res) {
     }
     const cashePlanTime = Number(process.env.cashePlanTime);
     manager.expTime = manager.expTime + cashePlanTime;
+    manager.plan = "subscription";
     await manager.save();
     return res.json({ message: "تمدید پلن با موفقیت انجام شد", success: true });
   } catch (error) {

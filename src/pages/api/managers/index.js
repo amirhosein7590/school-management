@@ -79,6 +79,7 @@ async function Managers(req, res) {
           ...req.body,
           gender: req.body.gender[0],
           isBanned: false,
+          messagesCharge: 0,
           role: "manager",
           birthDay: new Date(req.body.birthDay),
           notifications: [

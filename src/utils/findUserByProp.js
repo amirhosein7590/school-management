@@ -4,12 +4,17 @@ import managerModel from "@/models/manager";
 import connectToDb from "./db";
 import { cache } from "./cache";
 
-export default async function findUserByProp(propertyName, value) {
+export default async function findUserByProp(
+  propertyName,
+  value,
+  isCache = true,
+) {
   const cacheKey = `${propertyName}:${value}`;
-
-  const cachedUser = await cache.get(cacheKey);
-  if (cachedUser) {
-    return cachedUser;
+  if (isCache) {
+    const cachedUser = await cache.get(cacheKey);
+    if (cachedUser) {
+      return cachedUser;
+    }
   }
 
   await connectToDb();

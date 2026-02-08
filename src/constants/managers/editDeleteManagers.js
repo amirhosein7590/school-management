@@ -4,6 +4,7 @@ import dateToSolar from "@/utils/dateToSolar";
 import { createColumnHelper } from "@tanstack/react-table";
 import BanCell from "@/components/modules/Table/Cell/BanCell";
 import PlanCell from "@/components/modules/Table/Cell/PlanCell";
+import MessagesChargeCell from "@/components/modules/Table/Cell/messagesChargeCell";
 
 const columnHelper = createColumnHelper();
 const remainingDaysOfPlanHandler = (time) => {
@@ -160,6 +161,18 @@ const editDeleteManagerConfig = {
       columnHelper.accessor("planRenewal", {
         header: "تمدید پلن",
         cell: ({ row }) => <PlanCell managerId={row.original._id} />,
+      }),
+      columnHelper.accessor("messagesCharge", {
+        id: "messagesCharge",
+        header: "شارژ بسته پیامکی",
+        cell: ({ row }) => (
+          <MessagesChargeCell
+            id={row.original._id}
+            entityName="messagesCharge"
+            modalTitle="شارژ بسته پیامکی"
+            user={user}
+          />
+        ),
       }),
       columnHelper.accessor("actions", {
         header: "حذف / ویرایش",

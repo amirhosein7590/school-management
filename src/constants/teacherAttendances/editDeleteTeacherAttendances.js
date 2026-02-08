@@ -40,10 +40,14 @@ const editDeleteTeacherAttendancesConfig = {
         id: "sms",
         header: "پیامک غیبت",
         cell: ({ row }) => (
-          <SendAbsentSmsCell
-            url={`/teachersAttendances/${row.original._id}/sendAttendanceSms`}
-            mutationKey="/teachersAttendances/sendAttendanceSms"
-          />
+          <>
+            {row.original.status != "present" && (
+              <SendAbsentSmsCell
+                url={`/teachersAttendances/${row.original._id}/sendAttendanceSms`}
+                mutationKey="/teachersAttendances/sendAttendanceSms"
+              />
+            )}
+          </>
         ),
       }),
       columnHelper.display({

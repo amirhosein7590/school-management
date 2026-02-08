@@ -40,7 +40,7 @@ export function requireRole(page) {
       }
 
       const entity = await findUserByProp("nationalCode", user.nationalCode);
-      if (entity?.isBanned) {
+      if (entity?.isBanned || entity?.expTime < Date.now()) {
         return { redirect: { destination: "/auth/login", permanent: false } };
       }
 

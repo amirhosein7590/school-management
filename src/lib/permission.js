@@ -25,6 +25,8 @@ export const permission = {
       "teachersReport",
       "studentsReport",
       "ManagerDashboard",
+      "packages",
+      "message"
     ],
   },
   teacher: {

@@ -1,3 +1,4 @@
+import managerModel from "@/models/manager";
 import studentAttendanceModel from "@/models/studentAttendance";
 import teacherModel from "@/models/teacher";
 import connectToDb from "@/utils/db";
@@ -26,6 +27,18 @@ export default async function SendAttendanceSms(req, res) {
     if (!teacher) {
       return res.status(403).json({
         error: "شما مجاز به انجام این عملیات نیستید",
+        success: false,
+      });
+    }
+
+    const manager = await managerModel.findOne({ _id: teacher.manager });
+    if (!manager) {
+      return res.status(404).json({ error: "مدیر یافت نشد", success: false });
+    }
+    if (manager.messagesCharge < 1) {
+      return res.status(403).json({
+        error:
+          "شارژ بسته پیامکی به اتمام رسیده است ، لطفا به مدیر خود اطلاع بدهید",
         success: false,
       });
     }
@@ -66,6 +79,9 @@ export default async function SendAttendanceSms(req, res) {
     if (!sms.Success) {
       return res.status(422).json({ error: "خطا در ارسال پیامک", su });
     }
+
+    manager.messagesCharge = manager.messagesCharge - 1;
+    await manager.save();
 
     return res
       .status(201)

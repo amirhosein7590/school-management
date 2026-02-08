@@ -1,23 +1,6 @@
-import managerModel from "@/models/manager";
-import ownerModel from "@/models/owner";
-import teacherModel from "@/models/teacher";
 import connectToDb from "@/utils/db";
+import findUserByProp from "@/utils/findUserByProp";
 import { verifyToken } from "@/utils/tokenConf";
-
-const roleModels = {
-  owner: {
-    model: ownerModel,
-    rejectedProps: "-__v -password",
-  },
-  manager: {
-    model: managerModel,
-    rejectedProps: "-__v -password -actionsPermissions",
-  },
-  teacher: {
-    model: teacherModel,
-    rejectedProps: "-__v -password -actionsPermissions",
-  },
-};
 
 export default async function GetMe(req, res) {
   try {
@@ -43,12 +26,10 @@ export default async function GetMe(req, res) {
         .json({ error: "دسترسی شما نامعتبر است", success: false });
     }
     await connectToDb();
-    const user = await roleModels[decodedToken?.role].model.findOne(
-      {
-        nationalCode: decodedToken?.nationalCode,
-      },
-      roleModels[decodedToken?.role].rejectedProps,
-    );
+
+
+
+    const user = await findUserByProp("nationalCode" , decodedToken?.nationalCode , false)
     return res.json({ user, success: true });
   } catch (error) {
     return res.status(500).json({ error: "خطای ناشناخته", success: false });

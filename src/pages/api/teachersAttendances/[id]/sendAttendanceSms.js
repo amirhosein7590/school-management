@@ -22,7 +22,7 @@ export default async function SendAttendanceSms(req, res) {
   try {
     await connectToDb();
     // ------------------ Manager validation ------------------
-    const manager = await managerModel.findOne({ nationalCode }).lean();
+    const manager = await managerModel.findOne({ nationalCode });
     if (!manager) {
       return res.status(403).json({
         error: "شما مجاز به انجام این عملیات نیستید",
@@ -32,6 +32,12 @@ export default async function SendAttendanceSms(req, res) {
 
     if (!isValidObjectId(req.query?.id)) {
       return res.status(404).json({ error: "غیبت یافت نشد", success: false });
+    }
+
+    if (manager.messagesCharge < 1) {
+      return res
+        .status(403)
+        .json({ error: "شارژ بسته پیامکی به اتمام رسیده است", success: false });
     }
 
     const attendance = await teacherAttendanceModel
@@ -63,13 +69,23 @@ export default async function SendAttendanceSms(req, res) {
     });
 
     if (!sms.Success) {
-      return res.status(422).json({ error: "خطا در ارسال پیامک", su });
+      return res
+        .status(422)
+        .json({ error: "خطا در ارسال پیامک", success: false });
     }
+
+    manager.messagesCharge = manager.messagesCharge - 1;
+    await manager.save();
 
     return res
       .status(201)
       .json({ message: "پیامک غیبت ارسال شد", success: false });
   } catch (error) {
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
     return res.status(500).json({
       error: "خطای ناشناخته",
       dbError: error,

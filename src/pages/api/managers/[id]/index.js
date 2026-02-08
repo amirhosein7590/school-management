@@ -1,7 +1,6 @@
 import ownerModel from "@/models/owner";
 import connectToDb from "@/utils/db";
 import managerModel from "@/models/manager";
-import findUserByProps from "@/utils/findUserByProps";
 import RBAC from "@/utils/RBAC";
 import teacherModel from "@/models/teacher";
 import teacherAttendanceModel from "@/models/teacherAttendance";

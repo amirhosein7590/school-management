@@ -8,7 +8,7 @@ function PageGuide({ entityName, pageName }) {
   const { texts } = registryEntity.pageGuide[entityName];
   const { showModal } = useModal();
   return (
-    <div className="flex items-center pb-5 border-b border-gray-300 mb-10">
+    <div className="flex items-center pb-5 border-b border-gray-300 mb-7">
       <div className="page-name sans-bold text-lg ml-1">{pageName}</div>
       <Button
         onClick={() =>
