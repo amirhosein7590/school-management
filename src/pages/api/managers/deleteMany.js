@@ -80,8 +80,6 @@ export default async function DeleteManyManagers(req, res) {
       school: { $in: managersSchool },
     });
 
-    console.log(managersSchool);
-
     return res.status(200).json({
       success: true,
       message: `${result.deletedCount} مدیر با موفقیت حذف شد`,

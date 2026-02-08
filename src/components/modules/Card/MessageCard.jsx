@@ -36,7 +36,7 @@ function MessageCard() {
                 <span className="time text-sm">{remainingMessages()} پیامک</span>
             </div>
             <div className="activate-time bg-gray-100 border-b p-2 flex justify-between items-center">
-                <span className="label text-sm flex items-center gap-x-1"> <Info size="17" color="green" /> هزینه هر پیامک 200 تومان می باشد.</span>
+                <span className="label text-sm flex items-center gap-x-2"> <Info size="17" color="green" /> هزینه هر پیامک 200 تومان می باشد.</span>
             </div>
         </div>
     );

@@ -4,7 +4,6 @@ import pageNameHandler from "@/utils/pageNameHandler";
 import React, { memo, useEffect } from "react";
 
 function TeacherDashboard({ pageName }) {
-  console.log(pageName);
   useEffect(() => {
     pageNameHandler(pageName);
   }, []);

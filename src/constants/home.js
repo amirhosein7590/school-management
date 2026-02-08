@@ -81,6 +81,12 @@ const homeConfig = {
         href: "/school/managersManagement",
         icon: "Users",
       },
+      {
+        id: "setSchool",
+        text: "مدرسه بندی مدیران",
+        href: "/school/setSchool",
+        icon: "School2Icon"
+      }
     ],
     teacher: [
       {

@@ -28,7 +28,7 @@ export default async function planRenewal(req, res) {
     if (!manager || !manager?.expTime) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
-    if (manager.expTime > Date.now()) {
+    if (manager.plan != "free" && manager.expTime > Date.now()) {
       return res
         .status(403)
         .json({ error: "پلن ایشان هنوز به پایان نرسیده است", success: false });

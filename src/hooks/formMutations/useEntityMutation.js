@@ -21,7 +21,6 @@ export default function useEntityMutation(entityName, entityId) {
     headers,
     method,
     isPrivate,
-    config?.table?.dataArrayName,
   );
 
   const handler = useCallback(
@@ -40,10 +39,10 @@ export default function useEntityMutation(entityName, entityId) {
       config:
         exportToExcel || importFromExcel
           ? {
-              ...config,
-              exportToExcelConfig: exportToExcel,
-              importFromExcelConfig: importFromExcel,
-            }
+            ...config,
+            exportToExcelConfig: exportToExcel,
+            importFromExcelConfig: importFromExcel,
+          }
           : config,
     }),
     [handler, isPending, isError, data, config],

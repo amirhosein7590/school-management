@@ -13,17 +13,20 @@ export default async function SetSchool(req, res) {
   }
 
   const auth = RBAC(req, res, ["owner"], {
-    status: true,
-    errorMessage: "مدیر یافت نشد",
+    status: false,
   });
 
   if (!auth) return;
   const { nationalCode } = auth;
 
-  const { schoolId } = req.body;
+  const { schoolId, managerId } = req.body;
 
-  if (!schoolId || !isValidObjectId(schoolId)) {
+  if (!schoolId || !isValidObjectId(schoolId?.[0])) {
     return res.status(422).json({ error: "مدرسه یافت نشد", success: false });
+  }
+
+  if (!managerId || !isValidObjectId(managerId?.[0])) {
+    return res.status(422).json({ error: "مدیر یافت نشد", success: false });
   }
 
   try {
@@ -35,17 +38,22 @@ export default async function SetSchool(req, res) {
         success: false,
       });
     }
-    const manager = await managerModel.findOne({ _id: req.query?.id });
+    const manager = await managerModel.findOne({ _id: managerId?.[0] });
     if (!manager) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
-    const school = await schoolModel.findOne({ _id: schoolId });
+    const school = await schoolModel.findOne({ _id: schoolId?.[0] });
     if (!school) {
       return res.status(404).json({ error: "مدرسه یافت نشد", success: false });
     }
 
-    manager.school = schoolId;
-    school.manager = req.query?.id;
+    const duplicate = await managerModel.findOne({ school: schoolId?.[0] });
+    if (duplicate) {
+      return res.status(409).json({ error: "این مدرسه متعلق به مدیر دیگری است", sucesss: false })
+    }
+
+    manager.school = schoolId?.[0];
+    school.manager = managerId?.[0];
     await school.save();
     await manager.save();
 

@@ -21,6 +21,7 @@ import {
   LogOut,
   House,
   Notebook,
+  School2Icon
 } from "lucide-react";
 
 import { memo, useState } from "react";
@@ -54,6 +55,7 @@ const icons = {
   LogOut,
   House,
   Notebook,
+  School2Icon
 };
 
 function Nav({ user }) {
@@ -208,9 +210,8 @@ function Nav({ user }) {
         ></div>
       )}
       <nav
-        className={`fixed ${
-          isSideBarShow ? "right-0 z-[200]" : "-right-1000"
-        }  lg:right-0 flex flex-col w-8/12 lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
+        className={`fixed ${isSideBarShow ? "right-0 z-[200]" : "-right-1000"
+          }  lg:right-0 flex flex-col w-8/12 lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
       >
         <div
           dir="rtl"

@@ -25,6 +25,7 @@ function EditCell({ id, entityName, user, modalTitle }) {
               afterSubmitFn={close}
               clearFormButton={false}
               datePickerPortal={false}
+                            
             />
           ),
         })

@@ -11,6 +11,7 @@ import {
   UserRoundPen,
   Backpack,
   Notebook,
+  School2Icon
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
 import pageNameHandler from "@/utils/pageNameHandler";
@@ -25,6 +26,7 @@ const icons = {
   UserRoundPen,
   Backpack,
   Notebook,
+  School2Icon
 };
 function Home({ user, pageName }) {
   useEffect(() => {

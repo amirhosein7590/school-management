@@ -17,7 +17,8 @@ const pageNames = {
   schoolsManagement: "مدیریت مدارس",
   managersManagement: "مدیریت مدیران",
   packages: "بسته خریداری شده",
-  message: "پنل پیامکی"
+  message: "پنل پیامکی",
+  setSchool : "مدرسه بندی مدیران"
 };
 
 export default pageNames;

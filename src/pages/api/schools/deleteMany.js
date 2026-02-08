@@ -29,7 +29,6 @@ export default async function deleteManySchools(req, res) {
         .json({ error: "اطلاعات مدرسه ها نامعتبر است", success: false });
     }
     const schools = await schoolModel.deleteMany({ _id: { $in: ids } });
-    console.log(schools);
     return res.json({
       message: `${schools.deletedCount} مدرسه با موفقیت حذف شدند`,
       success: true,

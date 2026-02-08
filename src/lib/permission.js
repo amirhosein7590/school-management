@@ -7,6 +7,7 @@ export const permission = {
       "changePassword",
       "schoolsManagement",
       "managersManagement",
+      "setSchool"
     ],
   },
   manager: {

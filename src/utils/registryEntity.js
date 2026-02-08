@@ -39,6 +39,7 @@ import exportSchoolsToExcel from "@/constants/exportToExcel/schools";
 import editDeleteManagerConfig from "@/constants/managers/editDeleteManagers";
 import exportManagersToExcel from "@/constants/exportToExcel/managers";
 import messagesChargeConfig from "@/constants/managers/messagesCharge";
+import setSchoolConfig from "@/constants/managers/setSchool";
 
 export default {
   login: loginFormConfig,
@@ -82,4 +83,5 @@ export default {
   schoolsToExcel: exportSchoolsToExcel,
   managersToExcel: exportManagersToExcel,
   messagesCharge: messagesChargeConfig,
+  setSchool : setSchoolConfig
 };

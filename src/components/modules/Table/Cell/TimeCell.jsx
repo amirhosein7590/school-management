@@ -8,8 +8,6 @@ const TimeCell = memo(function TimeCell({ rowId, defaultStatus, defaultTime }) {
   const setRowState = useTableStore((s) => s.setRowState);
   if (rowState?.status !== "late" && defaultStatus !== "late") return null;
 
-  console.log(defaultTime);
-
   return (
     <div className="flex items-center justify-center gap-x-2">
       <TimePicker
