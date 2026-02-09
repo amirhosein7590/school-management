@@ -1,4 +1,4 @@
-const manaegerPermissionsConfig = {
+const managerPermissionsConfig = {
     inputs: {
         owner: [
             {
@@ -30,13 +30,13 @@ const manaegerPermissionsConfig = {
             },
             {
                 type: "select",
-                name: "permission",
+                name: "permissions",
                 placeholder: "محدودیت",
                 className: "!text-sm !rounded-[5px] mb-5",
                 rules: {
                     required: "لطفا محدودیت را وارد نمایید",
                 },
-                multiple: false,
+                multiple: true,
                 options: [
                     { label: "ایجاد دانش آموز", value: "createStudent" },
                     { label: "ویرایش دانش آموز", value: "editStudent" },
@@ -61,4 +61,4 @@ const manaegerPermissionsConfig = {
     isPrivate: true,
 }
 
-export default manaegerPermissionsConfig
+export default managerPermissionsConfig

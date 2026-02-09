@@ -25,14 +25,31 @@ function useCustomeMutation(
   const client = isPrivate ? axiosPrivate : axiosPublic;
   const baseMutation = useMutation({
     mutationKey: finalKey,
-    mutationFn: ({ data, finalUrl }) =>
-      client[reqType](finalUrl, data, headers && { headers }).then(
-        (res) => res.data
-      ),
+    mutationFn: async ({ data, finalUrl }) => { // async کن
+      try {
+        const response = await client[reqType](finalUrl, data, headers && { headers });
+        return response.data;
+      } catch (error) {
+        if (reqType.toLowerCase() === 'delete') {
+          throw {
+            isDeleteError: true,
+            message: error.response?.data?.error || 'خطا در حذف',
+            response: error.response,
+            config: error.config,
+            toString: () => 'Delete Error'
+          };
+        }
+        throw error;
+      }
+    },
     onError: (err) => {
-      const errorMessage = err.response.data.error;
+      const errorMessage = err.isDeleteError
+        ? err.message
+        : err.response?.data?.error || err.message;
       toast.error(errorMessage);
     },
+    throwOnError: false,
+    useErrorBoundary: false
   });
 
   const defaultOnSuccess = (response) => {

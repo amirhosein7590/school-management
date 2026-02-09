@@ -40,7 +40,7 @@ import editDeleteManagerConfig from "@/constants/managers/editDeleteManagers";
 import exportManagersToExcel from "@/constants/exportToExcel/managers";
 import messagesChargeConfig from "@/constants/managers/messagesCharge";
 import setSchoolConfig from "@/constants/managers/setSchool";
-import manaegerPermissionsConfig from "@/constants/managers/permissions";
+import managerPermissionsConfig from "@/constants/managers/permissions";
 
 export default {
   login: loginFormConfig,
@@ -85,5 +85,5 @@ export default {
   managersToExcel: exportManagersToExcel,
   messagesCharge: messagesChargeConfig,
   setSchool: setSchoolConfig,
-  manaegerPermissions: manaegerPermissionsConfig
+  managerPermissions: managerPermissionsConfig
 };

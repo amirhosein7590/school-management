@@ -86,6 +86,12 @@ const homeConfig = {
         text: "مدرسه بندی مدیران",
         href: "/school/setSchool",
         icon: "School2Icon"
+      },
+      {
+        id: "managersPermissions",
+        text: "محدودیت مدیران",
+        href: "/school/managersPermissions",
+        icon: "School2Icon"
       }
     ],
     teacher: [

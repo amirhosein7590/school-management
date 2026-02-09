@@ -19,7 +19,11 @@ axiosPrivate.interceptors.response.use(
         return axiosPrivate(originalReq);
       }
     } catch (refreshError) {
-      return Promise.reject(refreshError);
+      return Promise.reject({
+        ...refreshError,
+        name: 'AxiosError',
+        isAxiosError: true,
+      });
     }
     return Promise.reject(error);
   },

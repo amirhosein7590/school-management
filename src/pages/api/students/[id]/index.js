@@ -58,6 +58,14 @@ export default async function SingleStudent(req, res) {
             .status(403)
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
+        if (!manager?.actionsPermissions?.editStudent) {
+          return res
+            .status(403)
+            .json({
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
+              success: false,
+            });
+        }
         const student = await studentModel.findOneAndUpdate(
           {
             _id: req.query.id,
@@ -86,6 +94,16 @@ export default async function SingleStudent(req, res) {
             .status(403)
             .json({ error: "دسترسی غیر مجاز", success: false });
         }
+
+         if (!manager?.actionsPermissions?.deleteStudent) {
+          return res
+            .status(403)
+            .json({
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
+              success: false,
+            });
+        }
+
         const student = await studentModel.findOneAndDelete({
           _id: req.query.id,
           manager: manager._id,

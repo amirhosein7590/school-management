@@ -11,7 +11,7 @@ import {
   UserRoundPen,
   Backpack,
   Notebook,
-  School2Icon
+  School2Icon,
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
 import pageNameHandler from "@/utils/pageNameHandler";

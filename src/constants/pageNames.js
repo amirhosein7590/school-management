@@ -18,7 +18,8 @@ const pageNames = {
   managersManagement: "مدیریت مدیران",
   packages: "بسته خریداری شده",
   message: "پنل پیامکی",
-  setSchool : "مدرسه بندی مدیران"
+  setSchool: "مدرسه بندی مدیران",
+  managerPermissions: "محدودیت مدیران"
 };
 
 export default pageNames;
