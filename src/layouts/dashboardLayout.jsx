@@ -6,7 +6,7 @@ function DashboardLayout({ children, user }) {
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Nav user={user} />
 
-      <div className="flex flex-col flex-grow container w-full md:w-10/12">
+      <div className="flex flex-col flex-grow w-full md:w-10/12">
         <main className="flex-grow m-3">{children}</main>
 
         <footer className="text-center text-sm p-6 bg-[#eee] text-[#000000de]">

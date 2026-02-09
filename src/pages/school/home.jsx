@@ -12,6 +12,7 @@ import {
   Backpack,
   Notebook,
   School2Icon,
+  ShieldQuestionMark
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
 import pageNameHandler from "@/utils/pageNameHandler";
@@ -26,7 +27,8 @@ const icons = {
   UserRoundPen,
   Backpack,
   Notebook,
-  School2Icon
+  School2Icon,
+  ShieldQuestionMark
 };
 function Home({ user, pageName }) {
   useEffect(() => {
@@ -71,6 +73,7 @@ function Home({ user, pageName }) {
               transition
               hover:shadow-md
               hover:bg-gray-50
+              sans-medium
             "
               >
                 <IconComponent
@@ -92,6 +95,7 @@ function Home({ user, pageName }) {
     break-word
     text-wrap
     mt-1
+    sans-medium
   "
                 >
                   {button.text}

@@ -21,7 +21,8 @@ import {
   LogOut,
   House,
   Notebook,
-  School2Icon
+  School2Icon,
+  ShieldQuestionMark
 } from "lucide-react";
 
 import { memo, useState } from "react";
@@ -55,7 +56,8 @@ const icons = {
   LogOut,
   House,
   Notebook,
-  School2Icon
+  School2Icon,
+  ShieldQuestionMark
 };
 
 function Nav({ user }) {
@@ -146,7 +148,7 @@ function Nav({ user }) {
     <nav className="flex">
       <header
         dir="rtl"
-        className="w-full bg-[var(--dark-blue)] p-4 lg:w-10/12 flex items-center justify-between"
+        className="w-full bg-[var(--dark-blue)] p-4 lg:w-[85%] flex items-center justify-between"
       >
         <div className="school-name flex items-center gap-x-4">
           <Button
@@ -211,7 +213,7 @@ function Nav({ user }) {
       )}
       <nav
         className={`fixed ${isSideBarShow ? "right-0 z-[200]" : "-right-1000"
-          }  lg:right-0 flex flex-col w-8/12 lg:w-2/12 h-full transition-all duration-300 animate-in overflow-y-auto`}
+          }  lg:right-0 flex flex-col w-8/12 lg:w-[15%] h-full transition-all duration-300 animate-in overflow-y-auto`}
       >
         <div
           dir="rtl"

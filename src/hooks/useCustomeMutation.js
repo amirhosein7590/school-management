@@ -25,7 +25,7 @@ function useCustomeMutation(
   const client = isPrivate ? axiosPrivate : axiosPublic;
   const baseMutation = useMutation({
     mutationKey: finalKey,
-    mutationFn: async ({ data, finalUrl }) => { // async کن
+    mutationFn: async ({ data, finalUrl }) => {
       try {
         const response = await client[reqType](finalUrl, data, headers && { headers });
         return response.data;

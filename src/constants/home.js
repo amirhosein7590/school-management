@@ -63,12 +63,6 @@ const homeConfig = {
       },
     ],
     owner: [
-      // {
-      //   id: "dashboard",
-      //   text: "داشبورد",
-      //   href: "/school/dashboard/owner",
-      //   icon: "LayoutDashboard",
-      // },
       {
         id: "schools",
         text: "مدیریت مدارس",
@@ -91,7 +85,7 @@ const homeConfig = {
         id: "managersPermissions",
         text: "محدودیت مدیران",
         href: "/school/managersPermissions",
-        icon: "School2Icon"
+        icon: "ShieldQuestionMark"
       }
     ],
     teacher: [
