@@ -69,6 +69,7 @@ teacherSchema.virtual("suggests", {
 teacherSchema.index({ manager: 1, school: 1 });
 teacherSchema.index({ school: 1 });
 teacherSchema.index({ manager: 1 });
+teacherSchema.index({ nationalCode: 1, phone: 1, personnelCode: 1 })
 
 const teacherModel =
   mongoose.models.Teacher || mongoose.model("Teacher", teacherSchema);

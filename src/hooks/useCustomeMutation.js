@@ -30,23 +30,17 @@ function useCustomeMutation(
         const response = await client[reqType](finalUrl, data, headers && { headers });
         return response.data;
       } catch (error) {
-        if (reqType.toLowerCase() === 'delete') {
-          throw {
-            isDeleteError: true,
-            message: error.response?.data?.error || 'خطا در حذف',
-            response: error.response,
-            config: error.config,
-            toString: () => 'Delete Error'
-          };
-        }
-        throw error;
+
+        throw {
+          message: error.response?.data?.error || "خطای ناشناخته",
+          response: error.response,
+          config: error.config,
+          toString: () => 'Delete Error'
+        };
       }
     },
     onError: (err) => {
-      const errorMessage = err.isDeleteError
-        ? err.message
-        : err.response?.data?.error || err.message;
-      toast.error(errorMessage);
+      toast.error(err.message)
     },
     throwOnError: false,
     useErrorBoundary: false

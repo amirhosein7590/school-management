@@ -5,23 +5,23 @@ import persianJs from "persianjs";
 const teacherValidationSchema = {
   نام: {
     key: "firstName",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   "نام خانوادگی": {
     key: "lastName",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
-  "شماره تلفن": {   
+  "شماره تلفن": {
     key: "phone",
     validator: (v) => /^(?:\+?98|0)9\d{9}$/.test(v),
   },
   "کد ملی": {
     key: "nationalCode",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   "کد پرسنلی": {
     key: "personnelCode",
-    validator: (v) => String(v)?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   جنسیت: {
     key: "gender",
@@ -39,15 +39,14 @@ const teacherValidationSchema = {
     validator: (v) => {
       if (!v) return false;
       const [year, mounth, day] = v.split("/");
+      if (isNaN(year) || isNaN(mounth) || isNaN(day)) return false
       const formatedYear = Number(persianJs(year).toEnglishNumber().toString());
       const formatedMounth = Number(
         persianJs(mounth).toEnglishNumber().toString(),
       );
       const formatedDay = Number(persianJs(day).toEnglishNumber().toString());
       const date = toGregorian(formatedYear, formatedMounth, formatedDay);
-      const isInvalidDate = isNaN(
-        Date.parse(`${date.gy}-${date.gm}-${date.gd}`),
-      );
+      const isInvalidDate = new Date(`${formatedYear}/${formatedMounth}/${formatedDay}`) == "Invalid Date";
       if (isInvalidDate) {
         return false;
       } else {
