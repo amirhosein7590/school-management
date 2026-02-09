@@ -45,7 +45,6 @@ const teacherValidationSchema = {
         persianJs(mounth).toEnglishNumber().toString(),
       );
       const formatedDay = Number(persianJs(day).toEnglishNumber().toString());
-      const date = toGregorian(formatedYear, formatedMounth, formatedDay);
       const isInvalidDate = new Date(`${formatedYear}/${formatedMounth}/${formatedDay}`) == "Invalid Date";
       if (isInvalidDate) {
         return false;

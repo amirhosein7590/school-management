@@ -5,11 +5,11 @@ import persianJs from "persianjs";
 const studentValidationSchema = {
   نام: {
     key: "firstName",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   "نام خانوادگی": {
     key: "lastName",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   "شماره تلفن والد": {
     key: "parentPhone",
@@ -17,7 +17,7 @@ const studentValidationSchema = {
   },
   "کد ملی": {
     key: "nationalCode",
-    validator: (v) => v?.trim()?.length > 0,
+    validator: (v) => String(v)?.trim?.()?.length > 0,
   },
   "تاریخ تولد": {
     key: "birthDay",
@@ -29,10 +29,7 @@ const studentValidationSchema = {
         persianJs(mounth).toEnglishNumber().toString(),
       );
       const formatedDay = Number(persianJs(day).toEnglishNumber().toString());
-      const date = toGregorian(formatedYear, formatedMounth, formatedDay);
-      const isInvalidDate = isNaN(
-        Date.parse(`${date.gy}-${date.gm}-${date.gd}`),
-      );
+      const isInvalidDate = new Date(`${formatedYear}/${formatedMounth}/${formatedDay}`) == "Invalid Date";
       if (isInvalidDate) {
         return false;
       } else {
@@ -43,7 +40,11 @@ const studentValidationSchema = {
 
   پایه: {
     key: "grade",
-    validator: (v) => (isNaN(Number(v)) ? false : true),
+    validator: (v) => {
+      if (isNaN(Number(v))) return false;
+      if (Number(v) > 12 || Number(v) < 1) return false;
+      return true
+    },
   },
 };
 
