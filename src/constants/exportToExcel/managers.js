@@ -2,6 +2,21 @@ import dateToSolar from "@/utils/dateToSolar";
 import ExcelJS from "exceljs";
 import persianJs from "persianjs";
 
+const remainingDaysHandler = (time) => {
+  const originalTime = Number(time);
+  const today = Date.now();
+
+  if (originalTime < today) {
+    return "منقضی شده";
+  }
+
+  const differenceMs = originalTime - today;
+
+  const millisecondsInDay = 24 * 60 * 60 * 1000;
+  const remainingDays = Math.ceil(differenceMs / millisecondsInDay);
+  return remainingDays
+};
+
 export default async function exportManagersToExcel(dataFn) {
   const data = dataFn()?.map((item) => ({
     fullName: `${item.firstName} ${item.lastName}`,
@@ -10,6 +25,8 @@ export default async function exportManagersToExcel(dataFn) {
     personnelCode: persianJs(item?.personnelCode).persianNumber().toString(),
     gender: item?.gender == "male" ? "آقا" : "خانم",
     birthDay: dateToSolar(item.birthDay),
+    plan: item.plan == 'free' ? "رایگان هفت روزه" : "اشتراک یکساله",
+    remainingDays: remainingDaysHandler(item.expTime),
     isBanned: item?.isBanned ? "مسدود" : "فعال",
   }));
   const workbook = new ExcelJS.Workbook();
@@ -18,6 +35,8 @@ export default async function exportManagersToExcel(dataFn) {
 
   worksheet.columns = [
     { header: "وضعیت مسدودیت", key: "isBanned", width: 20 },
+    { header: "روز های باقی مانده از پلن", key: "remainingDays", width: 25 },
+    { header: "پلن", key: "plan", width: 20 },
     { header: "تاریخ تولد", key: "birthDay", width: 20 },
     { header: "جنسیت", key: "gender", width: 20 },
     { header: "کد پرسنلی", key: "personnelCode", width: 20 },

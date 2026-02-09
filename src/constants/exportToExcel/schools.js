@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import persianJs from "persianjs";
 
 const genderLabels = {
   boyish: "پسرانه",
@@ -12,7 +13,7 @@ export default async function exportSchoolsToExcel(dataFn) {
     address: school.address,
     level: school.level == "1" ? "دوره اول" : "دوره دوم",
     shift: school.shift == "morning" ? "صبح" : "عصر",
-    phone: school.phone,
+    phone: persianJs(school.phone).persianNumber()._str,
     gender: genderLabels[school.gender],
     manager: `${school?.manager?.firstName ?? ""} ${school?.manager?.lastName ?? ""}`,
   }));
