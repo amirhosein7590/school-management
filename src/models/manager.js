@@ -49,14 +49,8 @@ const managerSchema = new mongoose.Schema({
     editClass: { type: Boolean, default: true },
     deleteClass: { type: Boolean, default: true },
     overrideSchoolSettings: { type: Boolean, default: true },
-    teacherExcused: { type: Boolean, default: true },
-    teacherUnexcused: { type: Boolean, default: true },
-    teacherLate: { type: Boolean, default: true },
-    teacherOther: { type: Boolean, default: true },
-    studentExcused: { type: Boolean, default: true },
-    studentUnexcused: { type: Boolean, default: true },
-    studentLate: { type: Boolean, default: true },
-    studentOther: { type: Boolean, default: true },
+    teacherAbsent: { type: Boolean, default: true },
+    studentAbsent: { type: Boolean, defaut: true }
   },
 });
 

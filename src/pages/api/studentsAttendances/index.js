@@ -94,6 +94,20 @@ export default async function TeachersAttendances(req, res) {
 
       case "POST": {
         const { students, status: statusArray, date } = req.body;
+
+        if (!teacher.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر محدود شده است", success: false })
+        }
+
+        const manager = await managerModel.findOne({ _id: teacher.manager });
+        if (!manager) {
+          return res.status(404).json({ error: "مدیر یافت نشد", success: false })
+        }
+
+        if (!manager.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+        }
+
         const status = statusArray?.[0];
         if (!Array.isArray(students) || !status || !date) {
           return res

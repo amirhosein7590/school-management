@@ -3,6 +3,7 @@ import connectToDb from "@/utils/db";
 import studentAttendanceModel from "@/models/studentAttendance";
 import RBAC from "@/utils/RBAC";
 import { isValidObjectId } from "mongoose";
+import managerModel from "@/models/manager";
 
 export default async function deleteManyStudentAttendances(req, res) {
   if (req.method !== "POST") {
@@ -46,7 +47,6 @@ export default async function deleteManyStudentAttendances(req, res) {
   try {
     await connectToDb();
     const teacher = await teacherModel.findOne({ nationalCode }).lean();
-
     if (!teacher) {
       return res.status(404).json({ error: "معلم پیدا نشد", success: false });
     }
@@ -54,6 +54,19 @@ export default async function deleteManyStudentAttendances(req, res) {
       return res
         .status(403)
         .json({ error: "برای شما کلاسی تعریف نشده است", success: false });
+    }
+
+    if (!teacher.actionsPermissions?.studentAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر محدود شده است", success: false })
+    }
+
+    const manager = await managerModel.findOne({ _id: teacher.manager });
+    if (!manager) {
+      return res.status(404).json({ error: "مدیر یافت نشد", success: false })
+    }
+
+    if (!manager.actionsPermissions?.studentAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
     }
 
     const existingAttendances = await studentAttendanceModel.find({

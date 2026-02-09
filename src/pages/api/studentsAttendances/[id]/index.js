@@ -4,6 +4,7 @@ import connectToDb from "@/utils/db";
 import RBAC from "@/utils/RBAC";
 import { isValidObjectId } from "mongoose";
 import studentModel from "@/models/student";
+import managerModel from "@/models/manager";
 
 export default async function StudentAttendace(req, res) {
   const auth = RBAC(req, res, ["owner", "teacher"], {
@@ -59,6 +60,19 @@ export default async function StudentAttendace(req, res) {
             message: "برای وضعیت تاخیر توضیحات و ساعت الزامی است",
           },
         };
+
+        if (!teacher.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر محدود شده است", success: false })
+        }
+
+        const manager = await managerModel.findOne({ _id: teacher.manager });
+        if (!manager) {
+          return res.status(404).json({ error: "مدیر یافت نشد", success: false })
+        }
+
+        if (!manager.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+        }
 
         const { student, status, date } = req.body;
         const { id } = req.query;
@@ -128,6 +142,20 @@ export default async function StudentAttendace(req, res) {
       }
 
       case "DELETE": {
+
+        if (!teacher.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر محدود شده است", success: false })
+        }
+        
+        const manager = await managerModel.findOne({ _id: teacher.manager });
+        if (!manager) {
+          return res.status(404).json({ error: "مدیر یافت نشد", success: false })
+        }
+
+        if (!manager.actionsPermissions?.studentAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+        }
+
         const attendance = await studentAttendanceModel.findOneAndDelete({
           _id: req.query?.id,
           teacher: teacher._id,

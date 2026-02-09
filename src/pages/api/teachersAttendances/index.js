@@ -84,6 +84,9 @@ export default async function TeachersAttendances(req, res) {
       }
 
       case "POST": {
+        if (!manager.actionsPermissions?.teacherAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+        }
         const { teachers, status: statusArray, date } = req.body;
         const status = statusArray?.[0];
         if (!Array.isArray(teachers) || !status || !date) {

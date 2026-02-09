@@ -52,6 +52,10 @@ export default async function deleteManyTeachersAttendances(req, res) {
       return res.status(404).json({ error: "مدیر پیدا نشد", success: false });
     }
 
+    if (!manager.actionsPermissions?.teacherAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+    }
+
     const existingAttendances = await teacherAttendanceModel.find({
       _id: { $in: ids },
       manager: manager._id,

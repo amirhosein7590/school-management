@@ -59,6 +59,10 @@ export default async function TeacherAttendace(req, res) {
           },
         };
 
+        if (!manager.actionsPermissions?.teacherAbsent) {
+          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+        }
+
         const { teacher, status, date } = req.body;
         const { id } = req.query;
         const validStatus = ["present", "absent", "excused", "late", "other"];

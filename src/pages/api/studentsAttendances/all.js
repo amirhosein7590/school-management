@@ -1,3 +1,4 @@
+import managerModel from "@/models/manager";
 import studentModel from "@/models/student";
 import studentAttendanceModel from "@/models/studentAttendance";
 import teacherModel from "@/models/teacher";
@@ -31,6 +32,19 @@ export default async function attendanceAll(req, res) {
         error: "شما مجاز به انجام این عملیات نیستید",
         success: false,
       });
+    }
+
+    if (!teacher.actionsPermissions?.studentAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر محدود شده است", success: false })
+    }
+
+    const manager = await managerModel.findOne({ _id: teacher.manager });
+    if (!manager) {
+      return res.status(404).json({ error: "مدیر یافت نشد", success: false })
+    }
+
+    if (!manager.actionsPermissions?.studentAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
     }
 
     const students = await studentModel.find({

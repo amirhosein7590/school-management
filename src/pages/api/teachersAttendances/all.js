@@ -33,6 +33,10 @@ export default async function attendanceAll(req, res) {
       });
     }
 
+    if (!manager.actionsPermissions?.teacherAbsent) {
+      return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+    }
+
     const teachers = await teacherModel.find({
       manager: manager._id,
       school: manager.school,
