@@ -1,7 +1,14 @@
 import { verifyToken } from "@/utils/tokenConf";
 
 function Index() {
-  return <></>;
+  return (
+    <>
+      <Head>
+        <title>صفحه اصلی</title>
+        <meta name="description" content="صفحه اصلی" />
+      </Head>
+    </>
+  );
 }
 
 export default Index;

@@ -1,16 +1,19 @@
 import AttendanceStats from "@/components/templates/managerDashboard/attendanceStats";
 import { requireRole } from "@/lib/requireRole";
-import React, { memo, useEffect } from "react";
-import pageNameHandler from "@/utils/pageNameHandler";
+import Head from "next/head";
+import React, { memo } from "react";
 
-function ManagerDashboard({ pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
+function ManagerDashboard() {
   return (
-    <div dir="rtl" className="flex flex-col gap-y-10">
-      <AttendanceStats />
-    </div>
+    <>
+      <Head>
+        <title>داشبورد</title>
+        <meta name="description" content="صفحه داشبورد مدیر" />
+      </Head>
+      <div dir="rtl" className="flex flex-col gap-y-10">
+        <AttendanceStats />
+      </div>
+    </>
   );
 }
 

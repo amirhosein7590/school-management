@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/requireRole";
-import React, { memo, useCallback, useEffect, useMemo } from "react";
+import React, { memo } from "react";
 import PageGuide from "@/components/modules/pageGuide";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
@@ -8,12 +8,9 @@ import Select from "@/components/modules/select";
 import { Button } from "@/components/modules/Button/button";
 import { useModal } from "@/contexts/ModalContext";
 import MessageModalContent from "@/components/templates/InSystemMessage/messageModalContent";
-import pageNameHandler from "@/utils/pageNameHandler";
+import Head from "next/head";
 
 function InSystemMessage({ user, pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
   const inputs = inSystemMessageConfig.inputs[user.role];
   const { control, getValues } = useForm({
     mode: "onSubmit",
@@ -37,44 +34,50 @@ function InSystemMessage({ user, pageName }) {
     });
   };
   return (
-    <div
-      dir="rtl"
-      className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
-    >
-      <PageGuide
-        entityName="inSystemMessage"
-        pageName="ارسال پیام درون سامانه ای"
-      />
-      <form className="flex flex-col lg:flex-row lg:items-center gap-x-0 gap-y-4 lg:gap-x-4 lg:gap-y-0">
-        {inputs.map((input) => (
-          <Controller
-            key={input.name}
-            name={input.name}
-            rules={input.rules}
-            control={control}
-            render={({ field }) => (
-              <Select
-                name={field.name}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                className={input?.className}
-                placeholder={input.placeholder}
-                values={field.value || ""}
-                {...input}
-              />
-            )}
-          />
-        ))}
-        <Button
-          type="button"
-          className="flex justify-center items-center"
-          size="sm"
-          onClick={sendMessageHandler}
-        >
-          شروع گفتگو
-        </Button>
-      </form>
-    </div>
+    <>
+      <Head>
+        <title>پیام درون سامانه ای</title>
+        <meta name="description" content="صفحه پیام درون سامانه ای" />
+      </Head>
+      <div
+        dir="rtl"
+        className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
+      >
+        <PageGuide
+          entityName="inSystemMessage"
+          pageName="ارسال پیام درون سامانه ای"
+        />
+        <form className="flex flex-col lg:flex-row lg:items-center gap-x-0 gap-y-4 lg:gap-x-4 lg:gap-y-0">
+          {inputs.map((input) => (
+            <Controller
+              key={input.name}
+              name={input.name}
+              rules={input.rules}
+              control={control}
+              render={({ field }) => (
+                <Select
+                  name={field.name}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  className={input?.className}
+                  placeholder={input.placeholder}
+                  values={field.value || ""}
+                  {...input}
+                />
+              )}
+            />
+          ))}
+          <Button
+            type="button"
+            className="flex justify-center items-center"
+            size="sm"
+            onClick={sendMessageHandler}
+          >
+            شروع گفتگو
+          </Button>
+        </form>
+      </div>
+    </>
   );
 }
 

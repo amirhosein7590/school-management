@@ -2,9 +2,9 @@ import { Button } from "@/components/modules/Button/button";
 import Form from "@/components/modules/Form";
 import Steper from "@/components/templates/ForgotPassword/steper";
 import useAuthStore from "@/store/authStore";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { memo, useEffect } from "react";
-import pageNameHandler from "@/utils/pageNameHandler";
+import React, { memo } from "react";
 
 function ForgotPassword() {
   const router = useRouter();
@@ -16,40 +16,42 @@ function ForgotPassword() {
     router.push("/auth/forgotPassword/reset");
   };
 
-  useEffect(() => {
-    pageNameHandler(null, "فراموشی رمز عبور");
-  }, []);
-
   return (
-    <div
-      dir="rtl"
-      className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full"
-    >
-      <Steper currentStep={1} className="mb-2" />
-      <div className="form-wrapper bg-white shadow-sm flex flex-col py-2 px-4">
-        <p className="description mt-5 mb-15 text-sm md:text-[16px]">
-          جهت بازیابی لطفا نام کاربری خود را وارد نمایید:
-        </p>
+    <>
+      <Head>
+        <title>فراموشی رمز عبور</title>
+        <meta name="description" content="صفحه فراموشی رمز عبور" />
+      </Head>
+      <div
+        dir="rtl"
+        className="flex flex-col md:max-w-10/12 md:mx-auto mt-4 w-full"
+      >
+        <Steper currentStep={1} className="mb-2" />
+        <div className="form-wrapper bg-white shadow-sm flex flex-col py-2 px-4">
+          <p className="description mt-5 mb-15 text-sm md:text-[16px]">
+            جهت بازیابی لطفا نام کاربری خود را وارد نمایید:
+          </p>
 
-        <Form
-          entityName="getOtp"
-          submitButtonClassName="flex justify-center w-65 pb-3 rounded-full items-center"
-          submitButtonText="دریافت کد بازیابی رمز عبور"
-          className="w-full md:w-4/12 md:mx-auto mb-5 flex flex-col items-center"
-          afterSubmitFn={afterSubmitFn}
-          clearFormButton={false}
-        />
-        <div className="buttons-container flex justify-center items-center">
-          <Button
-            variant="ghost"
-            href="/auth/login"
-            className="text-[var(--light-blue)] cursor-pointer text-xs md:text-sm flex justify-center items-center"
-          >
-            بازگشت به صفحه ورود
-          </Button>
+          <Form
+            entityName="getOtp"
+            submitButtonClassName="flex justify-center w-65 pb-3 rounded-full items-center"
+            submitButtonText="دریافت کد بازیابی رمز عبور"
+            className="w-full md:w-4/12 md:mx-auto mb-5 flex flex-col items-center"
+            afterSubmitFn={afterSubmitFn}
+            clearFormButton={false}
+          />
+          <div className="buttons-container flex justify-center items-center">
+            <Button
+              variant="ghost"
+              href="/auth/login"
+              className="text-[var(--light-blue)] cursor-pointer text-xs md:text-sm flex justify-center items-center"
+            >
+              بازگشت به صفحه ورود
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

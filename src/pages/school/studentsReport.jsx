@@ -2,27 +2,30 @@ import PageGuide from "@/components/modules/pageGuide";
 import Search from "@/components/templates/studentsReport/search";
 import ShowReport from "@/components/templates/studentsReport/showReport";
 import { requireRole } from "@/lib/requireRole";
-import pageNameHandler from "@/utils/pageNameHandler";
-import React, { useEffect } from "react";
+import Head from "next/head";
+import React, { memo } from "react";
 
-function StudentsReport({ user, pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
+function StudentsReport({ user }) {
   return (
-    <div
-      dir="rtl"
-      className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
-    >
-      <PageGuide
-        entityName="studentsReport"
-        pageName="گزارش گیری دانش آموزان"
-      />
-      <Search user={user} />
-      <ShowReport user={user} />
-    </div>
+    <>
+      <Head>
+        <title>گزارش گیری دانش آموزان</title>
+        <meta name="description" content="صفحه گزارش گیری دانش آموزان" />
+      </Head>
+      <div
+        dir="rtl"
+        className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
+      >
+        <PageGuide
+          entityName="studentsReport"
+          pageName="گزارش گیری دانش آموزان"
+        />
+        <Search user={user} />
+        <ShowReport user={user} />
+      </div>
+    </>
   );
 }
 
-export default StudentsReport;
+export default memo(StudentsReport);
 export const getServerSideProps = requireRole("studentsReport")();

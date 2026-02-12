@@ -1,16 +1,19 @@
 import AttendanceStats from "@/components/templates/teacherDashboard/attendanceStats";
 import { requireRole } from "@/lib/requireRole";
-import pageNameHandler from "@/utils/pageNameHandler";
-import React, { memo, useEffect } from "react";
+import Head from "next/head";
+import React, { memo } from "react";
 
-function TeacherDashboard({ pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
+function TeacherDashboard() {
   return (
-    <div dir="rtl" className="flex flex-col gap-y-10">
-      <AttendanceStats />
-    </div>
+    <>
+      <Head>
+        <title>داشبورد</title>
+        <meta name="description" content="صفحه داشبورد معلم" />
+      </Head>
+      <div dir="rtl" className="flex flex-col gap-y-10">
+        <AttendanceStats />
+      </div>
+    </>
   );
 }
 

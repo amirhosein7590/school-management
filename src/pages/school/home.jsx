@@ -1,5 +1,5 @@
 import { requireRole } from "@/lib/requireRole";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import homeConfig from "@/constants/home";
 import {
   LayoutDashboard,
@@ -12,10 +12,10 @@ import {
   Backpack,
   Notebook,
   School2Icon,
-  ShieldQuestionMark
+  ShieldQuestionMark,
 } from "lucide-react";
 import { Button } from "@/components/modules/Button/button";
-import pageNameHandler from "@/utils/pageNameHandler";
+import Head from "next/head";
 
 const icons = {
   LayoutDashboard,
@@ -28,17 +28,19 @@ const icons = {
   Backpack,
   Notebook,
   School2Icon,
-  ShieldQuestionMark
+  ShieldQuestionMark,
 };
-function Home({ user, pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
+function Home({ user }) {
   return (
-    <div className="w-full">
-      <div
-        dir="rtl"
-        className="
+    <>
+      <Head>
+        <title>خانه</title>
+        <meta name="description" content="صفحه خانه" />
+      </Head>
+      <div className="w-full">
+        <div
+          dir="rtl"
+          className="
       links
       grid
       grid-cols-3
@@ -48,18 +50,18 @@ function Home({ user, pageName }) {
       px-4
       py-2
     "
-      >
-        {user?.role &&
-          homeConfig.buttons[user.role].map((button) => {
-            const IconComponent = icons[button.icon];
-            if (!IconComponent) return null;
+        >
+          {user?.role &&
+            homeConfig.buttons[user.role].map((button) => {
+              const IconComponent = icons[button.icon];
+              if (!IconComponent) return null;
 
-            return (
-              <Button
-                key={button.id}
-                href={button.href}
-                variant="ghost"
-                className="
+              return (
+                <Button
+                  key={button.id}
+                  href={button.href}
+                  variant="ghost"
+                  className="
               bg-white
               h-24 md:h-28
               px-1 sm:px-2
@@ -75,16 +77,16 @@ function Home({ user, pageName }) {
               hover:bg-gray-50
               sans-medium
             "
-              >
-                <IconComponent
-                  className="
+                >
+                  <IconComponent
+                    className="
                 text-[var(--dark-blue)]
                 !w-5 !h-5
                 md:!w-6 md:!h-6
               "
-                />
-                <span
-                  className="
+                  />
+                  <span
+                    className="
     text-[11px]
     sm:text-xs
     md:text-sm
@@ -97,14 +99,15 @@ function Home({ user, pageName }) {
     mt-1
     sans-medium
   "
-                >
-                  {button.text}
-                </span>
-              </Button>
-            );
-          })}
+                  >
+                    {button.text}
+                  </span>
+                </Button>
+              );
+            })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

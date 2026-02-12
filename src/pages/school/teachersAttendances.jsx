@@ -2,25 +2,28 @@ import PageGuide from "@/components/modules/pageGuide";
 import AddAttendance from "@/components/templates/teachersAttendances/addAttendance";
 import ShowAttendances from "@/components/templates/teachersAttendances/showAttendances";
 import { requireRole } from "@/lib/requireRole";
-import pageNameHandler from "@/utils/pageNameHandler";
-import React, { memo, useEffect } from "react";
+import Head from "next/head";
+import React, { memo } from "react";
 
-function TeachersAttendances({ user, pageName }) {
-  useEffect(() => {
-    pageNameHandler(pageName);
-  }, []);
+function TeachersAttendances({ user }) {
   return (
-    <div
-      dir="rtl"
-      className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
-    >
-      <PageGuide
-        entityName="teachersAttendances"
-        pageName="حضور و غیاب معلمان"
-      />
-      <AddAttendance user={user} />
-      <ShowAttendances user={user} />
-    </div>
+    <>
+      <Head>
+        <title>حضور و غیاب معلمان</title>
+        <meta name="description" content="صفحه حضور و غیاب معلمان" />
+      </Head>
+      <div
+        dir="rtl"
+        className="px-2 bg-white shadow-sm py-2 lg:px-4 flex flex-col"
+      >
+        <PageGuide
+          entityName="teachersAttendances"
+          pageName="حضور و غیاب معلمان"
+        />
+        <AddAttendance user={user} />
+        <ShowAttendances user={user} />
+      </div>
+    </>
   );
 }
 
