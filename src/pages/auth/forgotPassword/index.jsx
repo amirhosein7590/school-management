@@ -39,13 +39,15 @@ function ForgotPassword() {
           afterSubmitFn={afterSubmitFn}
           clearFormButton={false}
         />
-        <Button
-          variant="ghost"
-          href="/auth/login"
-          className="text-[var(--light-blue)] text-xs md:text-sm flex justify-center items-center"
-        >
-          بازگشت به صفحه ورود
-        </Button>
+        <div className="buttons-container flex justify-center items-center">
+          <Button
+            variant="ghost"
+            href="/auth/login"
+            className="text-[var(--light-blue)] cursor-pointer text-xs md:text-sm flex justify-center items-center"
+          >
+            بازگشت به صفحه ورود
+          </Button>
+        </div>
       </div>
     </div>
   );

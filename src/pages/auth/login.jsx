@@ -4,6 +4,7 @@ import { Info } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useEffect, memo } from "react";
 import pageNameHandler from "@/utils/pageNameHandler";
+import Image from "next/image";
 
 function Login() {
   const router = useRouter();
@@ -22,8 +23,14 @@ function Login() {
     >
       <div className="form flex flex-col w-full md:w-1/2">
         <div className="medad-info bg-white flex items-center pb-2 border-b border-b-[rgba(0_0_0_0.87)] card-shadow">
-          <div className="w-8 ml-4 h-20 bg-[url('/images/logo.png')] bg-cover bg-center bg-no-repeat"></div>
-
+          {/* <div className="w-8 ml-4 h-20 bg-[url('/images/logo.png')] bg-cover bg-center bg-no-repeat"></div> */}
+          <Image
+            className="w-18 h-20"
+            src="/images/logo.png"
+            width={1000}
+            height={800}
+            alt="medad-logo"
+          />
           <div className="description flex flex-col -mr-2">
             <span className="sans-bold mb-1 text-sm md:text-[16px]">
               سامانه مداد
@@ -52,12 +59,12 @@ function Login() {
         >
           رمز عبور خود را فراموش کرده اید ؟
         </Button>
-        <p className="text-rose-600 text-xs md:text-[16px] flex md:items-center gap-x-2">
-          <Info size={20} />
+        <p className="text-rose-600 text-xs md:text-sm flex md:items-center gap-x-1">
+          <Info size={16} />
           به صورت پیش فرض نام کاربری کدملی و رمز عبور کد پرسنلی می باشد
         </p>
       </div>
-      <div className="image hidden h-110 w-1/2 bg-no-repeat md:block bg-[url(/images/loginImage.png)]"></div>
+      <div className="image hidden h-110 w-1/2 bg-no-repeat md:block bg-[url(/images/login-image.png)]"></div>
     </div>
   );
 }

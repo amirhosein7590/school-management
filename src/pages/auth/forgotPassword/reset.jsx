@@ -86,17 +86,24 @@ function Reset() {
             />
             {timer > 0 ? (
               <p className="text-center text-[var(--light-blue)] text-xs md:text-sm ">
-                ارسال مجدد کد تا {timer} دیگر
+                ارسال مجدد کد تا {timer} ثانیه دیگر
               </p>
             ) : (
-              <Button
-                variant="ghost"
-                onClick={sendOtp}
-                className="flex justify-center items-center text-xs md:text-sm text-[var(--light-blue)]"
-                disabled={isPending}
-              >
-                {isPending ? <Spinner size="sm" /> : "ارسال مجدد کد فعال سازی"}
-              </Button>
+              <div className="resent-code-button-container flex justify-center items-center">
+                {" "}
+                <Button
+                  variant="ghost"
+                  onClick={sendOtp}
+                  className="flex justify-center cursor-pointer items-center text-xs md:text-sm text-[var(--light-blue)]"
+                  disabled={isPending}
+                >
+                  {isPending ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    "ارسال مجدد کد فعال سازی"
+                  )}
+                </Button>
+              </div>
             )}
           </>
         ) : (
