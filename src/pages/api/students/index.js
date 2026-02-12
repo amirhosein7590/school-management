@@ -112,10 +112,8 @@ export default async function Students(req, res) {
           });
         }
         const student = await studentModel.findOne({
-          $or: [
-            { nationalCode: req.body?.nationalCode },
-            { parentPhone: req.body?.parentPhone },
-          ],
+          nationalCode: req.body?.nationalCode,
+          parentPhone: req.body?.parentPhone,
         });
         if (student) {
           return res.status(409).json({
@@ -168,6 +166,7 @@ export default async function Students(req, res) {
       }
     }
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ error: "خطای ناشناخته", success: false, dbError: error });

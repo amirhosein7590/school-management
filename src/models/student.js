@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const studentSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  nationalCode: { type: String, required: true, unique: true },
-  parentPhone: { type: String, required: true, unique: true },
+  nationalCode: { type: String, required: true },
+  parentPhone: { type: String, required: true },
   school: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -37,6 +37,7 @@ studentSchema.index({ manager: 1 });
 studentSchema.index({ school: 1 });
 studentSchema.index({ teacher: 1 });
 studentSchema.index({ class: 1 });
+studentSchema.index({ nationalCode: 1, parentPhone: 1 });
 
 const studentModel =
   mongoose.models.Student || mongoose.model("Student", studentSchema);
