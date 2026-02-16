@@ -8,7 +8,8 @@ export const permission = {
       "schoolsManagement",
       "managersManagement",
       "setSchool",
-      "managerPermissions"
+      "managerPermissions",
+      "SuggestsManagement",
     ],
   },
   manager: {
@@ -28,7 +29,7 @@ export const permission = {
       "studentsReport",
       "ManagerDashboard",
       "packages",
-      "message"
+      "message",
     ],
   },
   teacher: {

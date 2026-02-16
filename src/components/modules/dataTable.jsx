@@ -44,7 +44,7 @@ function DataTable({
     registry.deps,
     registry.url,
     registry.headers,
-    registry.isPrivate
+    registry.isPrivate,
   );
   const flatData = useMemo(() => {
     if (!pages || !pages.pages) return [];
@@ -54,12 +54,12 @@ function DataTable({
 
   const allRowIds = useMemo(
     () => flatData?.map((d) => d._id) ?? [],
-    [flatData]
+    [flatData],
   );
 
   const columnHelper = useMemo(() => createColumnHelper(), []);
   const { showModal } = useModal();
-  let columns = registry.columns(user.role, showModal, user);
+  let columns = registry.columns(user?.role, showModal, user);
 
   if (enableRowSelection) {
     const selectColumn = columnHelper.display({
@@ -104,7 +104,7 @@ function DataTable({
       },
       {
         threshold: 0.1,
-      }
+      },
     );
     observer.observe(observerRef.current);
     return () => observer.disconnect();
@@ -136,8 +136,8 @@ function DataTable({
                     {header.isPlaceholder
                       ? null
                       : typeof header.column.columnDef.header === "function"
-                      ? header.column.columnDef.header(header.getContext())
-                      : header.column.columnDef.header}
+                        ? header.column.columnDef.header(header.getContext())
+                        : header.column.columnDef.header}
                   </TableHead>
                 ))}
               </TableRow>

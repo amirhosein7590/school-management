@@ -29,7 +29,11 @@ export default async function Suggests(req, res) {
         }
         if (page) {
           const [suggests, total] = await Promise.all([
-            suggestModel.find({}).skip(skip).limit(limit),
+            suggestModel
+              .find({})
+              .skip(skip)
+              .limit(limit)
+              .populate("sender", "_id firstName lastName phone nationalCode"),
             suggestModel.countDocuments({}),
           ]);
           return res.json({
@@ -39,7 +43,9 @@ export default async function Suggests(req, res) {
             success: true,
           });
         }
-        const suggests = await suggestModel.find({});
+        const suggests = await suggestModel
+          .find({})
+          .populate("sender", "_id firstName lastName phone nationalCode");
 
         return res.json({ suggests, success: true });
       }
@@ -48,7 +54,7 @@ export default async function Suggests(req, res) {
         const exceptedProps = ["sender", "senderModel", "text", "subject"];
 
         const isBodyPropsValid = exceptedProps.every(
-          (prop) => req.body[prop?.trim()]
+          (prop) => req.body[prop?.trim()],
         );
         if (!isBodyPropsValid) {
           return res

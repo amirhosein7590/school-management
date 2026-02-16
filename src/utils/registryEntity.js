@@ -2,7 +2,6 @@ import loginFormConfig from "@/constants/auth/login";
 import getOtpConfig from "@/constants/auth/forgotPassword/getOtp";
 import checkOtpConfig from "@/constants/auth/forgotPassword/checkOtp";
 import resetPasswordConfig from "@/constants/auth/forgotPassword/resetPassword";
-import suggestConfig from "@/constants/suggests";
 import inSystemMessageConfig from "@/constants/inSystemMessage";
 import replayMessageConfig from "@/constants/replayMessage";
 import pageGuideConfig from "@/constants/pageGuide";
@@ -41,13 +40,15 @@ import exportManagersToExcel from "@/constants/exportToExcel/managers";
 import messagesChargeConfig from "@/constants/managers/messagesCharge";
 import setSchoolConfig from "@/constants/managers/setSchool";
 import managerPermissionsConfig from "@/constants/managers/permissions";
+import addSuggestConfig from "@/constants/suggests/addSuggest";
+import editDeleteSuggestConfig from "@/constants/suggests/editDeleteSuggestes";
 
 export default {
   login: loginFormConfig,
   getOtp: getOtpConfig,
   checkOtp: checkOtpConfig,
   resetPassword: resetPasswordConfig,
-  suggest: suggestConfig,
+  addSuggest: addSuggestConfig,
   inSystemMessage: inSystemMessageConfig,
   replayMessage: replayMessageConfig,
   pageGuide: pageGuideConfig,
@@ -85,5 +86,6 @@ export default {
   managersToExcel: exportManagersToExcel,
   messagesCharge: messagesChargeConfig,
   setSchool: setSchoolConfig,
-  managerPermissions: managerPermissionsConfig
+  managerPermissions: managerPermissionsConfig,
+  editDeleteSuggest : editDeleteSuggestConfig
 };

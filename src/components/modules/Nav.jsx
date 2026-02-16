@@ -22,7 +22,7 @@ import {
   House,
   Notebook,
   School2Icon,
-  ShieldQuestionMark
+  ShieldQuestionMark,
 } from "lucide-react";
 
 import { memo, useState } from "react";
@@ -57,7 +57,7 @@ const icons = {
   House,
   Notebook,
   School2Icon,
-  ShieldQuestionMark
+  ShieldQuestionMark,
 };
 
 function Nav({ user }) {
@@ -134,7 +134,7 @@ function Nav({ user }) {
             user={user}
             bodyReq={{ sender: data?.user?._id, senderModel }}
             afterSubmitFn={close}
-            entityName="suggest"
+            entityName="addSuggest"
             submitButtonText="ثبت"
             submitButtonClassName="bg-green-500 !rounded-[5px] flex justify-center items-center cursor-pointer mt-4 px-4 rounded-sm"
             clearFormButton={false}
@@ -212,8 +212,9 @@ function Nav({ user }) {
         ></div>
       )}
       <nav
-        className={`fixed ${isSideBarShow ? "right-0 z-[200]" : "-right-1000"
-          }  lg:right-0 flex flex-col w-8/12 lg:w-[15%] h-full transition-all duration-300 animate-in overflow-y-auto`}
+        className={`fixed ${
+          isSideBarShow ? "right-0 z-[200]" : "-right-1000"
+        }  lg:right-0 flex flex-col w-8/12 lg:w-[15%] h-full transition-all duration-300 animate-in overflow-y-auto`}
       >
         <div
           dir="rtl"

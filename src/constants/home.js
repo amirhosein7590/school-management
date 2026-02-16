@@ -79,14 +79,20 @@ const homeConfig = {
         id: "setSchool",
         text: "مدرسه بندی مدیران",
         href: "/school/setSchool",
-        icon: "School2Icon"
+        icon: "School2Icon",
       },
       {
         id: "managersPermissions",
         text: "محدودیت مدیران",
         href: "/school/managersPermissions",
-        icon: "ShieldQuestionMark"
-      }
+        icon: "ShieldQuestionMark",
+      },
+      {
+        id: "suggestsManagement",
+        href: "/school/suggestsManagement",
+        text: "پیشنهادات / انتقادات",
+        icon: "School2Icon",
+      },
     ],
     teacher: [
       {

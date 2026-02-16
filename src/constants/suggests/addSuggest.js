@@ -1,4 +1,4 @@
-const suggestConfig = {
+const addSuggestConfig = {
   inputs: {
     all: [
       {
@@ -47,4 +47,4 @@ const suggestConfig = {
   key: "suggest",
 };
 
-export default suggestConfig;
+export default addSuggestConfig;
