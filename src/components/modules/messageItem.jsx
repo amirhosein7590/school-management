@@ -9,11 +9,11 @@ function MessageItem({
   sender,
 }) {
   const date = new Date(createdAt);
-  const time = date.toLocaleString("FA").slice(11,-3);
+  const time = date.toLocaleString("FA").slice(11, -3);
   return (
     <div
-      className={`flex flex-col py-2 px-4 ${
-        isYouSend ? "bg-sky-300" : "bg-gray-300"
+      className={`flex flex-col rounded-sm py-2 px-4 ${
+        isYouSend ? "message-item-sent" : "message-item-received"
       }`}
     >
       {text}

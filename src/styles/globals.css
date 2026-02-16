@@ -155,4 +155,57 @@
       3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
       0 1px 5px 0 rgba(0, 0, 0, 0.12);
   }
+  .message-item-sent,
+  .message-item-received {
+    border-radius: 7px 7px 10px 10px;
+    position: relative;
+    padding: 10px 15px;
+    vertical-align: middle;
+    width: auto;
+    color: #fff;
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      border-bottom: none;
+      border-left: 17px solid transparent;
+      border-right: 10px solid transparent;
+    }
+    &:before {
+      padding-top: 10px;
+    }
+    &:after {
+      margin-top: -5px;
+    }
+  }
+  .message-item-sent {
+    background: var(--light-blue);
+    border-bottom: 5px solid var(--light-blue);
+
+    &:before,
+    &:after {
+      border-top: 14px solid var(--light-blue);
+      right: 10%;
+    }
+
+    &:before {
+      border-top-color: var(--light-blue);
+    }
+  }
+  .message-item-received {
+    background: oklch(70.7% 0.022 261.325);
+    border-bottom: 5px solid oklch(70.7% 0.022 261.325);
+
+    &:before,
+    &:after {
+      border-top: 14px solid oklch(70.7% 0.022 261.325);
+      left: 10%;
+    }
+
+    &:before {
+      border-top-color: oklch(70.7% 0.022 261.325);
+      transform: rotateY(180deg);
+    }
+  }
 }
