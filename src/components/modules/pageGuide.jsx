@@ -1,11 +1,11 @@
-import registryEntity from "@/utils/registryEntity";
 import React, { memo } from "react";
 import { Button } from "./Button/button";
 import { CircleQuestionMark } from "lucide-react";
 import { useModal } from "@/contexts/ModalContext";
+import pageGuideConfig from "@/constants/pageGuide";
 
 function PageGuide({ entityName, pageName }) {
-  const { texts } = registryEntity.pageGuide[entityName];
+  const { texts } = pageGuideConfig[entityName];
   const { showModal } = useModal();
   return (
     <div className="flex items-center pb-5 border-b border-gray-300 mb-7">

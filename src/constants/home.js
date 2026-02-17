@@ -91,7 +91,13 @@ const homeConfig = {
         id: "suggestsManagement",
         href: "/school/suggestsManagement",
         text: "پیشنهادات / انتقادات",
-        icon: "School2Icon",
+        icon: "MessageSquareWarning",
+      },
+      {
+        id: "notifications",
+        href: "/school/notificationsManagement",
+        text: "مدیریت اعلانات",
+        icon: "Bell",
       },
     ],
     teacher: [

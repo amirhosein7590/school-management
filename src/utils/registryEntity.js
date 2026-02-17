@@ -4,7 +4,6 @@ import checkOtpConfig from "@/constants/auth/forgotPassword/checkOtp";
 import resetPasswordConfig from "@/constants/auth/forgotPassword/resetPassword";
 import inSystemMessageConfig from "@/constants/inSystemMessage";
 import replayMessageConfig from "@/constants/replayMessage";
-import pageGuideConfig from "@/constants/pageGuide";
 import profileConfig from "@/constants/profile";
 import changePasswordConfig from "@/constants/changePassword";
 import schoolSettingsConfig from "@/constants/school/schoolSettings";
@@ -42,6 +41,7 @@ import setSchoolConfig from "@/constants/managers/setSchool";
 import managerPermissionsConfig from "@/constants/managers/permissions";
 import addSuggestConfig from "@/constants/suggests/addSuggest";
 import editDeleteSuggestConfig from "@/constants/suggests/editDeleteSuggestes";
+import addNotificationConfig from "@/constants/addNotification";
 
 export default {
   login: loginFormConfig,
@@ -51,7 +51,6 @@ export default {
   addSuggest: addSuggestConfig,
   inSystemMessage: inSystemMessageConfig,
   replayMessage: replayMessageConfig,
-  pageGuide: pageGuideConfig,
   profile: profileConfig,
   changePassword: changePasswordConfig,
   addSchool: addSchoolConfig,
@@ -87,5 +86,6 @@ export default {
   messagesCharge: messagesChargeConfig,
   setSchool: setSchoolConfig,
   managerPermissions: managerPermissionsConfig,
-  editDeleteSuggest : editDeleteSuggestConfig
+  editDeleteSuggest: editDeleteSuggestConfig,
+  addNotification: addNotificationConfig,
 };

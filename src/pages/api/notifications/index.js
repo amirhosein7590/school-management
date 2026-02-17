@@ -3,6 +3,7 @@ import connectToDb from "@/utils/db";
 import managerModel from "@/models/manager";
 import RBAC from "@/utils/RBAC";
 import teacherModel from "@/models/teacher";
+import { isValidObjectId } from "mongoose";
 
 export default async function Notifications(req, res) {
   if (req.method != "POST") {
@@ -12,12 +13,34 @@ export default async function Notifications(req, res) {
   }
 
   const ALLOWED_STATUS = ["error", "warning", "success", "info"];
-  const { text, status } = req.body;
-  if (!text?.trim() || !ALLOWED_STATUS.includes(status)) {
+  const { text, status, receiver } = req.body;
+  if (!text?.trim() || !ALLOWED_STATUS.includes(status?.[0])) {
     return res
       .status(422)
       .json({ error: "متن یا وضعیت اعلان نامعتبر است", success: false });
   }
+
+  if (!receiver || !Array.isArray(receiver)) {
+    return res
+      .status(422)
+      .json({ error: "اطلاعات گیرنده ها نادرست است", success: false });
+  }
+
+  if (receiver.includes("all") && receiver.length > 1) {
+    return res.status(422).json({
+      error: "برای ارسال اعلان به همه کاربران ، فقط گزینه همه را انتخاب کنید",
+      success: false,
+    });
+  }
+
+  const isValidReceiverIds = receiver?.every((id) => isValidObjectId(id));
+
+  if (receiver?.[0] != "all" && !isValidReceiverIds) {
+    return res
+      .status(422)
+      .json({ error: "اطلاعات فرستنده نامعتبر است", success: false });
+  }
+
   const auth = RBAC(req, res, ["owner"]);
 
   if (!auth) return;
@@ -29,30 +52,61 @@ export default async function Notifications(req, res) {
     if (!owner) {
       return res.status(403).json({ error: "دسترسی غیر مجاز", success: false });
     }
-    await managerModel.updateMany(
-      {},
-      {
-        $push: {
-          notifications: {
-            $each: [{ text, status }],
-            $slice: -50,
+
+    if (receiver?.[0] == "all") {
+      await managerModel.updateMany(
+        {},
+        {
+          $push: {
+            notifications: {
+              $each: [{ text, status: status?.[0] }],
+              $slice: -50,
+            },
           },
         },
-      }
-    );
-    await teacherModel.updateMany(
-      {},
-      {
-        $push: {
-          notifications: {
-            $each: [{ text, status }],
-            $slice: -50,
+      );
+      await teacherModel.updateMany(
+        {},
+        {
+          $push: {
+            notifications: {
+              $each: [{ text, status: status?.[0] }],
+              $slice: -50,
+            },
           },
         },
+      );
+      return res.json({
+        message: "اعلانات با موفقیت ارسال شدند",
+        success: true,
+      });
+    } else {
+      const managerIds = receiver?.map((id) => String(id));
+      const managers = await managerModel.countDocuments({
+        _id: { $in: managerIds },
+      });
+      if (managers != receiver.length) {
+        return res
+          .status(422)
+          .json({ error: "برخی از مدیران یافت نشدند", success: false });
       }
-    );
-    return res.json({ message: "اعلان با موفقیت ارسال شد", success: true });
+      await managerModel.updateMany(
+        { _id: { $in: managerIds } },
+        {
+          $push: {
+            notifications: {
+              $each: [{ text, status: status?.[0] }],
+              $slice: -50,
+            },
+          },
+        },
+      );
+      return res
+        .status(201)
+        .json({ message: "اعلان با موفقیت ارسال شد", success: true });
+    }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: "خطای ناشناخته", success: false });
   }
 }

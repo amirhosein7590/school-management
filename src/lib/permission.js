@@ -10,6 +10,7 @@ export const permission = {
       "setSchool",
       "managerPermissions",
       "SuggestsManagement",
+      "notificationsManagement",
     ],
   },
   manager: {

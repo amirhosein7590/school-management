@@ -119,6 +119,9 @@ const pageGuideConfig = {
       "در این بخش می توانید پیشنهادات / انتقاداتی که از سوی کاربران ارسال شده است را مدیریت کنید",
     ],
   },
+  notificationsManagement: {
+    texts: ["در این بخش می توانید برای کاربران سایت ، اعلان ارسال کنید"],
+  },
 };
 
 export default pageGuideConfig;
