@@ -165,20 +165,24 @@ function Nav({ user }) {
           </p>
         </div>
         <div className="toolbar flex gap-x-4 lg:gap-x-2 items-center">
+          {user.role != "owner" && (
+            <Button
+              className="suggests cursor-pointer !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3"
+              tooltip="ثبت پیشنهاد / انتقاد"
+              variant="ghost"
+              onClick={suggestHandler}
+            >
+              <icons.MessageSquareWarning
+                color="white"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </Button>
+          )}
           <Button
-            className="suggests cursor-pointer !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3"
-            tooltip="ثبت پیشنهاد / انتقاد"
-            variant="ghost"
-            onClick={suggestHandler}
-          >
-            <icons.MessageSquareWarning
-              color="white"
-              style={{ width: "20px", height: "20px" }}
-            />
-          </Button>
-          <Button
-            className="inner-site-message !items-center cursor-pointer !p-0 lg:p-auto lg:!py-2 lg:!px-3"
-            tooltip="ارسال پیام درون سامانه ای"
+            className={`inner-site-message !items-center cursor-pointer !p-0 lg:p-auto lg:!py-2 lg:!px-3`}
+            tooltip={
+              user.role == "owner" ? "ارسال پیام" : "ارسال پیام درون سامانه ای"
+            }
             variant="ghost"
             href="/school/inSystemMessage"
           >
@@ -187,22 +191,24 @@ function Nav({ user }) {
               style={{ width: "20px", height: "20px" }}
             />
           </Button>
-          <Button
-            className="notifications !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3 cursor-pointer relative"
-            tooltip="اعلانات"
-            variant="ghost"
-            onClick={showNotifications}
-          >
-            {data?.user?.notifications?.length > 0 && (
-              <span className="bg-red-600 text-white w-5 h-5 rounded-full absolute top-0 right-1 flex justify-center items-center text-xs">
-                {data?.user?.notifications?.length}
-              </span>
-            )}
-            <icons.Bell
-              color="white"
-              style={{ width: "20px", height: "20px" }}
-            />
-          </Button>
+          {user.role != "owner" && (
+            <Button
+              className="notifications !items-center !p-0 lg:p-auto lg:!py-2 lg:!px-3 cursor-pointer relative"
+              tooltip="اعلانات"
+              variant="ghost"
+              onClick={showNotifications}
+            >
+              {data?.user?.notifications?.length > 0 && (
+                <span className="bg-red-600 text-white w-5 h-5 rounded-full absolute top-0 right-1 flex justify-center items-center text-xs">
+                  {data?.user?.notifications?.length}
+                </span>
+              )}
+              <icons.Bell
+                color="white"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </Button>
+          )}
         </div>
       </header>
       {isSideBarShow && (

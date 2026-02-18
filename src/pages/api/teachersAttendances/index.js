@@ -23,7 +23,7 @@ const statusConfig = {
   },
   late: {
     requireProps: ["description", "time"],
-    message: "برای وضعیت غیبت موجه توضیحات و ساعت الزامی است",
+    message: "برای وضعیت تاخیر توضیحات و ساعت الزامی است",
   },
 };
 
@@ -85,7 +85,12 @@ export default async function TeachersAttendances(req, res) {
 
       case "POST": {
         if (!manager.actionsPermissions?.teacherAbsent) {
-          return res.status(403).json({ error: "این عملیات از سوی مدیر سیستم محدود شده است", success: false })
+          return res
+            .status(403)
+            .json({
+              error: "این عملیات از سوی مدیر سیستم محدود شده است",
+              success: false,
+            });
         }
         const { teachers, status: statusArray, date } = req.body;
         const status = statusArray?.[0];
@@ -98,7 +103,7 @@ export default async function TeachersAttendances(req, res) {
         if (statusConfig[status]) {
           const config = statusConfig[status];
           const isPropsValid = config.requireProps.every(
-            (prop) => req.body[prop]
+            (prop) => req.body[prop],
           );
 
           if (!isPropsValid) {

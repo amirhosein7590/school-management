@@ -20,6 +20,7 @@ function SetSchool({ user }) {
           user={user}
           entityName="setSchool"
           submitButtonText="ذخیره تغییرات"
+          submitButtonClassName="w-full lg:w-auto flex justify-center items-center"
           inputsContainerClassName="flex items-center gap-x-4"
         />
       </div>

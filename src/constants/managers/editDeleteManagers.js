@@ -52,7 +52,7 @@ const editDeleteManagerConfig = {
         rules: {
           required: "لطفا شماره تلفن  را وارد کنید",
           pattern: {
-            value: /^(?:\+?98|0)9\d{9}$/,
+            value: /^(?:\+?98|0)[۰-۹0-9]{10}$/,
             message: "شماره تلفن نا معتبر است",
           },
         },

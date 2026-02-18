@@ -50,7 +50,7 @@ const managerSchema = new mongoose.Schema({
     deleteClass: { type: Boolean, default: true },
     overrideSchoolSettings: { type: Boolean, default: true },
     teacherAbsent: { type: Boolean, default: true },
-    studentAbsent: { type: Boolean, defaut: true }
+    studentAbsent: { type: Boolean, default: true },
   },
 });
 

@@ -13,7 +13,7 @@ const teacherValidationSchema = {
   },
   "شماره تلفن": {
     key: "phone",
-    validator: (v) => /^(?:\+?98|0)9\d{9}$/.test(v),
+    validator: (v) => /^(?:\+?98|0)[۰-۹0-9]{10}$/.test(v),
   },
   "کد ملی": {
     key: "nationalCode",
@@ -39,13 +39,15 @@ const teacherValidationSchema = {
     validator: (v) => {
       if (!v) return false;
       const [year, mounth, day] = v.split("/");
-      if (isNaN(year) || isNaN(mounth) || isNaN(day)) return false
+      if (isNaN(year) || isNaN(mounth) || isNaN(day)) return false;
       const formatedYear = Number(persianJs(year).toEnglishNumber().toString());
       const formatedMounth = Number(
         persianJs(mounth).toEnglishNumber().toString(),
       );
       const formatedDay = Number(persianJs(day).toEnglishNumber().toString());
-      const isInvalidDate = new Date(`${formatedYear}/${formatedMounth}/${formatedDay}`) == "Invalid Date";
+      const isInvalidDate =
+        new Date(`${formatedYear}/${formatedMounth}/${formatedDay}`) ==
+        "Invalid Date";
       if (isInvalidDate) {
         return false;
       } else {

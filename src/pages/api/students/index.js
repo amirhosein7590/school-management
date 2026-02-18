@@ -122,13 +122,6 @@ export default async function Students(req, res) {
           });
         }
 
-        const newStudent = await studentModel.create({
-          ...req.body,
-          grade: Number(req.body.grade?.[0]),
-          manager: manager._id,
-          school: manager.school,
-        });
-
         if (req.body?.class?.[0]) {
           const cls = await classModel.findOne({ _id: req.body.class[0] });
           if (!cls) {
@@ -147,11 +140,25 @@ export default async function Students(req, res) {
               .status(403)
               .json({ error: "کلاس ظرفیت ندارد", success: false });
           }
+          const newStudent = await studentModel.create({
+            ...req.body,
+            grade: Number(req.body.grade?.[0]),
+            manager: manager._id,
+            school: manager.school,
+          });
           cls.capacity = cls.capacity - 1;
           await cls.save();
           newStudent.teacher = cls.teacher;
           newStudent.class = cls._id;
           await newStudent.save();
+        } else {
+          const { class: Class, ...body } = req.body;
+          await studentModel.create({
+            ...body,
+            grade: Number(req.body.grade?.[0]),
+            manager: manager._id,
+            school: manager.school,
+          });
         }
 
         return res

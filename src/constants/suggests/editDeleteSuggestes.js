@@ -54,7 +54,7 @@ const editDeleteSuggestConfig = {
       columnHelper.display({
         id: "phone",
         header: "شماره تلفن",
-        cell: ({ row }) => row.original?.sender.phone ?? "",
+        cell: ({ row }) => row.original?.sender?.phone ?? "",
       }),
       columnHelper.display({
         id: "nationalCode",

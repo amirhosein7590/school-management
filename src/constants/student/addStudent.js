@@ -27,7 +27,7 @@ const addStudentsConfig = {
         rules: {
           required: "لطفا شماره تلفن والد را وارد کنید",
           pattern: {
-            value: /^(?:\+?98|0)9\d{9}$/,
+            value: /^(?:\+?98|0)[۰-۹0-9]{10}$/,
             message: "شماره تلفن والد نا معتبر است",
           },
         },
