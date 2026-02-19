@@ -21,6 +21,7 @@ import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
 import { useModal } from "@/contexts/ModalContext";
 import DataTableSkelton from "./Table/dataTableSkelton";
 import useInfiniteCustomeQuery from "@/hooks/useCustomeInfiniteQuery";
+import { Button } from "./Button/button";
 
 function DataTable({
   enableRowSelection = false,
@@ -96,9 +97,7 @@ function DataTable({
         const e = entries[0];
         if (e.isIntersecting) {
           if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage().catch(() => {
-              /* swallow */
-            });
+            fetchNextPage().catch(() => {});
           }
         }
       },
@@ -112,16 +111,6 @@ function DataTable({
 
   if (isLoading) {
     return <DataTableSkelton enableRowSelection={enableRowSelection} />;
-  }
-
-  if (isError) {
-    return (
-      <div className="p-4">
-        <p>خطا در بارگذاری داده‌ها.</p>
-        <pre>{String(error)}</pre>
-        <button onClick={() => refetch()}>تلاش مجدد</button>
-      </div>
-    );
   }
 
   return (
@@ -156,7 +145,11 @@ function DataTable({
               ))
             ) : (
               <TableRow>
-                <TableCell>رکوردی برای نمایش وجود ندارد</TableCell>
+                <TableCell>
+                  {isError
+                    ? error?.response?.data?.error
+                    : "رکوردی برای نمایش وجود ندارد"}
+                </TableCell>
               </TableRow>
             )}
             <tr className="w-[.1px] h-[.1px] opacity-0" ref={observerRef}></tr>
