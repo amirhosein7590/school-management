@@ -538,7 +538,7 @@ When a manager is restricted from recording attendance:
   birthDay: Date,
   notifications: [{
     text: String,
-    status: "success" | "error" | "warning",
+    status: "success" | "error" | "warning" | "info",
     _id: ObjectId
   }],
   actionsPermissions: {
@@ -611,7 +611,7 @@ When a manager is restricted from recording attendance:
   _id: ObjectId,
   name: String,
   address: String,
-  level: Number,            // 1: elementary, 2: middle, 3: high
+  level: Number,            // First Period | Second Period
   shift: "morning" | "afternoon",
   phone: String,
   gender: "boyish" | "girlish",
