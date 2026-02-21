@@ -21,16 +21,12 @@ A complete, secure, and scalable school management platform with multi-role acce
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Database Schema](#database-schema)
-- [Architecture](#architecture)
 - [Security](#security)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
 
 ## ✨ Features
+<span id="features"></span>
 
 ### 👥 Role-Based Access Control
 Three distinct user roles with specific permissions:
@@ -119,6 +115,7 @@ When a manager is restricted from recording attendance:
 ---
 
 ## 🛠 Tech Stack
+<span id="tech-stack"></span>
 
 ### Frontend
 | Technology | Purpose |
@@ -153,6 +150,7 @@ When a manager is restricted from recording attendance:
 ---
 
 ## 📁 Project Structure
+<span id="project-structure"></span>
 
 ```bash
 ├── public/
@@ -501,6 +499,7 @@ When a manager is restricted from recording attendance:
 ```
 
 ## 📊 Database Schema
+<span id="database-schema"></span>
 
 ### Owner
 ```javascript
@@ -700,6 +699,7 @@ When a manager is restricted from recording attendance:
 ```
 
 ## 🔒 Security
+<span id="security"></span>
 
 ### Authentication Flow
 
