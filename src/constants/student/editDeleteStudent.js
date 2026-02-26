@@ -109,10 +109,15 @@ const editDeleteStudentConfig = {
       {
         type: "text",
         name: "nationalCode",
-        placeholder: "کد ملی ",
+        maxLength : 10,
+        placeholder: "کد ملی (ده رقم)",
         className: "!text-sm !rounded-[5px] my-5",
         rules: {
           required: "لطفا کد ملی  را وارد نمایید",
+          pattern: {
+            value: /^[0-9۰-۹]{10}$/,
+            message: "کد ملی نامعتبر است",
+          },
         },
       },
       {

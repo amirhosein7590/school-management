@@ -95,19 +95,29 @@ const editDeleteTeacher = {
       {
         type: "text",
         name: "nationalCode",
-        placeholder: "کد ملی ",
+        placeholder: "کد ملی (ده رقم)",
         className: "!text-sm !rounded-[5px] my-5",
+        maxLength: 10,
         rules: {
           required: "لطفا کد ملی  را وارد نمایید",
+          pattern: {
+            value: /^[0-9۰-۹]{10}$/,
+            message: "کد ملی نامعتبر است",
+          },
         },
       },
       {
         type: "text",
         name: "personnelCode",
+        maxLength: 10,
         placeholder: "کد پرسنلی ",
         className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا کد پرسنلی  را وارد نمایید",
+          pattern: {
+            value: /^[0-9۰-۹]{1,10}$/,
+            message: "کد پرسنلی نامعتبر است",
+          },
         },
       },
       {

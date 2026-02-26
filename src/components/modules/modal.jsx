@@ -9,7 +9,7 @@ import { memo } from "react";
 function ModalComponent({ modal, close, update }) {
   const handleOpenChange = (isOpen) => {
     if (!isOpen) {
-      close(); // وقتی کاربر خارج کلیک میکنه یا esc بزنه
+      close();
     }
   };
 

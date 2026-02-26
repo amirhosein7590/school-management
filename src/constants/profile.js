@@ -36,9 +36,16 @@ const baseInputs = [
   {
     type: "text",
     name: "nationalCode",
-    placeholder: "کد ملی",
+    placeholder: "کد ملی (ده رقم)",
+    maxLength : 10,
     className: "!text-sm !rounded-[5px]",
-    rules: { required: "لطفا کد ملی را وارد کنید" },
+    rules: {
+      required: "لطفا کد ملی را وارد کنید",
+      pattern: {
+        value: /^[0-9۰-۹]{10}$/,
+        message: "کد ملی نامعتبر است",
+      },
+    },
   },
 ];
 
@@ -51,7 +58,14 @@ const profileConfig = {
         name: "personnelCode",
         placeholder: "کد پرسنلی",
         className: "!text-sm !rounded-[5px]",
-        rules: { required: "لطفا کد پرسنلی را وارد کنید" },
+        maxLength: 10,
+        rules: {
+          required: "لطفا کد پرسنلی را وارد کنید",
+          pattern: {
+            value: /^[0-9۰-۹]{1,10}$/,
+            message: "کد پرسنلی نامعتبر است",
+          },
+        },
       },
     ],
     teacher: [

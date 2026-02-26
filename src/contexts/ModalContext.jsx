@@ -89,7 +89,6 @@ export function ModalProvider({ children }) {
           modal={modal}
           update={(maybeId, maybeData) => {
             if (typeof maybeData === "undefined") {
-              // فقط یک آرگومان فرستاده شده: update(newData)
               return updateData(modal.id, maybeId);
             } else {
               return updateData(maybeId, maybeData);

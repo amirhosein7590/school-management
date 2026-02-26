@@ -17,11 +17,11 @@ const teacherValidationSchema = {
   },
   "کد ملی": {
     key: "nationalCode",
-    validator: (v) => String(v)?.trim?.()?.length > 0,
+    validator: (v) => /^[0-9۰-۹]{10}$/.test(v),
   },
   "کد پرسنلی": {
     key: "personnelCode",
-    validator: (v) => String(v)?.trim?.()?.length > 0,
+    validator: (v) => /^[0-9۰-۹]{1,10}$/.test(v),
   },
   جنسیت: {
     key: "gender",

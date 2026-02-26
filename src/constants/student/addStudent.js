@@ -35,10 +35,15 @@ const addStudentsConfig = {
       {
         type: "text",
         name: "nationalCode",
-        placeholder: "کد ملی",
+        placeholder: "کد ملی (ده رقم)",
         className: "!text-sm !rounded-[5px]",
+        maxLength: 10,
         rules: {
           required: "لطفا کد ملی را وارد نمایید",
+          pattern: {
+            value: /^[0-9۰-۹]{10}$/,
+            message: "کد ملی نامعتبر است",
+          },
         },
       },
       {

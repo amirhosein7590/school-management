@@ -17,7 +17,7 @@ const studentValidationSchema = {
   },
   "کد ملی": {
     key: "nationalCode",
-    validator: (v) => String(v)?.trim?.()?.length > 0,
+    validator: (v) => /^[0-9۰-۹]{10}$/.test(v),
   },
   "تاریخ تولد": {
     key: "birthDay",
