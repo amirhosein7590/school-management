@@ -1,4 +1,3 @@
-// components/modules/Table/Cell/SelectAllCheckbox.jsx
 import React, { memo, useMemo } from "react";
 import useTableStore from "@/store/tableStore";
 

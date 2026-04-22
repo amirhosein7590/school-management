@@ -37,7 +37,7 @@ const baseInputs = [
     type: "text",
     name: "nationalCode",
     placeholder: "کد ملی (ده رقم)",
-    maxLength : 10,
+    maxLength: 10,
     className: "!text-sm !rounded-[5px]",
     rules: {
       required: "لطفا کد ملی را وارد کنید",
@@ -74,8 +74,15 @@ const profileConfig = {
         type: "text",
         name: "personnelCode",
         placeholder: "کد پرسنلی",
+        maxLength: 10,
         className: "!text-sm !rounded-[5px]",
-        rules: { required: "لطفا کد پرسنلی را وارد کنید" },
+        rules: {
+          required: "لطفا کد پرسنلی را وارد کنید",
+          pattern: {
+            value: /^[0-9۰-۹]{1,10}$/,
+            message: "کد پرسنلی نامعتبر است",
+          },
+        },
       },
       {
         type: "datePicker",
