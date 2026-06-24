@@ -59,7 +59,7 @@ export default async function SingleTeacher(req, res) {
             success: false,
           });
         }
-        const { permissions, managerId, schoolId } = await checkRoleAndTeacher(
+        const { permissions, managerId, schoolId , teacher } = await checkRoleAndTeacher(
           req,
           nationalCode,
           res,
@@ -73,7 +73,16 @@ export default async function SingleTeacher(req, res) {
           });
         }
 
-        await teacherModel.findOneAndUpdate(
+        if (req.body?.phone != teacher?.phone){
+          const duplicateTeacher = await teacherModel.findOne({phone : req.body?.phone});
+          if (duplicateTeacher){
+            const duplicateTeacherFullName = duplicateTeacher.firstName + " " + duplicateTeacher.lastName
+            const errorMessage = duplicateTeacher?.manager?.toString() == managerId ? `این شماره برای ${duplicateTeacherFullName} ثبت شده است` : "این شماره برای معلم دیگری ثبت شده است"
+            return res.status(409).json({error : errorMessage , success : false})
+          }
+        }
+
+        await teacherModel.updateOne(
           {
             _id: req.query?.id,
             school: schoolId,
@@ -82,7 +91,6 @@ export default async function SingleTeacher(req, res) {
           { ...req.body, gender: req.body.gender[0] },
         );
 
-        // const isPhoneDuplicate = 
 
         return res.json({
           message: "اطلاعات معلم با موفقیت تغییر یافت",
