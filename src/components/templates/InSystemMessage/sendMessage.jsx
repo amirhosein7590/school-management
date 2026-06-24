@@ -7,7 +7,7 @@ import React, { memo, useCallback, useState } from "react";
 
 function SendMessage({ receiverId }) {
   const [text, setText] = useState("");
-  const { mutate, isPending } = useCustomeMutation(
+  const { mutateAsync, isPending } = useCustomeMutation(
     "messages",
     null,
     "/messages",
@@ -19,9 +19,10 @@ function SendMessage({ receiverId }) {
     return text.length < 1 || isPending ? true : false;
   }, [isPending, receiverId, text]);
 
-  const sendMessageHandler = () => {
+  const sendMessageHandler = async () => {
     if (disableHandler()) return;
-    mutate({ text, receiver: receiverId?.[0] });
+    await mutateAsync({ text, receiver: receiverId?.[0] });
+    setText("")
   };
 
   const keyPressHandler = (event) => {

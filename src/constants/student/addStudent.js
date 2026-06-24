@@ -8,6 +8,10 @@ const addStudentsConfig = {
         className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا نام را وارد نمایید",
+          pattern: {
+            value: /^[\u0600-\u06FF ]{3,}$/,
+            message: "نام باید با حروف فارسی و بیشتر از سه حرف باشد",
+          },
         },
       },
       {
@@ -17,6 +21,10 @@ const addStudentsConfig = {
         placeholder: "نام خانوادگی",
         rules: {
           required: "لطفا نام خانوادگی را وارد نمایید",
+          pattern: {
+            value: /^[\u0600-\u06FF ]{3,}$/,
+            message: "نام خانوادگی باید با حروف فارسی و بیشتر از سه حرف باشد",
+          },
         },
       },
       {
@@ -27,7 +35,7 @@ const addStudentsConfig = {
         rules: {
           required: "لطفا شماره تلفن والد را وارد کنید",
           pattern: {
-            value: /^(?:\+?98|0)[۰-۹0-9]{10}$/,
+            value: /^0[0-9]{10}$/,
             message: "شماره تلفن والد نا معتبر است",
           },
         },

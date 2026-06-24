@@ -8,6 +8,10 @@ const addClassConfig = {
         className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا نام کلاس را وارد نمایید",
+          pattern: {
+            value: /^[\u0600-\u06FF0-9۰-۹ ]{3,}$/,
+            message: "نام کلاس باید شامل حروف فارسی باشد",
+          },
         },
       },
       {

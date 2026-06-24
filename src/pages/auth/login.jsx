@@ -2,7 +2,7 @@ import { Button } from "@/components/modules/Button/button";
 import Form from "@/components/modules/Form";
 import { Info } from "lucide-react";
 import { useRouter } from "next/router";
-import React, {memo } from "react";
+import React, {memo, useEffect } from "react";
 import Image from "next/image";
 import Head from "next/head";
 

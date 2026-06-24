@@ -82,6 +82,8 @@ export default async function SingleTeacher(req, res) {
           { ...req.body, gender: req.body.gender[0] },
         );
 
+        // const isPhoneDuplicate = 
+
         return res.json({
           message: "اطلاعات معلم با موفقیت تغییر یافت",
           success: true,
@@ -122,7 +124,7 @@ export default async function SingleTeacher(req, res) {
       }
     }
   } catch (error) {
-    return res.status(500).json({ error: "خطای ناشناخته", success: false });
+    return res.status(500).json({ error: "خطای ناشناخته",details : String(error), success: false });
   }
 }
 

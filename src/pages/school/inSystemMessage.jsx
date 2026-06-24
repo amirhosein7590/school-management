@@ -10,9 +10,9 @@ import { useModal } from "@/contexts/ModalContext";
 import MessageModalContent from "@/components/templates/InSystemMessage/messageModalContent";
 import Head from "next/head";
 
-function InSystemMessage({ user, pageName }) {
+function InSystemMessage({ user }) {
   const inputs = inSystemMessageConfig.inputs[user.role];
-  const { control, getValues } = useForm({
+  const { control, getValues,reset } = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });

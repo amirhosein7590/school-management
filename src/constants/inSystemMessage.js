@@ -1,4 +1,4 @@
-const inSystemMessageConfig = {
+const   inSystemMessageConfig = {
   inputs: {
     teacher: [
       {

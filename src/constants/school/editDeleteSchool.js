@@ -20,6 +20,10 @@ const editDeleteSchoolConfig = {
         className: "!text-sm !rounded-[5px]",
         rules: {
           required: "لطفا نام مدرسه را وارد کنید",
+          pattern: {
+            value: /^[\u0600-\u06FF0-9۰-۹ ]{3,}$/,
+            message: "نام مدرسه باید با حروف فارسی و بیش از 3 حرف باشد",
+          },
         },
       },
       {
@@ -29,6 +33,10 @@ const editDeleteSchoolConfig = {
         className: "!text-sm !rounded-[5px] my-4",
         rules: {
           required: "لطفا آدرس مدرسه را وارد کنید",
+          pattern: {
+            value: /^[\u0600-\u06FF0-9۰-۹\-\/() ]{3,}$/,
+            message: "آدرس مدرسه باید با حروف فارسی و بیش از 3 حرف باشد",
+          },
         },
       },
       {
@@ -82,8 +90,8 @@ const editDeleteSchoolConfig = {
         rules: {
           required: "لطفا شماره مدرسه را وارد کنید",
           pattern: {
-            value: /[0-9]/,
-            message: "شماره تلفن نامعتبر است",
+            value: /^[\d۰-۹]{11,}$/,
+            message: "شماره تلفن باید با پیش شماره و 11 رقم باشد",
           },
         },
       },

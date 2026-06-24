@@ -19,7 +19,7 @@ export default async function exportClassesToExcel(dataFn) {
   const data = dataFn()?.map((item) => ({
     name: item.name,
     teacher: `${item?.teacher?.firstName ?? ""} ${item?.teacher?.lastName ?? ""}`,
-    capacity: persianJs(item.capacity).persianNumber().toString(),
+    capacity: persianJs(String(item.capacity)).persianNumber().toString(),
     grade: gradeLabels?.[item.grade],
   }));
   const workbook = new ExcelJS.Workbook();

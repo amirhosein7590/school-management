@@ -6,7 +6,6 @@ import Form from "../../Form";
 
 function EditCell({ id, entityName, user, modalTitle }) {
   const { showModal } = useModal();
-
   return (
     <Button
       onClick={() =>
@@ -25,7 +24,6 @@ function EditCell({ id, entityName, user, modalTitle }) {
               afterSubmitFn={close}
               clearFormButton={false}
               datePickerPortal={false}
-                            
             />
           ),
         })

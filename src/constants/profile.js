@@ -4,14 +4,26 @@ const baseInputs = [
     name: "firstName",
     placeholder: "نام",
     className: "!text-sm !rounded-[5px]",
-    rules: { required: "لطفا نام را وارد کنید" },
+    rules: {
+      required: "لطفا نام را وارد کنید",
+      pattern: {
+        value: /^[\u0600-\u06FF ]{3,}$/,
+        message: "نام باید با حروف فارسی و بیشتر از سه حرف باشد",
+      },
+    },
   },
   {
     type: "text",
     name: "lastName",
     placeholder: "نام خانوادگی",
     className: "!text-sm !rounded-[5px]",
-    rules: { required: "لطفا نام خانوادگی را وارد کنید" },
+    rules: {
+      required: "لطفا نام خانوادگی را وارد کنید",
+      pattern: {
+        value: /^[\u0600-\u06FF ]{3,}$/,
+        message: "نام خانوادگی باید با حروف فارسی و بیشتر از سه حرف باشد",
+      },
+    },
   },
   {
     type: "text",
@@ -28,7 +40,7 @@ const baseInputs = [
     rules: {
       required: "لطفا شماره تلفن را وارد کنید",
       pattern: {
-        value: /^(?:\+?98|0)9\d{9}$/,
+        value: /^0[0-9]{10}$/,
         message: "شماره تلفن نامعتبر است",
       },
     },
