@@ -60,10 +60,14 @@ export default async function SendAttendanceSms(req, res) {
 
     const d = new Date(attendance?.date.toISOString().slice(0, 10));
     const date = d.toLocaleDateString("FA");
-    const status = "غیبت";
+    const status = attendance?.status == "late" ? "تاخیر" : "غیبت"
+    const gender = attendance?.teacher?.gender == "male" ? "جناب آقای " : "سرکار خانم "
+    const fullName = `${attendance?.teacher?.firstName} ${attendance?.teacher?.lastName}`
+    const param1 = gender + fullName
     const sms = await sendSms({
       patternKey: "presentAndAbsent",
       phoneNumber: attendance?.teacher?.phone,
+      param1,
       param2: date,
       param3: status,
     });
