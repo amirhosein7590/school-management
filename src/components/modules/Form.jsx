@@ -15,6 +15,7 @@ import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import TimePicker from "./timePicker";
 import ImportFromExcel from "./Button/importFromExcel";
+import { Label } from "@radix-ui/react-label";
 
 function Form({
   mode,
@@ -221,7 +222,10 @@ function Form({
 
     switch (input.type) {
       case "select": {
-        return <Select {...commonProps} values={field.value || ""} />;
+        return mode == "edit" ? <div className={`input_wrapper flex flex-col ${input.className}`}>
+          <Label className="mb-2 text-xs lg:text-sm text-muted-foreground mr-2">{input.placeholder}</Label>
+          <Select {...commonProps} values={field.value || ""} placeholder=" " className="w-full" />
+        </div> : <Select {...commonProps} values={field.value || ""} />
       }
       case "textarea": {
         return <Textarea {...commonProps} />;
@@ -257,7 +261,12 @@ function Form({
         );
       }
       default: {
-        return <Input {...commonProps} />;
+        return mode == "edit" ? (
+           <div className={`input__wrapper flex flex-col ${input.className}`}>
+          <Label className="mb-2 text-xs lg:text-sm text-muted-foreground mr-2">{input.placeholder}</Label>
+          <Input {...commonProps} placeholder=" " className="w-full !outline-none" />
+        </div>
+        ) : <Input {...commonProps} />
       }
     }
   };
