@@ -105,7 +105,7 @@ const profileConfig = {
       },
     ],
     owner: [...baseInputs],
-    url: "/me",
+    url: "/auth/me",
     method: "get",
     key: "me",
     deps: null,
