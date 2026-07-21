@@ -55,7 +55,7 @@ export default async function MessagesCharge(req, res) {
     if (!manager) {
       return res.status(404).json({ error: "مدیر یافت نشد", success: false });
     }
-    manager.messagesCharge = manager.messagesCharge + count;
+    manager.messagesCharge = manager.messagesCharge + Number(count);
     await manager.save();
     return res.json({
       message: "شارژ پیامک با موفقیت انجام شد",
