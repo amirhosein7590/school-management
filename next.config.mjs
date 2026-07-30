@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   async redirects() {
-    return [{ source: "/", destination: "/school/home", permanent: true }];
+    return [{ source: "/", destination: "/school/home", permanent: false }];
   },
   output: "standalone",
   poweredByHeader: false,
