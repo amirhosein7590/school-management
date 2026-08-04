@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
@@ -5,6 +7,27 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/utils/shadcn-utils";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+
+type ToolTipProp = React.PropsWithChildren & {
+    tooltip ?: string | null
+}
+
+export type TOnClick = (event ?: React.MouseEvent<HTMLButtonElement, MouseEvent>,...rest : unknown[])=> void | unknown
+
+type ButtonProp = {
+    className ?: string,
+    variant ?:"default" | "destructive" | "outline" | "secondary" | "ghost" | "link" ,
+    size ?: "default" | "sm" | "lg" | "xl" | "icon",
+    asChild ?: boolean,
+    href ?: string | null,
+    isActiveAware ?: boolean,
+    tooltip ?: string | null,
+    activeClass ?: string,
+    disabled ?: boolean,
+    type : "button" | "submit"
+    onClick ?: TOnClick,
+    style ?: React.CSSProperties
+}
 
 const buttonVariants = cva(
   "inline-flex gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -40,7 +63,7 @@ const buttonVariants = cva(
   }
 );
 
-const WithTooltip = React.memo(({ tooltip, children }) => {
+const WithTooltip = React.memo(({ tooltip, children } : ToolTipProp) => {
   if (!tooltip) return children;
 
   return (
@@ -76,28 +99,32 @@ const Button = React.memo(
     tooltip = null,
     activeClass,
     disabled,
+    type = "button",
+    onClick,
+    children,
     ...props
-  }) => {
+  } : ButtonProp & React.PropsWithChildren) => {
     const Comp = asChild ? Slot : "button";
     const pathName = usePathname();
     const isActive = href ? pathName?.startsWith(href) : false;
 
     if (isActiveAware) {
-      const activeCls = isActive && "bg-gray-100";
+      const activeCls = isActive ? "bg-gray-100" : ""
       return (
         <WithTooltip tooltip={tooltip}>
           <Link
+            type={type}
             className={cn(
               buttonVariants({ variant, size }),
-              isActive && activeCls,
+              isActive ? activeCls : "",
               disabled
                 ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
                 : "",
-              className
+              className ? className : ""
             )}
-            href={href}
+            href={href ? href : ""}
             {...props}
-          />
+          >{children}</Link>
         </WithTooltip>
       );
     }
@@ -106,16 +133,17 @@ const Button = React.memo(
       return (
         <WithTooltip tooltip={tooltip}>
           <Link
+           type={type}
             className={cn(
               buttonVariants({ variant, size }),
               disabled
                 ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
                 : "",
-              className
+              className ? className : ""
             )}
             href={href}
             {...props}
-          />
+          >{children}</Link>
         </WithTooltip>
       );
     }
@@ -124,16 +152,18 @@ const Button = React.memo(
       <WithTooltip tooltip={tooltip}>
         <Comp
           data-slot="button"
+          onClick={onClick}
+           type={type}
           className={cn(
             buttonVariants({ variant, size }),
-            isActiveAware && isActive && "!text-red-600",
+            isActiveAware ? isActive ? "!text-red-600" : "" : "",
             disabled
               ? "!text-[rgba(0,0,0,.26)] bg-[rgba(0,0,0,.12)] !cursor-not-allowed !border-[rgba(0,0,0,.12)] hover:!bg-[rgba(0,0,0,.12)]"
               : "",
-            className
+            className ? className : ""
           )}
           {...props}
-        />
+        >{children}</Comp>
       </WithTooltip>
     );
   }
