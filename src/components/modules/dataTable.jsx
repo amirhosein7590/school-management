@@ -20,8 +20,7 @@ import SelectAllCheckbox from "./Table/Cell/SelectAllCheckbox";
 import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
 import { useModal } from "@/contexts/ModalContext";
 import DataTableSkelton from "./Table/dataTableSkelton";
-import useInfiniteCustomeQuery from "@/hooks/useCustomeInfiniteQuery";
-import { Button } from "./Button/button";
+import { useCustomeInfiniteQuery } from "@/hooks/useCustomeInfiniteQuery";
 
 function DataTable({
   enableRowSelection = false,
@@ -40,13 +39,14 @@ function DataTable({
     isError,
     error,
     refetch,
-  } = useInfiniteCustomeQuery(
-    registry.key,
-    registry.deps,
-    registry.url,
-    registry.headers,
-    registry.isPrivate,
-  );
+  } = useCustomeInfiniteQuery({
+    key: registry.key,
+    url: registry.url,
+    headers: registry.headers || {},
+    enabled: true,
+    isPrivate: registry.isPrivate,
+    deps: null,
+  });
   const flatData = useMemo(() => {
     if (!pages || !pages.pages) return [];
     const arr = pages.pages.flatMap((p) => p?.[dataArrayName] ?? []);
