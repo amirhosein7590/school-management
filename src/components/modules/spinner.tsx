@@ -3,8 +3,14 @@ import { Loader2Icon } from "lucide-react";
 import { cn } from "@/utils/shadcn-utils";
 import { memo } from "react";
 
-const Spinner = memo(({ className, size, ...props }) => {
+type SpinnerProp = React.PropsWithChildren & {
+    className ?: string,
+    size : "xs" | "sm" | "md" | "lg" | "xl",
+}
+
+const Spinner = memo(({ className, size, ...props } : SpinnerProp) => {
   const sizes = {
+    xs : "size2",
     sm: "size4",
     md: "size-7",
     lg: "size-10",

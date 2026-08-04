@@ -17,11 +17,14 @@ import {
 } from "@/components/modules/popover";
 import { Label } from "./label";
 import { Spinner } from "./spinner";
-import useCustomeInfiniteQuery from "@/hooks/useCustomeInfiniteQuery";
+import flatDatas from "@/utils/flatInfiniteData";
 
-const Select = memo(
+import { SelectProps } from "@/types/select";
+import useGenerateOptions from "@/hooks/select/useGenerateOptions";
+
+function Select<TData , TDeps>
   ({
-    options = [],
+    options,
     values = [],
     multiple = false,
     title,
@@ -29,10 +32,10 @@ const Select = memo(
     labels,
     className,
     placeholder,
-  }) => {
+  } : SelectProps){
     const [open, setOpen] = useState(false);
 
-    const toggleOption = (value) => {
+    const toggleSelect = (value : string) => {
       if (multiple) {
         if (values.includes(value)) {
           onChange(values.filter((v) => v !== value));
@@ -50,31 +53,20 @@ const Select = memo(
       setOpen(false);
     };
 
-    const optionsData = !Array.isArray(options)
-      ? useCustomeInfiniteQuery(
-          options.key,
-          options.deps,
-          options.url,
-          options.headers,
-          options.isPrivate
-        )
-      : undefined;
+    const {optionsData} = useGenerateOptions<TData , TDeps>(options)
+
 
     const flatData = useMemo(() => {
-      if (!optionsData || !optionsData?.data?.pages) return [];
-      const arr = optionsData?.data?.pages.flatMap(
-        (p) => p?.[options?.dataArrayName] ?? []
-      );
-      return arr;
+      if (Array.isArray(optionsData)) return optionsData;
+      if (!optionsData?.data?.pages || !optionsData.dataArrayName) return [];
+        const arr = flatDatas<TData>(optionsData.data,optionsData.dataArrayName)
+        return arr;
+      
     }, [optionsData, options]);
 
-    if (options?.isFetching) {
-      return <Spinner size="sm" />;
-    }
-
-    const formatedOptions = optionsData?.data?.pages
+    const formatedOptions = !Array.isArray(options)
       ? options.optionsGenerator(flatData)
-      : options;
+      : options
 
     const getSelectedLabel = () => {
       if (multiple) {
@@ -92,14 +84,14 @@ const Select = memo(
     };
 
     const paginationHandler = () => {
-      if (optionsData?.hasNextPage && !optionsData?.isFetching) {
+      if (!Array.isArray(optionsData) && optionsData?.hasNextPage && !optionsData?.isFetching) {
         optionsData?.fetchNextPage();
       }
     };
 
     return (
       <>
-        {labels?.length > 0 &&
+        {labels &&
           labels.map((label) => (
             <>
               {label.position == "before" && (
@@ -113,6 +105,7 @@ const Select = memo(
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
+                type="button"
                 variant="outline"
                 style={{ direction: "rtl" }}
                 className="w-full flex justify-between !rounded-[5px]"
@@ -139,7 +132,7 @@ const Select = memo(
                           className="flex-row-reverse justify-between px-3.5 rounded-none"
                           key={item.value}
                           value={item.label} // for search use label of datas
-                          onSelect={() => toggleOption(item.value)}
+                          onSelect={() => toggleSelect(item.value)}
                         >
                           <Check
                             className={cn(
@@ -152,10 +145,14 @@ const Select = memo(
                           {item.label}
                         </CommandItem>
                       ))}
+                      {!Array.isArray(optionsData) && optionsData.isFetching && <div className="w-full flex mt-5 justify-center items-center">
+                        <Spinner size="xs" />
+                        </div>}
 
                     <div className="flex items-center justify-between mt-4">
-                      {optionsData?.hasNextPage && (
-                        <Button
+                      {!Array.isArray(optionsData) && optionsData?.hasNextPage && (
+                        <Button 
+                          type="button"
                           onClick={paginationHandler}
                           disabled={
                             optionsData?.isFetching || !optionsData?.hasNextPage
@@ -169,6 +166,7 @@ const Select = memo(
                       )}
                       {values.length > 0 && (
                         <Button
+                        type="button"
                           onClick={clearSelectedOptions}
                           disabled={values.length < 1}
                           size="sm"
@@ -185,7 +183,7 @@ const Select = memo(
             </PopoverContent>
           </Popover>
         </div>
-        {labels?.length > 0 &&
+        {labels &&
           labels.map((label) => (
             <>
               {label.position == "after" && (
@@ -197,7 +195,6 @@ const Select = memo(
           ))}
       </>
     );
-  }
-);
+}
 
-export default Select;
+export default memo(Select);
