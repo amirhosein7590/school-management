@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "./button";
-import { useModal } from "@/contexts/ModalContext";
 import { Input } from "../input";
 import { Label } from "@radix-ui/react-label";
-import { Paperclip, Upload } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { toast } from "sonner";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { Spinner } from "../spinner";
+import { useContext } from "react";
+import { useModal } from "@/hooks/useModal";
 
 function ImportFromExcel({ user, disabled, queryKey, text, importConfig }) {
   const { showModal } = useModal();

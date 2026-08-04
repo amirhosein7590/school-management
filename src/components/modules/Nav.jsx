@@ -25,15 +25,15 @@ import {
   ShieldQuestionMark,
 } from "lucide-react";
 
-import { memo, useState } from "react";
+import { memo, useState, useContext } from "react";
 import { Popover, PopoverTrigger } from "./popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
 import { useRouter } from "next/router";
 import homeConfig from "@/constants/home";
-import { useModal } from "@/contexts/ModalContext";
 import Notification from "./Notification";
 import Form from "./Form";
+import { useModal } from "@/hooks/useModal";
 
 const icons = {
   Menu,

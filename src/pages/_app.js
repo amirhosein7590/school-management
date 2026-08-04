@@ -6,11 +6,10 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 import { Toaster } from "sonner";
-import { ModalProvider } from "@/contexts/ModalContext";
+import ModalProvider from "@/contexts/ModalContext";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import DashboardLayout from "@/layouts/dashboardLayout";
 import { UserContext } from "@/contexts/UserContext";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient({}));
@@ -30,7 +29,6 @@ export default function App({ Component, pageProps }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} position="bottom" /> */}
       <HydrationBoundary state={pageProps.dehydratedState}>
         <UserContext.Provider value={pageProps.user || null}>
           <ModalProvider>

@@ -1,9 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { Button } from "../../Button/button";
 import { Trash2 } from "lucide-react";
 import useCustomeMutation from "@/hooks/useCustomeMutation";
-import { useModal } from "@/contexts/ModalContext";
 import { Spinner } from "../../spinner";
+import { useModal } from "@/hooks/useModal";
 
 function DeleteCell({
   id,
@@ -20,12 +20,12 @@ function DeleteCell({
     null,
     "delete",
     true,
-    dataArrayName
+    dataArrayName,
   );
   const { showModal } = useModal();
-  const deleteEntity = async (close) => {
+  const deleteEntity = async (close, modalId) => {
     await mutateAsync(null);
-    close();
+    close(modalId);
   };
   return (
     <Button
@@ -33,7 +33,7 @@ function DeleteCell({
       onClick={() =>
         showModal({
           size: "sm",
-          content: ({ close }) => (
+          content: ({ closeModal, id: modalId }) => (
             <div className="flex flex-col">
               <p className="title text-center sans-bold text-lg">
                 حذف {entityName}
@@ -44,7 +44,7 @@ function DeleteCell({
               </p>
               <div className="buttons-container flex items-center justify-center gap-x-2">
                 <Button
-                  onClick={close}
+                  onClick={() => closeModal(modalId)}
                   variant="secondary"
                   className="text-center cursor-pointer w-1/2 flex justify-center items-center"
                 >
@@ -52,7 +52,7 @@ function DeleteCell({
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => deleteEntity(close)}
+                  onClick={() => deleteEntity(closeModal, modalId)}
                   variant="destructive"
                   className={`text-center w-1/2 flex justify-center items-center ${
                     isPending ? "cursor-not-allowed" : "cursor-pointer"

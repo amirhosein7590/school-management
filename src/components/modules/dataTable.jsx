@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef, useEffect } from "react";
+import React, { memo, useMemo, useRef, useEffect, useContext } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -18,9 +18,9 @@ import SelectAction from "./Button/SelectAction";
 import registryEntity from "@/utils/registryEntity";
 import SelectAllCheckbox from "./Table/Cell/SelectAllCheckbox";
 import RowSelectCheckbox from "./Table/Cell/RowSelectCheckBox";
-import { useModal } from "@/contexts/ModalContext";
 import DataTableSkelton from "./Table/dataTableSkelton";
 import { useCustomeInfiniteQuery } from "@/hooks/useCustomeInfiniteQuery";
+import { useModal } from "@/hooks/useModal";
 
 function DataTable({
   enableRowSelection = false,

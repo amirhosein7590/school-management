@@ -6,13 +6,13 @@ import { toast } from "sonner";
 import inSystemMessageConfig from "@/constants/inSystemMessage";
 import Select from "@/components/modules/select";
 import { Button } from "@/components/modules/Button/button";
-import { useModal } from "@/contexts/ModalContext";
+import { useModal } from "@/hooks/useModal";
 import MessageModalContent from "@/components/templates/InSystemMessage/messageModalContent";
 import Head from "next/head";
 
 function InSystemMessage({ user }) {
   const inputs = inSystemMessageConfig.inputs[user.role];
-  const { control, getValues,reset } = useForm({
+  const { control, getValues } = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });

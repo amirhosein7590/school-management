@@ -1,8 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { Button } from "../../Button/button";
 import { Pencil } from "lucide-react";
-import { useModal } from "@/contexts/ModalContext";
 import Form from "../../Form";
+import { useModal } from "@/hooks/useModal";
 
 function EditCell({ id, entityName, user, modalTitle }) {
   const { showModal } = useModal();
@@ -11,7 +11,7 @@ function EditCell({ id, entityName, user, modalTitle }) {
       onClick={() =>
         showModal({
           title: modalTitle,
-          content: ({ close }) => (
+          content: ({ closeModal, id: modalId }) => (
             <Form
               mode="edit"
               size="xl"
@@ -21,7 +21,7 @@ function EditCell({ id, entityName, user, modalTitle }) {
               queryOptions={{ paramId: { id } }}
               submitButtonText="ذخیره تغییرات"
               submitButtonClassName="w-full lg:w-auto flex justify-center items-center mt-4"
-              afterSubmitFn={close}
+              afterSubmitFn={() => closeModal(modalId)}
               clearFormButton={false}
               datePickerPortal={false}
             />

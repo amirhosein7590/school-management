@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -5,11 +7,18 @@ import {
 } from "@/components/modules/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { memo } from "react";
+import type {Modal , Size, closeModal , updateData} from "@/types/providers/modal"
 
-function ModalComponent({ modal, close, update }) {
-  const handleOpenChange = (isOpen) => {
+type ModalProps = {
+    modal : Modal,
+    close : closeModal,
+    update : updateData
+}
+
+function ModalComponent({ modal, close, update } : ModalProps) {
+  const handleOpenChange = (isOpen : boolean) => {
     if (!isOpen) {
-      close();
+      close(modal?.id ? modal.id : Math.random() * 1000);
     }
   };
 
@@ -25,27 +34,24 @@ function ModalComponent({ modal, close, update }) {
 
   return (
     <Dialog open onOpenChange={handleOpenChange}>
-      <DialogContent className={sizeClasses(size)}>
+      <DialogContent className={sizeClasses(size ? size : "sm")}>
         <DialogHeader
           className="!justify-between !flex-row !items-center"
           style={{ direction: "ltr" }}
         >
-          {Header && <Header />}
+          {typeof Header == "function" ? <Header /> : Header}
           <DialogTitle className="!mr-10">{title}</DialogTitle>
         </DialogHeader>
 
-        {Content && (
-          <Content
-            data={data}
-            id={id}
-            parentId={parentId}
-            close={(result) => close(result)}
-            update={update}
-            openNested={(cfg) =>
-              modal.showModal({ ...cfg, parentId: modal.id })
-            }
-          />
-        )}
+        {typeof Content == "function" ? <Content
+           title={title}
+           size={size}
+           closeModal={close}
+           updateData={update}
+           id={id ? id : Math.random() * 1000}
+           data={data}
+           openNested={modal.showModal}
+          /> : Content}
       </DialogContent>
     </Dialog>
   );
@@ -67,7 +73,7 @@ const ModalContainer = memo(ModalComponent, (prev, next) => {
   );
 });
 
-const sizeClasses = (size) => {
+const sizeClasses = (size : Size) => {
   switch (size) {
     case "sm":
       return "!max-w-sm";

@@ -1,8 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { Button } from "./Button/button";
 import { CircleQuestionMark } from "lucide-react";
-import { useModal } from "@/contexts/ModalContext";
 import pageGuideConfig from "@/constants/pageGuide";
+import { useModal } from "@/hooks/useModal";
 
 function PageGuide({ entityName, pageName }) {
   const { texts } = pageGuideConfig[entityName];

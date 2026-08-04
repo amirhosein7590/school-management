@@ -1,6 +1,6 @@
 import MessageItem from "@/components/modules/messageItem";
 import { Spinner } from "@/components/modules/spinner";
-import useCustomeInfiniteQuery from "@/hooks/useCustomeInfiniteQuery";
+import { useCustomeInfiniteQuery } from "@/hooks/useCustomeInfiniteQuery";
 import React, { memo, useEffect, useMemo, useRef } from "react";
 
 function MessagesList({ receiverId }) {
@@ -10,13 +10,13 @@ function MessagesList({ receiverId }) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useCustomeInfiniteQuery(
-    "messages",
-    null,
-    `/messages?receiver=${receiverId}`,
-    null,
-    true
-  );
+  } = useCustomeInfiniteQuery({
+    key: "messages",
+    deps: null,
+    url: `/messages?receiver=${receiverId}`,
+    enabled: true,
+    isPrivate: true,
+  });
 
   const flatData = useMemo(() => {
     if (!pages || !pages.pages) return [];
@@ -43,7 +43,7 @@ function MessagesList({ receiverId }) {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     observer.observe(observerRef.current);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);

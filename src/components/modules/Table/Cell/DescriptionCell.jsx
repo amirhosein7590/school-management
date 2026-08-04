@@ -1,11 +1,8 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import useTableStore from "@/store/tableStore";
 import { Button } from "@/components/modules/Button/button";
-import { useModal } from "@/contexts/ModalContext";
-import { Input } from "../../input";
+import { useModal } from "@/hooks/useModal";
 import { Edit } from "lucide-react";
-import useCustomeQuery from "@/hooks/useCustomeQuery";
-import { Spinner } from "../../spinner";
 
 const DescriptionCell = memo(function DescriptionCell({
   rowId,
@@ -21,7 +18,7 @@ const DescriptionCell = memo(function DescriptionCell({
       title: "انتخاب توضیح",
       content: ({ close }) => {
         const [input, setInput] = useState(
-          rowState?.description || defaultValue || ""
+          rowState?.description || defaultValue || "",
         );
         return (
           <div dir="rtl" className="flex flex-col">

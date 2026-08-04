@@ -1,6 +1,6 @@
 import useCustomeMutation from "@/hooks/useCustomeMutation";
 import useTableStore from "@/store/tableStore";
-import { CheckCircle, Pencil } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import React, { memo } from "react";
 import { Button } from "../../Button/button";
 import { Spinner } from "../../spinner";
