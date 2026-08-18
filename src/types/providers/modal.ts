@@ -3,7 +3,7 @@ export type updateData = (id : string | number , newData : object)=> void
 export type showModal = (config : Modal)=> string | number
 import {FC} from "react"
 
-export type Size = "sm" | "lg" | "xl" | "2xl"
+export type Size = "sm" | "lg" | "xl" | "2xl" | "md"
 
 type ContentProps = {
   id : string | number,
